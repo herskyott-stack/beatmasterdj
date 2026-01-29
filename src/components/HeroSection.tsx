@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Play, Star, Calendar } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-dj.jpg";
 
 const HeroSection = () => {
@@ -43,9 +44,11 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            <Button variant="hero" size="xl">
-              <Calendar className="w-5 h-5" />
-              Book Your Event
+            <Button variant="hero" size="xl" asChild>
+              <Link to="/book">
+                <Calendar className="w-5 h-5" />
+                Book Your Event
+              </Link>
             </Button>
             <Button variant="glass" size="xl">
               <Play className="w-5 h-5" />
