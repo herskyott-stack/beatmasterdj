@@ -7,6 +7,7 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
+    { href: "/", label: "Home", isRoute: true },
     { href: "#services", label: "Services" },
     { href: "#packages", label: "Packages" },
     { href: "#addons", label: "Add-Ons" },
