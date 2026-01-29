@@ -7,6 +7,7 @@ export type CartItem = {
   name: string;
   price: number;
   description: string;
+  features?: string[];
 };
 
 export type EventDetails = {

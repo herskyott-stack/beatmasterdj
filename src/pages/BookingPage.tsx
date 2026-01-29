@@ -1,13 +1,11 @@
-import { Check, Star, ShoppingCart, ArrowRight } from "lucide-react";
+import { Check, Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/contexts/CartContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import BookingAddons from "@/components/BookingAddons";
-import { toast } from "@/hooks/use-toast";
 
 type Package = {
   name: string;
@@ -339,10 +337,10 @@ const packageData: Record<string, Package[]> = {
 };
 
 const BookingPage = () => {
-  const { addItem, isInCart, items } = useCart();
+  const { addItem } = useCart();
   const navigate = useNavigate();
 
-  const handleAddPackage = (category: string, pkg: Package) => {
+  const handleSelectPackage = (category: string, pkg: Package) => {
     const id = `${category}-${pkg.name}`.toLowerCase().replace(/\s/g, "-");
     addItem({
       id,
@@ -351,14 +349,10 @@ const BookingPage = () => {
       name: pkg.name,
       price: pkg.priceNum,
       description: pkg.description,
+      features: pkg.features,
     });
-    toast({
-      title: "Package Added",
-      description: `${pkg.name} package added to your cart`,
-    });
+    navigate("/checkout");
   };
-
-  const cartItemCount = items.length;
 
   return (
     <div className="min-h-screen bg-background">
@@ -372,27 +366,9 @@ const BookingPage = () => {
               <span className="gradient-text">EVENT</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-              Select a package and add-ons to customize your perfect event experience.
+              Select a package to begin your booking. Add-ons can be added during checkout.
             </p>
           </div>
-
-          {/* Cart Summary Bar */}
-          {cartItemCount > 0 && (
-            <div className="fixed bottom-0 left-0 right-0 bg-card/95 backdrop-blur-xl border-t border-white/10 p-4 z-40">
-              <div className="container mx-auto flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <ShoppingCart className="w-5 h-5 text-primary" />
-                  <span className="font-display">
-                    {cartItemCount} item{cartItemCount !== 1 ? "s" : ""} in cart
-                  </span>
-                </div>
-                <Button variant="hero" onClick={() => navigate("/checkout")}>
-                  Proceed to Checkout
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-              </div>
-            </div>
-          )}
 
           {/* Package Tabs */}
           <Tabs defaultValue="weddings" className="max-w-6xl mx-auto">
@@ -411,67 +387,56 @@ const BookingPage = () => {
             {Object.entries(packageData).map(([category, packages]) => (
               <TabsContent key={category} value={category} className="mt-0">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {packages.map((pkg) => {
-                    const pkgId = `${category}-${pkg.name}`.toLowerCase().replace(/\s/g, "-");
-                    const inCart = isInCart(pkgId);
-
-                    return (
-                      <Card
-                        key={pkg.name}
-                        variant={pkg.featured ? "featured" : "glass"}
-                        className={`relative transition-all duration-500 hover:scale-[1.02] ${
-                          pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
-                        } ${inCart ? "ring-2 ring-primary" : ""}`}
-                      >
-                        {pkg.featured && (
-                          <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-3 h-3 fill-current" />
-                              <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
-                            </div>
+                  {packages.map((pkg) => (
+                    <Card
+                      key={pkg.name}
+                      variant={pkg.featured ? "featured" : "glass"}
+                      className={`relative transition-all duration-500 hover:scale-[1.02] ${
+                        pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
+                      }`}
+                    >
+                      {pkg.featured && (
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-3 h-3 fill-current" />
+                            <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
                           </div>
-                        )}
-                        <CardHeader className="text-center pb-4">
-                          <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
-                          <CardDescription>{pkg.description}</CardDescription>
-                          <div className="mt-4">
-                            <span className="font-display text-4xl font-bold gradient-text">
-                              {pkg.price}
-                            </span>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pb-6">
-                          <ul className="space-y-3">
-                            {pkg.features.map((feature) => (
-                              <li key={feature} className="flex items-start gap-3">
-                                <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                                <span className="text-sm text-muted-foreground">{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </CardContent>
-                        <CardFooter>
-                          <Button
-                            variant={inCart ? "secondary" : pkg.featured ? "hero" : "outline"}
-                            className="w-full"
-                            onClick={() => handleAddPackage(category, pkg)}
-                            disabled={inCart}
-                          >
-                            {inCart ? "In Cart" : "Add to Cart"}
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    );
-                  })}
+                        </div>
+                      )}
+                      <CardHeader className="text-center pb-4">
+                        <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                        <CardDescription>{pkg.description}</CardDescription>
+                        <div className="mt-4">
+                          <span className="font-display text-4xl font-bold gradient-text">
+                            {pkg.price}
+                          </span>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pb-6">
+                        <ul className="space-y-3">
+                          {pkg.features.map((feature) => (
+                            <li key={feature} className="flex items-start gap-3">
+                              <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                              <span className="text-sm text-muted-foreground">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                      <CardFooter>
+                        <Button
+                          variant={pkg.featured ? "hero" : "outline"}
+                          className="w-full"
+                          onClick={() => handleSelectPackage(category, pkg)}
+                        >
+                          Select Package
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
                 </div>
               </TabsContent>
             ))}
           </Tabs>
-
-          {/* Add-ons Section */}
-          <div className="mt-20">
-            <BookingAddons />
-          </div>
         </div>
       </main>
       <Footer />
