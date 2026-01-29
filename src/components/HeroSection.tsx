@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Play, Star, Calendar } from "lucide-react";
+import { Star, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-dj.jpg";
 
@@ -49,10 +49,6 @@ const HeroSection = () => {
                 <Calendar className="w-5 h-5" />
                 Book Your Event
               </Link>
-            </Button>
-            <Button variant="glass" size="xl">
-              <Play className="w-5 h-5" />
-              Watch Showreel
             </Button>
           </div>
 
