@@ -83,7 +83,7 @@ const CheckoutPage = () => {
     const form = document.createElement("form");
     form.action = "https://formsubmit.co/hersky.ott@gmail.com";
     form.method = "POST";
-    form.target = "_blank";
+    // No target="_blank" - stays on same page flow
 
     const addField = (name: string, value: string) => {
       const input = document.createElement("input");
@@ -93,9 +93,11 @@ const CheckoutPage = () => {
       form.appendChild(input);
     };
 
+    // Configure FormSubmit - redirect back to site after submission
     addField("_subject", `🎉 NEW BOOKING - ${pkg?.category || "Event"} ${pkg?.name || "Package"} - ${eventDetails.firstName} ${eventDetails.lastName}`);
     addField("_template", "table");
     addField("_captcha", "false");
+    addField("_next", window.location.origin + "/booking-confirmed");
     
     // Customer Information
     addField("1. First Name", eventDetails.firstName);
