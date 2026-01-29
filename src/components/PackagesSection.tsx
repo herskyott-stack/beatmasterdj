@@ -2,10 +2,14 @@ import { Check, Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "@/contexts/CartContext";
+import { useRef } from "react";
 
 type Package = {
   name: string;
   price: string;
+  priceNum: number;
   description: string;
   features: string[];
   featured?: boolean;
@@ -16,6 +20,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Essential",
       price: "$1,500",
+      priceNum: 1500,
       description: "Perfect for intimate ceremonies",
       features: [
         "4 hours of DJ service",
@@ -29,6 +34,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Classic",
       price: "$2,500",
+      priceNum: 2500,
       description: "Our most popular wedding package",
       features: [
         "6 hours of DJ service",
@@ -45,6 +51,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Premium",
       price: "$3,500",
+      priceNum: 3500,
       description: "Elevated entertainment experience",
       features: [
         "8 hours of DJ service",
@@ -61,6 +68,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Ultimate",
       price: "$5,000",
+      priceNum: 5000,
       description: "The complete luxury experience",
       features: [
         "10 hours of DJ service",
@@ -80,6 +88,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Starter",
       price: "$1,500",
+      priceNum: 1500,
       description: "Ideal for small gatherings",
       features: [
         "4 hours of DJ service",
@@ -92,6 +101,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Professional",
       price: "$2,500",
+      priceNum: 2500,
       description: "Perfect for corporate celebrations",
       features: [
         "6 hours of DJ service",
@@ -107,6 +117,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Executive",
       price: "$3,500",
+      priceNum: 3500,
       description: "High-end corporate entertainment",
       features: [
         "8 hours of DJ service",
@@ -122,6 +133,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Enterprise",
       price: "$5,000",
+      priceNum: 5000,
       description: "Large-scale corporate events",
       features: [
         "10+ hours of service",
@@ -139,6 +151,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Basic",
       price: "$800",
+      priceNum: 800,
       description: "School dances & events",
       features: [
         "3 hours of DJ service",
@@ -151,6 +164,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Standard",
       price: "$1,200",
+      priceNum: 1200,
       description: "Enhanced school events",
       features: [
         "4 hours of DJ service",
@@ -165,6 +179,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Prom Package",
       price: "$1,800",
+      priceNum: 1800,
       description: "Perfect for prom night",
       features: [
         "5 hours of DJ service",
@@ -179,6 +194,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Homecoming",
       price: "$2,500",
+      priceNum: 2500,
       description: "Ultimate homecoming experience",
       features: [
         "6 hours of DJ service",
@@ -196,6 +212,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Party Starter",
       price: "$1,000",
+      priceNum: 1000,
       description: "Great for birthday parties",
       features: [
         "3 hours of DJ service",
@@ -208,6 +225,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Celebration",
       price: "$1,500",
+      priceNum: 1500,
       description: "Milestone celebrations",
       features: [
         "4 hours of DJ service",
@@ -222,6 +240,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "VIP Party",
       price: "$2,500",
+      priceNum: 2500,
       description: "Exclusive private events",
       features: [
         "6 hours of DJ service",
@@ -236,6 +255,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Extravaganza",
       price: "$4,000",
+      priceNum: 4000,
       description: "Luxury party experience",
       features: [
         "8 hours of DJ service",
@@ -253,6 +273,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Club Night",
       price: "$1,500",
+      priceNum: 1500,
       description: "Club-style experience",
       features: [
         "4 hours of DJ service",
@@ -265,6 +286,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Rave Ready",
       price: "$2,500",
+      priceNum: 2500,
       description: "Festival-inspired energy",
       features: [
         "6 hours of DJ service",
@@ -280,6 +302,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Festival",
       price: "$4,000",
+      priceNum: 4000,
       description: "Full festival production",
       features: [
         "8 hours of DJ service",
@@ -295,6 +318,7 @@ const packageData: Record<string, Package[]> = {
     {
       name: "Ultra",
       price: "$5,000",
+      priceNum: 5000,
       description: "Ultimate EDM experience",
       features: [
         "10+ hours of service",
@@ -312,6 +336,29 @@ const packageData: Record<string, Package[]> = {
 };
 
 const PackagesSection = () => {
+  const navigate = useNavigate();
+  const { addItem } = useCart();
+  const packagesRef = useRef<HTMLDivElement>(null);
+
+  const handleSelectPackage = (category: string, pkg: Package) => {
+    const id = `${category}-${pkg.name}`.toLowerCase().replace(/\s/g, "-");
+    addItem({
+      id,
+      type: "package",
+      category: category.charAt(0).toUpperCase() + category.slice(1),
+      name: pkg.name,
+      price: pkg.priceNum,
+      description: pkg.description,
+      features: pkg.features,
+    });
+    navigate("/checkout");
+  };
+
+  const handleTabChange = () => {
+    // Scroll to the packages section when changing tabs
+    packagesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   return (
     <section id="packages" className="py-24 relative overflow-hidden">
       {/* Background Effects */}
@@ -332,7 +379,7 @@ const PackagesSection = () => {
         </div>
 
         {/* Package Tabs */}
-        <Tabs defaultValue="weddings" className="max-w-6xl mx-auto">
+        <Tabs defaultValue="weddings" className="max-w-6xl mx-auto" onValueChange={handleTabChange}>
           <TabsList className="flex flex-wrap justify-center gap-2 mb-12 bg-transparent h-auto p-0">
             {Object.keys(packageData).map((category) => (
               <TabsTrigger
@@ -345,57 +392,60 @@ const PackagesSection = () => {
             ))}
           </TabsList>
 
-          {Object.entries(packageData).map(([category, packages]) => (
-            <TabsContent key={category} value={category} className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {packages.map((pkg) => (
-                  <Card
-                    key={pkg.name}
-                    variant={pkg.featured ? "featured" : "glass"}
-                    className={`relative transition-all duration-500 hover:scale-[1.02] ${
-                      pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
-                    }`}
-                  >
-                    {pkg.featured && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
-                        <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 fill-current" />
-                          <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+          <div ref={packagesRef}>
+            {Object.entries(packageData).map(([category, packages]) => (
+              <TabsContent key={category} value={category} className="mt-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {packages.map((pkg) => (
+                    <Card
+                      key={pkg.name}
+                      variant={pkg.featured ? "featured" : "glass"}
+                      className={`relative transition-all duration-500 hover:scale-[1.02] ${
+                        pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
+                      }`}
+                    >
+                      {pkg.featured && (
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-3 h-3 fill-current" />
+                            <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                    <CardHeader className="text-center pb-4">
-                      <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
-                      <CardDescription>{pkg.description}</CardDescription>
-                      <div className="mt-4">
-                        <span className="font-display text-4xl font-bold gradient-text">
-                          {pkg.price}
-                        </span>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="pb-6">
-                      <ul className="space-y-3">
-                        {pkg.features.map((feature) => (
-                          <li key={feature} className="flex items-start gap-3">
-                            <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                            <span className="text-sm text-muted-foreground">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                    <CardFooter>
-                      <Button
-                        variant={pkg.featured ? "hero" : "outline"}
-                        className="w-full"
-                      >
-                        Select Package
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-          ))}
+                      )}
+                      <CardHeader className="text-center pb-4">
+                        <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                        <CardDescription>{pkg.description}</CardDescription>
+                        <div className="mt-4">
+                          <span className="font-display text-4xl font-bold gradient-text">
+                            {pkg.price}
+                          </span>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pb-6">
+                        <ul className="space-y-3">
+                          {pkg.features.map((feature) => (
+                            <li key={feature} className="flex items-start gap-3">
+                              <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                              <span className="text-sm text-muted-foreground">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                      <CardFooter>
+                        <Button
+                          variant={pkg.featured ? "hero" : "outline"}
+                          className="w-full"
+                          onClick={() => handleSelectPackage(category, pkg)}
+                        >
+                          Select Package
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))}
+                </div>
+              </TabsContent>
+            ))}
+          </div>
         </Tabs>
       </div>
     </section>
