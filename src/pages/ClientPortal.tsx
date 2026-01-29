@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { Music, Star, Plus, Trash2, Send, LogOut, Clipboard, X, Check } from "lucide-react";
+import { Music, Star, Plus, Trash2, Send, LogOut, Clipboard, X, Check, Shield } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import type { User } from "@supabase/supabase-js";
@@ -34,6 +35,7 @@ type Profile = {
 
 const ClientPortal = () => {
   const navigate = useNavigate();
+  const { isAdmin } = useAdminCheck();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [musicRequests, setMusicRequests] = useState<MusicRequest[]>([]);
@@ -337,10 +339,20 @@ const ClientPortal = () => {
                   : "Manage your music requests below"}
               </p>
             </div>
-            <Button variant="outline" onClick={handleSignOut} className="mt-4 md:mt-0">
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
+            <div className="flex gap-3 mt-4 md:mt-0">
+              {isAdmin && (
+                <Button variant="hero" asChild>
+                  <Link to="/admin">
+                    <Shield className="w-4 h-4 mr-2" />
+                    Admin Dashboard
+                  </Link>
+                </Button>
+              )}
+              <Button variant="outline" onClick={handleSignOut}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
