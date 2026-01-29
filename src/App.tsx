@@ -12,6 +12,7 @@ import AboutPage from "./pages/AboutPage";
 import PackagesPage from "./pages/PackagesPage";
 import AuthPage from "./pages/AuthPage";
 import ClientPortal from "./pages/ClientPortal";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -35,6 +36,7 @@ function App() {
               <Route path="/packages/:category" element={<PackagesPage />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/client-portal" element={<ClientPortal />} />
+              <Route path="/admin" element={<AdminDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
