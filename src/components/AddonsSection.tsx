@@ -72,9 +72,9 @@ const AddonsSection = () => {
             <Card
               key={addon.name}
               variant="glass"
-              className="group transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_hsl(280,85%,60%,0.2)]"
+              className="group transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_hsl(280,85%,60%,0.2)] flex flex-col"
             >
-              <CardContent className="p-8">
+              <CardContent className="p-8 flex flex-col flex-1">
                 <div className="flex items-start justify-between mb-6">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -91,14 +91,14 @@ const AddonsSection = () => {
                 <h3 className="font-display text-xl font-bold mb-2 group-hover:gradient-text transition-all duration-300">
                   {addon.name}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-4">
+                <p className="text-muted-foreground text-sm mb-4 flex-1">
                   {addon.description}
                 </p>
-                <div className="flex items-center justify-between">
-                  <span className="font-display text-2xl font-bold text-primary">
+                <div className="flex items-center justify-between gap-3 mt-auto">
+                  <span className="font-display text-xl font-bold text-primary whitespace-nowrap">
                     {addon.price}
                   </span>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" className="whitespace-nowrap shrink-0">
                     Add to Package
                   </Button>
                 </div>
