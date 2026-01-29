@@ -12,9 +12,16 @@ const addons = [
   },
   {
     icon: Camera,
-    name: "Photo Booth",
-    price: "$500",
-    description: "Premium photo booth with props, custom backdrops, and instant prints for your guests.",
+    name: "Photo Booth (No Prints)",
+    price: "$750",
+    description: "Premium photo booth with props and custom backdrops. Digital copies only.",
+    popular: false,
+  },
+  {
+    icon: Camera,
+    name: "Photo Booth (Unlimited Prints)",
+    price: "$900",
+    description: "Premium photo booth with props, custom backdrops, and unlimited instant prints for your guests.",
     popular: true,
   },
   {
