@@ -1,6 +1,7 @@
 import { Music, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,8 +39,8 @@ const Navbar = () => {
                 {link.label}
               </a>
             ))}
-            <Button variant="hero" size="default">
-              Book Now
+            <Button variant="hero" size="default" asChild>
+              <Link to="/book">Book Now</Link>
             </Button>
           </div>
 
@@ -66,8 +67,8 @@ const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <Button variant="hero" size="default" className="mt-4">
-                Book Now
+              <Button variant="hero" size="default" className="mt-4" asChild>
+                <Link to="/book">Book Now</Link>
               </Button>
             </div>
           </div>
