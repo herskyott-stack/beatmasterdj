@@ -20,7 +20,7 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-3 group">
             <div className="relative">
               <Music className="w-10 h-10 text-primary transition-all duration-300 group-hover:text-secondary" />
               <div className="absolute inset-0 bg-primary/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -28,7 +28,7 @@ const Navbar = () => {
             <span className="font-display text-2xl font-bold gradient-text">
               HERSKY DJ & AV
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
