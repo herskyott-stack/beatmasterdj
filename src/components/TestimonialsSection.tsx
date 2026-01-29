@@ -13,7 +13,7 @@ const testimonials = [
   {
     name: "David Chen",
     event: "Corporate Gala",
-    quote: "We've used BeatMaster DJ for 3 years running for our company events. Always professional, always on time, and the music selection is always on point.",
+    quote: "We've used Hersky DJ & AV for 3 years running for our company events. Always professional, always on time, and the music selection is always on point.",
     rating: 5,
     avatar: "DC",
   },
@@ -27,7 +27,7 @@ const testimonials = [
   {
     name: "Marcus Williams",
     event: "Club Night",
-    quote: "As a venue owner, I need DJs who can bring the energy. BeatMaster DJ consistently delivers incredible EDM sets that keep the crowd coming back.",
+    quote: "As a venue owner, I need DJs who can bring the energy. Hersky DJ & AV consistently delivers incredible EDM sets that keep the crowd coming back.",
     rating: 5,
     avatar: "MW",
   },
