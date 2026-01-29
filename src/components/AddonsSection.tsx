@@ -94,11 +94,11 @@ const AddonsSection = () => {
                 <p className="text-muted-foreground text-sm mb-4 flex-1">
                   {addon.description}
                 </p>
-                <div className="flex items-center justify-between gap-3 mt-auto">
-                  <span className="font-display text-xl font-bold text-primary whitespace-nowrap">
+                <div className="flex flex-col gap-3 mt-auto">
+                  <span className="font-display text-xl font-bold text-primary">
                     {addon.price}
                   </span>
-                  <Button variant="outline" size="sm" className="whitespace-nowrap shrink-0">
+                  <Button variant="outline" size="sm" className="w-full">
                     Add to Package
                   </Button>
                 </div>
