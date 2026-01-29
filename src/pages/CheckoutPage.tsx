@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useCart } from "@/contexts/CartContext";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,18 +8,25 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Trash2, CreditCard, Mail, Copy, Check } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowLeft, CreditCard, Mail, Copy, Check, FileText, PenTool, Plus } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
+import BookingAddons from "@/components/BookingAddons";
 
 const CheckoutPage = () => {
   const { items, eventDetails, updateEventDetails, removeItem, getTotal, getDeposit, clearCart } = useCart();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [contractAgreed, setContractAgreed] = useState(false);
+  const [signature, setSignature] = useState("");
+  const [step, setStep] = useState<"details" | "contract" | "payment">("details");
 
   const etransferEmail = "jacob.herscovitch@gmail.com";
   const total = getTotal();
   const deposit = getDeposit();
+  const pkg = items.find(i => i.type === "package");
+  const addons = items.filter(i => i.type === "addon");
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText(etransferEmail);
@@ -31,19 +38,9 @@ const CheckoutPage = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleDetailsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (items.length === 0) {
-      toast({
-        title: "Cart Empty",
-        description: "Please add a package to your cart before checkout",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate required fields
     if (!eventDetails.firstName || !eventDetails.lastName || !eventDetails.email || 
         !eventDetails.phone || !eventDetails.eventDate || !eventDetails.eventLocation) {
       toast({
@@ -53,7 +50,33 @@ const CheckoutPage = () => {
       });
       return;
     }
+    
+    setStep("contract");
+  };
 
+  const handleContractSign = () => {
+    if (!contractAgreed) {
+      toast({
+        title: "Agreement Required",
+        description: "Please read and agree to the contract terms",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!signature.trim()) {
+      toast({
+        title: "Signature Required",
+        description: "Please type your full name as your signature",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    setStep("payment");
+  };
+
+  const handleFinalSubmit = async () => {
     setIsSubmitting(true);
 
     // Create hidden form and submit to FormSubmit.co
@@ -70,41 +93,61 @@ const CheckoutPage = () => {
       form.appendChild(input);
     };
 
-    // Get package info
-    const pkg = items.find(i => i.type === "package");
-    const addons = items.filter(i => i.type === "addon");
-
-    addField("_subject", `New Booking Request - ${pkg?.category || "Event"} - ${pkg?.name || "Package"}`);
+    addField("_subject", `🎉 NEW BOOKING - ${pkg?.category || "Event"} ${pkg?.name || "Package"} - ${eventDetails.firstName} ${eventDetails.lastName}`);
     addField("_template", "table");
     addField("_captcha", "false");
     
-    addField("Customer Name", `${eventDetails.firstName} ${eventDetails.lastName}`);
-    addField("Email", eventDetails.email);
-    addField("Phone", eventDetails.phone);
-    addField("Event Date", eventDetails.eventDate);
-    addField("Event Time", eventDetails.eventTime || "TBD");
-    addField("Event Location", eventDetails.eventLocation);
-    addField("Event Type", eventDetails.eventType || (pkg?.category || "Not specified"));
+    // Customer Information
+    addField("1. First Name", eventDetails.firstName);
+    addField("2. Last Name", eventDetails.lastName);
+    addField("3. Email Address", eventDetails.email);
+    addField("4. Phone Number", eventDetails.phone);
     
+    // Event Details
+    addField("5. Event Date", eventDetails.eventDate);
+    addField("6. Event Time", eventDetails.eventTime || "TBD");
+    addField("7. Event Location", eventDetails.eventLocation);
+    addField("8. Event Type", eventDetails.eventType || (pkg?.category || "Not specified"));
+    
+    // Package Information
     if (pkg) {
-      addField("Package Selected", `${pkg.category} - ${pkg.name} ($${pkg.price})`);
+      addField("9. Package Category", pkg.category || "N/A");
+      addField("10. Package Name", pkg.name);
+      addField("11. Package Price", `$${pkg.price}`);
+      if (pkg.features && pkg.features.length > 0) {
+        addField("12. Package Includes", pkg.features.join(" | "));
+      }
     }
     
+    // Add-ons
     if (addons.length > 0) {
-      addField("Add-ons", addons.map(a => `${a.name} ($${a.price})`).join(", "));
+      addField("13. Add-ons Selected", addons.map(a => `${a.name} ($${a.price})`).join(" | "));
+      const addonsTotal = addons.reduce((sum, a) => sum + a.price, 0);
+      addField("14. Add-ons Total", `$${addonsTotal}`);
+    } else {
+      addField("13. Add-ons Selected", "None");
     }
     
-    addField("Total Amount", `$${total}`);
-    addField("Deposit Required (50%)", `$${deposit}`);
-    addField("Additional Notes", eventDetails.notes || "None");
+    // Pricing
+    addField("15. Total Amount", `$${total}`);
+    addField("16. Deposit Required (50%)", `$${deposit}`);
+    addField("17. Balance Due on Event Day", `$${total - deposit}`);
+    
+    // Contract
+    addField("18. Contract Signed", "Yes");
+    addField("19. Digital Signature", signature);
+    addField("20. Signature Date", new Date().toLocaleDateString());
+    
+    // Notes
+    addField("21. Customer Notes/Messages", eventDetails.notes || "None provided");
 
     document.body.appendChild(form);
     form.submit();
     document.body.removeChild(form);
 
     toast({
-      title: "Booking Submitted!",
-      description: "Your booking request has been sent. Please send your e-transfer deposit to confirm.",
+      title: "Booking Confirmed!",
+      description: "Your booking has been submitted. Please send your e-transfer deposit to secure your date.",
     });
 
     setIsSubmitting(false);
@@ -116,8 +159,8 @@ const CheckoutPage = () => {
         <Navbar />
         <main className="pt-32 pb-16">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="font-display text-3xl font-bold mb-4">Your Cart is Empty</h1>
-            <p className="text-muted-foreground mb-8">Add a package to get started with your booking.</p>
+            <h1 className="font-display text-3xl font-bold mb-4">No Package Selected</h1>
+            <p className="text-muted-foreground mb-8">Please select a package to proceed with your booking.</p>
             <Button variant="hero" onClick={() => navigate("/book")}>
               <ArrowLeft className="w-4 h-4 mr-2" />
               Browse Packages
@@ -139,201 +182,410 @@ const CheckoutPage = () => {
             Back to Packages
           </Button>
 
+          {/* Progress Steps */}
+          <div className="flex justify-center mb-12">
+            <div className="flex items-center gap-4">
+              <div className={`flex items-center gap-2 ${step === "details" ? "text-primary" : "text-muted-foreground"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "details" ? "bg-primary text-primary-foreground" : "bg-primary/20 text-primary"}`}>
+                  1
+                </div>
+                <span className="font-display text-sm hidden sm:block">Details</span>
+              </div>
+              <div className="w-12 h-px bg-white/20" />
+              <div className={`flex items-center gap-2 ${step === "contract" ? "text-primary" : "text-muted-foreground"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "contract" ? "bg-primary text-primary-foreground" : step === "payment" ? "bg-primary/20 text-primary" : "bg-muted"}`}>
+                  2
+                </div>
+                <span className="font-display text-sm hidden sm:block">Contract</span>
+              </div>
+              <div className="w-12 h-px bg-white/20" />
+              <div className={`flex items-center gap-2 ${step === "payment" ? "text-primary" : "text-muted-foreground"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "payment" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                  3
+                </div>
+                <span className="font-display text-sm hidden sm:block">Payment</span>
+              </div>
+            </div>
+          </div>
+
           <div className="grid lg:grid-cols-3 gap-8">
-            {/* Form Section */}
-            <div className="lg:col-span-2">
-              <Card variant="glass">
-                <CardHeader>
-                  <CardTitle className="font-display text-2xl">
-                    Event Details
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid md:grid-cols-2 gap-4">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Step 1: Event Details */}
+              {step === "details" && (
+                <Card variant="glass">
+                  <CardHeader>
+                    <CardTitle className="font-display text-2xl flex items-center gap-2">
+                      <FileText className="w-6 h-6 text-primary" />
+                      Event Details
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <form onSubmit={handleDetailsSubmit} className="space-y-6">
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">First Name *</label>
+                          <Input
+                            required
+                            value={eventDetails.firstName}
+                            onChange={(e) => updateEventDetails({ firstName: e.target.value })}
+                            placeholder="John"
+                            className="bg-card/50 border-white/10"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Last Name *</label>
+                          <Input
+                            required
+                            value={eventDetails.lastName}
+                            onChange={(e) => updateEventDetails({ lastName: e.target.value })}
+                            placeholder="Doe"
+                            className="bg-card/50 border-white/10"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Email *</label>
+                          <Input
+                            type="email"
+                            required
+                            value={eventDetails.email}
+                            onChange={(e) => updateEventDetails({ email: e.target.value })}
+                            placeholder="john@example.com"
+                            className="bg-card/50 border-white/10"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Phone *</label>
+                          <Input
+                            type="tel"
+                            required
+                            value={eventDetails.phone}
+                            onChange={(e) => updateEventDetails({ phone: e.target.value })}
+                            placeholder="(613) 000-0000"
+                            className="bg-card/50 border-white/10"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Event Date *</label>
+                          <Input
+                            type="date"
+                            required
+                            value={eventDetails.eventDate}
+                            onChange={(e) => updateEventDetails({ eventDate: e.target.value })}
+                            className="bg-card/50 border-white/10"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium mb-2">Event Time</label>
+                          <Input
+                            type="time"
+                            value={eventDetails.eventTime}
+                            onChange={(e) => updateEventDetails({ eventTime: e.target.value })}
+                            className="bg-card/50 border-white/10"
+                          />
+                        </div>
+                      </div>
+
                       <div>
-                        <label className="block text-sm font-medium mb-2">First Name *</label>
+                        <label className="block text-sm font-medium mb-2">Event Location *</label>
                         <Input
                           required
-                          value={eventDetails.firstName}
-                          onChange={(e) => updateEventDetails({ firstName: e.target.value })}
-                          placeholder="John"
+                          value={eventDetails.eventLocation}
+                          onChange={(e) => updateEventDetails({ eventLocation: e.target.value })}
+                          placeholder="Venue name and address"
                           className="bg-card/50 border-white/10"
                         />
                       </div>
+
                       <div>
-                        <label className="block text-sm font-medium mb-2">Last Name *</label>
-                        <Input
-                          required
-                          value={eventDetails.lastName}
-                          onChange={(e) => updateEventDetails({ lastName: e.target.value })}
-                          placeholder="Doe"
+                        <label className="block text-sm font-medium mb-2">Additional Notes / Special Requests</label>
+                        <Textarea
+                          value={eventDetails.notes}
+                          onChange={(e) => updateEventDetails({ notes: e.target.value })}
+                          placeholder="Any special requests, song preferences, or details about your event..."
+                          rows={4}
                           className="bg-card/50 border-white/10"
                         />
+                      </div>
+
+                      <Button type="submit" variant="hero" size="lg" className="w-full">
+                        Continue to Contract
+                      </Button>
+                    </form>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Step 2: Contract */}
+              {step === "contract" && (
+                <Card variant="glass">
+                  <CardHeader>
+                    <CardTitle className="font-display text-2xl flex items-center gap-2">
+                      <FileText className="w-6 h-6 text-primary" />
+                      Service Agreement
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Contract Content */}
+                    <div className="bg-card/30 rounded-lg p-6 max-h-96 overflow-y-auto border border-white/10">
+                      <h3 className="font-display text-lg font-bold mb-4 text-primary">BEATMASTER DJ SERVICES AGREEMENT</h3>
+                      
+                      <div className="space-y-4 text-sm text-muted-foreground">
+                        <p><strong className="text-foreground">Event Details:</strong></p>
+                        <ul className="list-disc pl-5 space-y-1">
+                          <li>Client: {eventDetails.firstName} {eventDetails.lastName}</li>
+                          <li>Event Date: {eventDetails.eventDate}</li>
+                          <li>Event Time: {eventDetails.eventTime || "TBD"}</li>
+                          <li>Location: {eventDetails.eventLocation}</li>
+                          <li>Package: {pkg?.category} - {pkg?.name} (${pkg?.price})</li>
+                          {addons.length > 0 && (
+                            <li>Add-ons: {addons.map(a => a.name).join(", ")}</li>
+                          )}
+                          <li>Total: ${total}</li>
+                        </ul>
+
+                        <p className="pt-4"><strong className="text-foreground">1. DEPOSIT & PAYMENT</strong></p>
+                        <p>A non-refundable deposit of 50% (${deposit}) is required to secure the booking date. The remaining balance (${total - deposit}) is due on the day of the event, prior to the start of services.</p>
+
+                        <p><strong className="text-foreground">2. CANCELLATION POLICY</strong></p>
+                        <p>If the Client cancels the event more than 30 days before the event date, the deposit may be applied to a future booking within 12 months. Cancellations within 30 days of the event date will result in forfeiture of the deposit. If BeatMaster DJ cancels, a full refund will be provided.</p>
+
+                        <p><strong className="text-foreground">3. EQUIPMENT & SETUP</strong></p>
+                        <p>BeatMaster DJ will provide all necessary equipment as outlined in the selected package. The Client agrees to provide adequate space and access to electrical outlets (standard 110V). Setup will begin approximately 1-2 hours before the event start time.</p>
+
+                        <p><strong className="text-foreground">4. MUSIC & CONTENT</strong></p>
+                        <p>The Client may provide song requests and do-not-play lists. BeatMaster DJ reserves the right to modify selections to maintain appropriate event atmosphere and comply with venue policies.</p>
+
+                        <p><strong className="text-foreground">5. LIABILITY</strong></p>
+                        <p>BeatMaster DJ is not responsible for any injuries or damages caused by guests or third parties. The Client is responsible for ensuring the venue permits amplified music and agrees to indemnify BeatMaster DJ against any claims arising from the event.</p>
+
+                        <p><strong className="text-foreground">6. FORCE MAJEURE</strong></p>
+                        <p>Neither party shall be liable for failure to perform due to circumstances beyond their control, including but not limited to: natural disasters, pandemics, government restrictions, or venue cancellations.</p>
+
+                        <p><strong className="text-foreground">7. OVERTIME</strong></p>
+                        <p>If the Client requests DJ services beyond the contracted hours, overtime will be charged at $200 per hour, billed in 30-minute increments.</p>
+
+                        <p className="pt-4"><strong className="text-foreground">8. AGREEMENT</strong></p>
+                        <p>By signing below, both parties agree to the terms and conditions outlined in this agreement.</p>
                       </div>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Email *</label>
-                        <Input
-                          type="email"
-                          required
-                          value={eventDetails.email}
-                          onChange={(e) => updateEventDetails({ email: e.target.value })}
-                          placeholder="john@example.com"
-                          className="bg-card/50 border-white/10"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Phone *</label>
-                        <Input
-                          type="tel"
-                          required
-                          value={eventDetails.phone}
-                          onChange={(e) => updateEventDetails({ phone: e.target.value })}
-                          placeholder="(613) 000-0000"
-                          className="bg-card/50 border-white/10"
-                        />
-                      </div>
+                    {/* Agreement Checkbox */}
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        id="contract-agree"
+                        checked={contractAgreed}
+                        onCheckedChange={(checked) => setContractAgreed(checked as boolean)}
+                        className="mt-1"
+                      />
+                      <label htmlFor="contract-agree" className="text-sm cursor-pointer">
+                        I have read and agree to the terms and conditions outlined in this service agreement. I understand that the 50% deposit is non-refundable.
+                      </label>
                     </div>
 
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Event Date *</label>
-                        <Input
-                          type="date"
-                          required
-                          value={eventDetails.eventDate}
-                          onChange={(e) => updateEventDetails({ eventDate: e.target.value })}
-                          className="bg-card/50 border-white/10"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-2">Event Time</label>
-                        <Input
-                          type="time"
-                          value={eventDetails.eventTime}
-                          onChange={(e) => updateEventDetails({ eventTime: e.target.value })}
-                          className="bg-card/50 border-white/10"
-                        />
-                      </div>
-                    </div>
-
+                    {/* Signature */}
                     <div>
-                      <label className="block text-sm font-medium mb-2">Event Location *</label>
+                      <label className="block text-sm font-medium mb-2 flex items-center gap-2">
+                        <PenTool className="w-4 h-4 text-primary" />
+                        Digital Signature (Type your full name)
+                      </label>
                       <Input
-                        required
-                        value={eventDetails.eventLocation}
-                        onChange={(e) => updateEventDetails({ eventLocation: e.target.value })}
-                        placeholder="Venue name and address"
-                        className="bg-card/50 border-white/10"
+                        value={signature}
+                        onChange={(e) => setSignature(e.target.value)}
+                        placeholder="Type your full legal name"
+                        className="bg-card/50 border-white/10 font-serif text-lg italic"
                       />
+                      {signature && (
+                        <p className="text-xs text-muted-foreground mt-2">
+                          Signed on: {new Date().toLocaleDateString()}
+                        </p>
+                      )}
                     </div>
 
-                    <div>
-                      <label className="block text-sm font-medium mb-2">Additional Notes</label>
-                      <Textarea
-                        value={eventDetails.notes}
-                        onChange={(e) => updateEventDetails({ notes: e.target.value })}
-                        placeholder="Any special requests or details about your event..."
-                        rows={4}
-                        className="bg-card/50 border-white/10"
-                      />
+                    <div className="flex gap-4">
+                      <Button variant="outline" onClick={() => setStep("details")} className="flex-1">
+                        Back
+                      </Button>
+                      <Button variant="hero" onClick={handleContractSign} className="flex-1">
+                        Sign & Continue to Payment
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Step 3: Payment */}
+              {step === "payment" && (
+                <Card variant="glass">
+                  <CardHeader>
+                    <CardTitle className="font-display text-2xl flex items-center gap-2">
+                      <CreditCard className="w-6 h-6 text-primary" />
+                      Payment - 50% Deposit Required
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="bg-primary/10 border border-primary/30 rounded-lg p-6">
+                      <h3 className="font-display text-xl font-bold mb-2">E-Transfer Payment</h3>
+                      <p className="text-muted-foreground mb-4">
+                        To confirm your booking and secure your date, please send a <span className="text-primary font-bold">50% deposit of ${deposit}</span> via Interac e-Transfer.
+                      </p>
+                      
+                      <div className="bg-card/50 rounded-lg p-4 flex items-center justify-between mb-4">
+                        <div>
+                          <p className="text-xs text-muted-foreground mb-1">Send e-Transfer to:</p>
+                          <code className="text-primary font-mono text-lg">{etransferEmail}</code>
+                        </div>
+                        <Button variant="outline" size="sm" onClick={handleCopyEmail}>
+                          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </Button>
+                      </div>
+
+                      <div className="bg-card/30 rounded-lg p-4 space-y-2">
+                        <p className="text-sm"><strong>In the e-Transfer message, include:</strong></p>
+                        <ul className="text-sm text-muted-foreground list-disc pl-5">
+                          <li>Your full name: {eventDetails.firstName} {eventDetails.lastName}</li>
+                          <li>Event date: {eventDetails.eventDate}</li>
+                          <li>Package: {pkg?.name}</li>
+                        </ul>
+                      </div>
                     </div>
 
-                    <Button 
-                      type="submit" 
-                      variant="hero" 
-                      size="lg" 
-                      className="w-full"
-                      disabled={isSubmitting}
-                    >
-                      <Mail className="w-5 h-5 mr-2" />
-                      {isSubmitting ? "Submitting..." : "Submit Booking Request"}
-                    </Button>
-                  </form>
-                </CardContent>
-              </Card>
+                    <Separator className="bg-white/10" />
+
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span>Package ({pkg?.name})</span>
+                        <span>${pkg?.price}</span>
+                      </div>
+                      {addons.map(addon => (
+                        <div key={addon.id} className="flex justify-between text-muted-foreground">
+                          <span>{addon.name}</span>
+                          <span>${addon.price}</span>
+                        </div>
+                      ))}
+                      <Separator className="bg-white/10" />
+                      <div className="flex justify-between font-bold">
+                        <span>Total</span>
+                        <span>${total}</span>
+                      </div>
+                      <div className="flex justify-between text-lg text-primary font-bold">
+                        <span>Deposit Due Now (50%)</span>
+                        <span>${deposit}</span>
+                      </div>
+                      <div className="flex justify-between text-sm text-muted-foreground">
+                        <span>Balance Due on Event Day</span>
+                        <span>${total - deposit}</span>
+                      </div>
+                    </div>
+
+                    <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
+                      <p className="text-sm text-secondary">
+                        <strong>Note:</strong> Your booking will be confirmed once we receive your e-Transfer deposit. 
+                        You will receive a confirmation email within 24 hours of payment.
+                      </p>
+                    </div>
+
+                    <div className="flex gap-4">
+                      <Button variant="outline" onClick={() => setStep("contract")} className="flex-1">
+                        Back
+                      </Button>
+                      <Button 
+                        variant="hero" 
+                        size="lg" 
+                        className="flex-1"
+                        onClick={handleFinalSubmit}
+                        disabled={isSubmitting}
+                      >
+                        <Mail className="w-5 h-5 mr-2" />
+                        {isSubmitting ? "Submitting..." : "Submit Booking"}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Add-ons Section (show only on details step) */}
+              {step === "details" && (
+                <div className="mt-8">
+                  <BookingAddons />
+                </div>
+              )}
             </div>
 
-            {/* Order Summary */}
+            {/* Order Summary Sidebar */}
             <div className="space-y-6">
               <Card variant="glass">
                 <CardHeader>
-                  <CardTitle className="font-display text-xl">Order Summary</CardTitle>
+                  <CardTitle className="font-display text-xl">Your Selection</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {items.map((item) => (
-                    <div key={item.id} className="flex items-start justify-between gap-4">
-                      <div className="flex-1">
-                        <p className="font-medium">
-                          {item.type === "package" && item.category && (
-                            <span className="text-primary text-sm">{item.category} • </span>
+                  {pkg && (
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="text-primary text-sm font-medium">{pkg.category}</p>
+                          <p className="font-display font-bold text-lg">{pkg.name} Package</p>
+                        </div>
+                        <span className="font-display font-bold">${pkg.price}</span>
+                      </div>
+                      {pkg.features && (
+                        <ul className="text-xs text-muted-foreground space-y-1 mt-2">
+                          {pkg.features.slice(0, 4).map((feature, i) => (
+                            <li key={i} className="flex items-center gap-2">
+                              <Check className="w-3 h-3 text-primary" />
+                              {feature}
+                            </li>
+                          ))}
+                          {pkg.features.length > 4 && (
+                            <li className="text-primary">+ {pkg.features.length - 4} more</li>
                           )}
-                          {item.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground">{item.description}</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-display font-bold">${item.price}</span>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-8 w-8 text-destructive hover:text-destructive"
-                          onClick={() => removeItem(item.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
+                        </ul>
+                      )}
                     </div>
-                  ))}
+                  )}
+
+                  {addons.length > 0 && (
+                    <>
+                      <Separator className="bg-white/10" />
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium">Add-ons</p>
+                        {addons.map((addon) => (
+                          <div key={addon.id} className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">{addon.name}</span>
+                            <span>${addon.price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
 
                   <Separator className="bg-white/10" />
 
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Subtotal</span>
-                      <span className="font-display">${total}</span>
+                      <span className="text-muted-foreground">Total</span>
+                      <span className="font-display font-bold">${total}</span>
                     </div>
-                    <div className="flex justify-between text-lg">
-                      <span className="font-bold text-primary">Deposit (50%)</span>
-                      <span className="font-display font-bold text-primary">${deposit}</span>
+                    <div className="flex justify-between text-primary">
+                      <span className="font-bold">Deposit (50%)</span>
+                      <span className="font-display font-bold">${deposit}</span>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
-              {/* E-Transfer Instructions */}
+              {/* Contact Info */}
               <Card variant="neon">
-                <CardHeader>
-                  <CardTitle className="font-display text-lg flex items-center gap-2">
-                    <CreditCard className="w-5 h-5 text-primary" />
-                    Payment Instructions
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    To confirm your booking, please send a <span className="text-primary font-bold">50% deposit (${deposit})</span> via e-transfer to:
-                  </p>
-                  
-                  <div className="bg-card/50 rounded-lg p-4 flex items-center justify-between">
-                    <code className="text-primary font-mono text-sm">{etransferEmail}</code>
-                    <Button variant="ghost" size="sm" onClick={handleCopyEmail}>
-                      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                    </Button>
-                  </div>
-
-                  <p className="text-xs text-muted-foreground">
-                    Please include your name and event date in the e-transfer message. 
-                    Your booking will be confirmed once we receive your deposit.
-                  </p>
-
-                  <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-3">
-                    <p className="text-xs text-secondary">
-                      <strong>Remaining Balance:</strong> ${total - deposit} due on event day
-                    </p>
-                  </div>
+                <CardContent className="p-4">
+                  <p className="text-sm text-muted-foreground mb-2">Questions about your booking?</p>
+                  <p className="font-display text-primary">(613) 837-4488</p>
+                  <p className="text-sm text-muted-foreground">hersky.ott@gmail.com</p>
                 </CardContent>
               </Card>
             </div>
