@@ -14,7 +14,84 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      music_requests: {
+        Row: {
+          artist: string | null
+          created_at: string
+          id: string
+          notes: string | null
+          request_type: string
+          song_title: string
+          user_id: string
+        }
+        Insert: {
+          artist?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          request_type: string
+          song_title: string
+          user_id: string
+        }
+        Update: {
+          artist?: string | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          request_type?: string
+          song_title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          event_date: string | null
+          event_location: string | null
+          event_type: string | null
+          first_name: string
+          id: string
+          last_name: string
+          notes: string | null
+          package_name: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          event_date?: string | null
+          event_location?: string | null
+          event_type?: string | null
+          first_name: string
+          id?: string
+          last_name: string
+          notes?: string | null
+          package_name?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          event_date?: string | null
+          event_location?: string | null
+          event_type?: string | null
+          first_name?: string
+          id?: string
+          last_name?: string
+          notes?: string | null
+          package_name?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
