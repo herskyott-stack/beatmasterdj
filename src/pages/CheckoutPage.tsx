@@ -431,11 +431,11 @@ const CheckoutPage = () => {
                       )}
                     </div>
 
-                    <div className="flex gap-4">
+                    <div className="flex gap-4 pt-4 border-t border-white/10">
                       <Button variant="outline" onClick={() => setStep("details")} className="flex-1">
                         Back
                       </Button>
-                      <Button variant="hero" onClick={handleContractSign} className="flex-1">
+                      <Button variant="hero" size="lg" onClick={handleContractSign} className="flex-1">
                         Sign & Continue to Payment
                       </Button>
                     </div>
