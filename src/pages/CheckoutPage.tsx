@@ -14,15 +14,17 @@ import { toast } from "@/hooks/use-toast";
 import BookingAddons from "@/components/BookingAddons";
 
 const CheckoutPage = () => {
-  const { items, eventDetails, updateEventDetails, removeItem, getTotal, getDeposit, clearCart } = useCart();
+  const { items, eventDetails, updateEventDetails, removeItem, getSubtotal, getTax, getTotal, getDeposit, clearCart } = useCart();
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [contractAgreed, setContractAgreed] = useState(false);
   const [signature, setSignature] = useState("");
-  const [step, setStep] = useState<"details" | "contract" | "payment">("details");
+  const [step, setStep] = useState<"addons" | "details" | "contract" | "payment">("addons");
 
   const etransferEmail = "jacob.herscovitch@gmail.com";
+  const subtotal = getSubtotal();
+  const tax = getTax();
   const total = getTotal();
   const deposit = getDeposit();
   const pkg = items.find(i => i.type === "package");
@@ -131,17 +133,19 @@ const CheckoutPage = () => {
     }
     
     // Pricing
-    addField("15. Total Amount", `$${total}`);
-    addField("16. Deposit Required (50%)", `$${deposit}`);
-    addField("17. Balance Due on Event Day", `$${total - deposit}`);
+    addField("15. Subtotal", `$${subtotal.toFixed(2)}`);
+    addField("16. HST (13%)", `$${tax.toFixed(2)}`);
+    addField("17. Total Amount", `$${total.toFixed(2)}`);
+    addField("18. Deposit Required (50%)", `$${deposit.toFixed(2)}`);
+    addField("19. Balance Due on Event Day", `$${(total - deposit).toFixed(2)}`);
     
     // Contract
-    addField("18. Contract Signed", "Yes");
-    addField("19. Digital Signature", signature);
-    addField("20. Signature Date", new Date().toLocaleDateString());
+    addField("20. Contract Signed", "Yes");
+    addField("21. Digital Signature", signature);
+    addField("22. Signature Date", new Date().toLocaleDateString());
     
     // Notes
-    addField("21. Customer Notes/Messages", eventDetails.notes || "None provided");
+    addField("23. Customer Notes/Messages", eventDetails.notes || "None provided");
 
     document.body.appendChild(form);
     form.submit();
@@ -186,24 +190,31 @@ const CheckoutPage = () => {
 
           {/* Progress Steps */}
           <div className="flex justify-center mb-12">
-            <div className="flex items-center gap-4">
-              <div className={`flex items-center gap-2 ${step === "details" ? "text-primary" : "text-muted-foreground"}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "details" ? "bg-primary text-primary-foreground" : "bg-primary/20 text-primary"}`}>
+            <div className="flex items-center gap-2 sm:gap-4">
+              <div className={`flex items-center gap-2 ${step === "addons" ? "text-primary" : "text-muted-foreground"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "addons" ? "bg-primary text-primary-foreground" : "bg-primary/20 text-primary"}`}>
                   1
+                </div>
+                <span className="font-display text-sm hidden sm:block">Add-ons</span>
+              </div>
+              <div className="w-8 sm:w-12 h-px bg-white/20" />
+              <div className={`flex items-center gap-2 ${step === "details" ? "text-primary" : "text-muted-foreground"}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "details" ? "bg-primary text-primary-foreground" : step === "contract" || step === "payment" ? "bg-primary/20 text-primary" : "bg-muted"}`}>
+                  2
                 </div>
                 <span className="font-display text-sm hidden sm:block">Details</span>
               </div>
-              <div className="w-12 h-px bg-white/20" />
+              <div className="w-8 sm:w-12 h-px bg-white/20" />
               <div className={`flex items-center gap-2 ${step === "contract" ? "text-primary" : "text-muted-foreground"}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "contract" ? "bg-primary text-primary-foreground" : step === "payment" ? "bg-primary/20 text-primary" : "bg-muted"}`}>
-                  2
+                  3
                 </div>
                 <span className="font-display text-sm hidden sm:block">Contract</span>
               </div>
-              <div className="w-12 h-px bg-white/20" />
+              <div className="w-8 sm:w-12 h-px bg-white/20" />
               <div className={`flex items-center gap-2 ${step === "payment" ? "text-primary" : "text-muted-foreground"}`}>
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${step === "payment" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
-                  3
+                  4
                 </div>
                 <span className="font-display text-sm hidden sm:block">Payment</span>
               </div>
@@ -213,7 +224,17 @@ const CheckoutPage = () => {
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Step 1: Event Details */}
+              {/* Step 1: Add-ons */}
+              {step === "addons" && (
+                <div className="space-y-6">
+                  <BookingAddons />
+                  <Button variant="hero" size="lg" className="w-full" onClick={() => setStep("details")}>
+                    Continue to Event Details
+                  </Button>
+                </div>
+              )}
+
+              {/* Step 2: Event Details */}
               {step === "details" && (
                 <Card variant="glass">
                   <CardHeader>
@@ -324,7 +345,7 @@ const CheckoutPage = () => {
                 </Card>
               )}
 
-              {/* Step 2: Contract */}
+              {/* Step 3: Contract */}
               {step === "contract" && (
                 <Card variant="glass">
                   <CardHeader>
@@ -422,7 +443,7 @@ const CheckoutPage = () => {
                 </Card>
               )}
 
-              {/* Step 3: Payment */}
+              {/* Step 4: Payment */}
               {step === "payment" && (
                 <Card variant="glass">
                   <CardHeader>
@@ -512,19 +533,13 @@ const CheckoutPage = () => {
                 </Card>
               )}
 
-              {/* Add-ons Section (show only on details step) */}
-              {step === "details" && (
-                <div className="mt-8">
-                  <BookingAddons />
-                </div>
-              )}
             </div>
 
             {/* Order Summary Sidebar */}
             <div className="space-y-6">
-              <Card variant="glass">
+              <Card variant="glass" className="sticky top-24">
                 <CardHeader>
-                  <CardTitle className="font-display text-xl">Your Selection</CardTitle>
+                  <CardTitle className="font-display text-xl">Order Summary</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {pkg && (
@@ -534,7 +549,7 @@ const CheckoutPage = () => {
                           <p className="text-primary text-sm font-medium">{pkg.category}</p>
                           <p className="font-display font-bold text-lg">{pkg.name} Package</p>
                         </div>
-                        <span className="font-display font-bold">${pkg.price}</span>
+                        <span className="font-display font-bold">${pkg.price.toFixed(2)}</span>
                       </div>
                       {pkg.features && (
                         <ul className="text-xs text-muted-foreground space-y-1 mt-2">
@@ -560,7 +575,7 @@ const CheckoutPage = () => {
                         {addons.map((addon) => (
                           <div key={addon.id} className="flex justify-between text-sm">
                             <span className="text-muted-foreground">{addon.name}</span>
-                            <span>${addon.price}</span>
+                            <span>${addon.price.toFixed(2)}</span>
                           </div>
                         ))}
                       </div>
@@ -570,13 +585,26 @@ const CheckoutPage = () => {
                   <Separator className="bg-white/10" />
 
                   <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">Total</span>
-                      <span className="font-display font-bold">${total}</span>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Subtotal</span>
+                      <span>${subtotal.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">HST (13%)</span>
+                      <span>${tax.toFixed(2)}</span>
+                    </div>
+                    <Separator className="bg-white/10" />
+                    <div className="flex justify-between font-bold">
+                      <span>Total</span>
+                      <span className="font-display">${total.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-primary">
                       <span className="font-bold">Deposit (50%)</span>
-                      <span className="font-display font-bold">${deposit}</span>
+                      <span className="font-display font-bold">${deposit.toFixed(2)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>Balance Due on Event Day</span>
+                      <span>${(total - deposit).toFixed(2)}</span>
                     </div>
                   </div>
                 </CardContent>

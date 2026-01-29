@@ -29,10 +29,14 @@ type CartContextType = {
   removeItem: (id: string) => void;
   clearCart: () => void;
   updateEventDetails: (details: Partial<EventDetails>) => void;
+  getSubtotal: () => number;
+  getTax: () => number;
   getTotal: () => number;
   getDeposit: () => number;
   isInCart: (id: string) => boolean;
 };
+
+const TAX_RATE = 0.13; // 13% HST
 
 const defaultEventDetails: EventDetails = {
   firstName: "",
@@ -80,8 +84,16 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setEventDetails((prev) => ({ ...prev, ...details }));
   };
 
-  const getTotal = () => {
+  const getSubtotal = () => {
     return items.reduce((sum, item) => sum + item.price, 0);
+  };
+
+  const getTax = () => {
+    return Math.round(getSubtotal() * TAX_RATE * 100) / 100;
+  };
+
+  const getTotal = () => {
+    return getSubtotal() + getTax();
   };
 
   const getDeposit = () => {
@@ -101,6 +113,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         removeItem,
         clearCart,
         updateEventDetails,
+        getSubtotal,
+        getTax,
         getTotal,
         getDeposit,
         isInCart,
