@@ -27,22 +27,29 @@ const ContactSection = () => {
           <Card variant="glass" className="p-2">
             <CardContent className="p-6 md:p-8">
               <h3 className="font-display text-2xl font-bold mb-6">Send a Message</h3>
-              <form className="space-y-6">
+              <form action="https://formsubmit.co/hersky.ott@gmail.com" method="POST" className="space-y-6">
+                <input type="hidden" name="_subject" value="New DJ Booking Inquiry!" />
+                <input type="hidden" name="_captcha" value="false" />
+                <input type="hidden" name="_template" value="table" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">First Name</label>
                     <input
                       type="text"
+                      name="first_name"
                       className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                       placeholder="John"
+                      required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium mb-2">Last Name</label>
                     <input
                       type="text"
+                      name="last_name"
                       className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                       placeholder="Doe"
+                      required
                     />
                   </div>
                 </div>
@@ -50,30 +57,45 @@ const ContactSection = () => {
                   <label className="block text-sm font-medium mb-2">Email</label>
                   <input
                     type="email"
+                    name="email"
                     className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                     placeholder="john@example.com"
+                    required
                   />
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Event Type</label>
-                  <select className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all">
+                  <select 
+                    name="event_type"
+                    className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                    required
+                  >
                     <option value="">Select event type</option>
-                    <option value="wedding">Wedding</option>
-                    <option value="corporate">Corporate Event</option>
-                    <option value="school">School Event</option>
-                    <option value="private">Private Party</option>
-                    <option value="edm">EDM Event</option>
+                    <option value="Wedding">Wedding</option>
+                    <option value="Corporate Event">Corporate Event</option>
+                    <option value="School Event">School Event</option>
+                    <option value="Private Party">Private Party</option>
+                    <option value="EDM Event">EDM Event</option>
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Message</label>
                   <textarea
+                    name="message"
                     rows={4}
                     className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all resize-none"
                     placeholder="Tell us about your event..."
+                    required
                   />
                 </div>
-                <Button variant="hero" size="lg" className="w-full">
+                <Button 
+                  variant="hero" 
+                  size="lg" 
+                  className="w-full"
+                  type="submit"
+                  formAction="https://formsubmit.co/hersky.ott@gmail.com"
+                  formMethod="POST"
+                >
                   <Send className="w-5 h-5" />
                   Send Message
                 </Button>
@@ -87,9 +109,9 @@ const ContactSection = () => {
               <h3 className="font-display text-2xl font-bold mb-6">Contact Information</h3>
               <div className="space-y-4">
                 {[
-                  { icon: Phone, label: "Phone", value: "(555) 123-4567", href: "tel:+15551234567" },
-                  { icon: Mail, label: "Email", value: "bookings@beatmasterdj.com", href: "mailto:bookings@beatmasterdj.com" },
-                  { icon: MapPin, label: "Location", value: "Los Angeles, CA", href: "#" },
+                  { icon: Phone, label: "Phone", value: "(613) 837-4488", href: "tel:+16138374488" },
+                  { icon: Mail, label: "Email", value: "hersky.ott@gmail.com", href: "mailto:hersky.ott@gmail.com" },
+                  { icon: MapPin, label: "Location", value: "Ottawa, Ontario, Canada", href: "https://maps.google.com/?q=Ottawa,Ontario,Canada" },
                 ].map((item) => (
                   <a
                     key={item.label}
