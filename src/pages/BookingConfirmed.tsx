@@ -26,7 +26,7 @@ const BookingConfirmed = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground mb-8">
-              Thank you for choosing BeatMaster DJ! Your booking request has been submitted successfully.
+              Thank you for choosing Hersky DJ & AV! Your booking request has been submitted successfully.
             </p>
 
             {/* Next Steps Card */}

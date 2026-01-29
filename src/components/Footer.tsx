@@ -9,13 +9,13 @@ const Footer = () => {
           <a href="#" className="flex items-center gap-3">
             <Music className="w-8 h-8 text-primary" />
             <span className="font-display text-xl font-bold gradient-text">
-              BEATMASTER DJ
+              HERSKY DJ & AV
             </span>
           </a>
 
           {/* Copyright */}
           <p className="text-sm text-muted-foreground text-center">
-            © {new Date().getFullYear()} Beatmaster DJ. All rights reserved.
+            © {new Date().getFullYear()} Hersky DJ & AV. All rights reserved.
           </p>
 
           {/* Links */}

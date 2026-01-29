@@ -16,11 +16,11 @@ const teamMembers = [
   {
     name: "Jacob Herscovitch",
     role: "Founder & Master DJ",
-    bio: "With over 15 years behind the decks, Jacob founded BeatMaster DJ in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
+    bio: "With over 15 years behind the decks, Jacob founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
     specialties: ["Weddings", "Corporate Events", "EDM"],
   },
   {
-    name: "The BeatMaster Crew",
+    name: "The Hersky Crew",
     role: "Professional DJ Team",
     bio: "Our handpicked team of professional DJs shares Jacob's passion for music and commitment to excellence. Each member brings their unique style while maintaining our signature standard of quality.",
     specialties: ["All Event Types", "Multiple Genres", "Bilingual Services"],
@@ -63,7 +63,7 @@ const AboutPage = () => {
               </span>
               <h1 className="font-display text-5xl md:text-6xl font-bold mb-6">
                 <span className="text-foreground">ABOUT </span>
-                <span className="gradient-text">BEATMASTER DJ</span>
+                <span className="gradient-text">HERSKY DJ & AV</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
                 Since 2012, we've been Ottawa's premier DJ service, bringing energy, 
@@ -104,7 +104,7 @@ const AboutPage = () => {
                   </h2>
                   <div className="space-y-4 text-muted-foreground leading-relaxed">
                     <p>
-                      BeatMaster DJ was founded in 2012 by Jacob Herscovitch, a passionate DJ who 
+                      Hersky DJ & AV was founded in 2012 by Jacob Herscovitch, a passionate DJ who 
                       believed that every event deserves exceptional entertainment. What started as 
                       a one-man operation quickly grew into Ottawa's most trusted DJ service.
                     </p>
