@@ -4,6 +4,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
+import { useEffect } from "react";
+import { initializeNativeFeatures } from "@/lib/native";
 import Index from "./pages/Index";
 import BookingPage from "./pages/BookingPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -13,12 +15,17 @@ import PackagesPage from "./pages/PackagesPage";
 import AuthPage from "./pages/AuthPage";
 import ClientPortal from "./pages/ClientPortal";
 import AdminDashboard from "./pages/AdminDashboard";
+import InstallPage from "./pages/InstallPage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
 function App() {
+  useEffect(() => {
+    initializeNativeFeatures();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <CartProvider>
@@ -37,6 +44,7 @@ function App() {
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/client-portal" element={<ClientPortal />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/install" element={<InstallPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
