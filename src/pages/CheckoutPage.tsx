@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, CreditCard, Mail, Copy, Check, FileText, PenTool, Plus } from "lucide-react";
+import { ArrowLeft, CreditCard, Mail, Copy, Check, FileText, PenTool, Plus, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import BookingAddons from "@/components/BookingAddons";
 
@@ -18,6 +19,7 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const [copied, setCopied] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [contractAgreed, setContractAgreed] = useState(false);
   const [signature, setSignature] = useState("");
   const [step, setStep] = useState<"addons" | "details" | "contract" | "payment">("addons");
@@ -453,10 +455,81 @@ const CheckoutPage = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
+                    {/* Online Payment Option */}
                     <div className="bg-primary/10 border border-primary/30 rounded-lg p-6">
-                      <h3 className="font-display text-xl font-bold mb-2">E-Transfer Payment</h3>
+                      <h3 className="font-display text-xl font-bold mb-2 flex items-center gap-2">
+                        <CreditCard className="w-5 h-5 text-primary" />
+                        Pay Online with Stripe
+                      </h3>
                       <p className="text-muted-foreground mb-4">
-                        To confirm your booking and secure your date, please send a <span className="text-primary font-bold">50% deposit of ${deposit}</span> via Interac e-Transfer.
+                        Secure online payment. Pay your <span className="text-primary font-bold">${deposit} deposit</span> instantly with credit card.
+                      </p>
+                      <Button
+                        variant="hero"
+                        size="lg"
+                        className="w-full"
+                        onClick={async () => {
+                          setIsProcessingPayment(true);
+                          try {
+                            const { data, error } = await supabase.functions.invoke('create-payment', {
+                              body: {
+                                amount: deposit,
+                                customerEmail: eventDetails.email,
+                                customerName: `${eventDetails.firstName} ${eventDetails.lastName}`,
+                                eventDetails: `${eventDetails.eventDate} at ${eventDetails.eventLocation}`,
+                                packageName: `${pkg?.category} - ${pkg?.name}`,
+                              },
+                            });
+                            
+                            if (error) throw error;
+                            if (data?.url) {
+                              // Also submit the booking info via form before redirecting
+                              handleFinalSubmit();
+                              window.open(data.url, '_blank');
+                            } else {
+                              throw new Error('No checkout URL returned');
+                            }
+                          } catch (error: any) {
+                            console.error('Payment error:', error);
+                            toast({
+                              title: "Payment Error",
+                              description: error.message || "Failed to create payment session. Please try e-transfer instead.",
+                              variant: "destructive",
+                            });
+                          } finally {
+                            setIsProcessingPayment(false);
+                          }
+                        }}
+                        disabled={isProcessingPayment}
+                      >
+                        {isProcessingPayment ? (
+                          <>
+                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="w-5 h-5 mr-2" />
+                            Pay ${deposit} Now
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <Separator className="w-full bg-white/10" />
+                      </div>
+                      <div className="relative flex justify-center text-xs uppercase">
+                        <span className="bg-card px-2 text-muted-foreground">Or pay via e-transfer</span>
+                      </div>
+                    </div>
+
+                    {/* E-Transfer Option */}
+                    <div className="bg-card/30 border border-white/10 rounded-lg p-6">
+                      <h3 className="font-display text-lg font-bold mb-2">E-Transfer Payment</h3>
+                      <p className="text-muted-foreground mb-4 text-sm">
+                        Send a <span className="text-primary font-bold">50% deposit of ${deposit}</span> via Interac e-Transfer.
                       </p>
                       
                       <div className="bg-card/50 rounded-lg p-4 flex items-center justify-between mb-4">
@@ -509,8 +582,8 @@ const CheckoutPage = () => {
 
                     <div className="bg-secondary/10 border border-secondary/30 rounded-lg p-4">
                       <p className="text-sm text-secondary">
-                        <strong>Note:</strong> Your booking will be confirmed once we receive your e-Transfer deposit. 
-                        You will receive a confirmation email within 24 hours of payment.
+                        <strong>Note:</strong> Your booking will be confirmed once we receive your payment. 
+                        You will receive a confirmation email within 24 hours.
                       </p>
                     </div>
 
@@ -519,14 +592,14 @@ const CheckoutPage = () => {
                         Back
                       </Button>
                       <Button 
-                        variant="hero" 
+                        variant="outline" 
                         size="lg" 
                         className="flex-1"
                         onClick={handleFinalSubmit}
                         disabled={isSubmitting}
                       >
                         <Mail className="w-5 h-5 mr-2" />
-                        {isSubmitting ? "Submitting..." : "Submit Booking"}
+                        {isSubmitting ? "Submitting..." : "Submit & Pay Later"}
                       </Button>
                     </div>
                   </CardContent>
