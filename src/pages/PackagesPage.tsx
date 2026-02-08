@@ -41,8 +41,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Essential",
-        price: "$1,500",
-        priceNum: 1500,
+        price: "$1,600",
+        priceNum: 1600,
         description: "Perfect for intimate ceremonies",
         features: [
           "4 hours of DJ service",
