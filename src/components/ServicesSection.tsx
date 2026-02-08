@@ -2,6 +2,13 @@ import { Heart, Building2, GraduationCap, Users, Zap } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
+// Import real stock photos
+import weddingImg from "@/assets/services/wedding-dj.jpg";
+import corporateImg from "@/assets/services/corporate-event.jpg";
+import schoolImg from "@/assets/services/school-event.jpg";
+import privateImg from "@/assets/services/private-party.jpg";
+import edmImg from "@/assets/services/edm-event.jpg";
+
 const services = [
   {
     icon: Heart,
@@ -10,6 +17,7 @@ const services = [
     color: "text-secondary",
     gradient: "from-secondary/20 to-accent/20",
     route: "/packages/weddings",
+    image: weddingImg,
   },
   {
     icon: Building2,
@@ -18,6 +26,7 @@ const services = [
     color: "text-primary",
     gradient: "from-primary/20 to-accent/20",
     route: "/packages/corporate",
+    image: corporateImg,
   },
   {
     icon: GraduationCap,
@@ -26,6 +35,7 @@ const services = [
     color: "text-accent",
     gradient: "from-accent/20 to-primary/20",
     route: "/packages/schools",
+    image: schoolImg,
   },
   {
     icon: Users,
@@ -34,6 +44,7 @@ const services = [
     color: "text-secondary",
     gradient: "from-secondary/20 to-primary/20",
     route: "/packages/private",
+    image: privateImg,
   },
   {
     icon: Zap,
@@ -42,6 +53,7 @@ const services = [
     color: "text-primary",
     gradient: "from-primary/20 to-secondary/20",
     route: "/packages/edm",
+    image: edmImg,
   },
 ];
 
@@ -74,15 +86,26 @@ const ServicesSection = () => {
             >
               <Card
                 variant="glass"
-                className="group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_hsl(199,89%,48%,0.2)] h-full"
+                className="group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.2)] h-full overflow-hidden"
               >
-                <CardContent className="p-8">
-                  <div className="relative mb-6">
-                    <div className={`absolute inset-0 bg-gradient-to-br ${service.gradient} rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
-                    <div className={`relative w-16 h-16 rounded-full bg-gradient-to-br ${service.gradient} flex items-center justify-center`}>
-                      <service.icon className={`w-8 h-8 ${service.color}`} />
+                {/* Image Section */}
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={`${service.title} DJ services`}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                  
+                  {/* Icon Badge */}
+                  <div className="absolute bottom-4 left-4">
+                    <div className={`relative w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-lg`}>
+                      <service.icon className={`w-6 h-6 ${service.color}`} />
                     </div>
                   </div>
+                </div>
+
+                <CardContent className="p-6">
                   <h3 className="font-display text-xl font-bold mb-3 group-hover:gradient-text transition-all duration-300">
                     {service.title}
                   </h3>
