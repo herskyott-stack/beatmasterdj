@@ -402,40 +402,34 @@ const BookingPage = () => {
 
             {Object.entries(packageData).map(([category, packages]) => (
               <TabsContent key={category} value={category} className="mt-0">
-                {/* Category Hero Image */}
-                <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden mb-8">
-                  <img
-                    src={categoryImages[category]}
-                    alt={`${category} event`}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-                  <div className="absolute bottom-6 left-6">
-                    <h2 className="font-display text-3xl md:text-4xl font-bold gradient-text capitalize">
-                      {category}
-                    </h2>
-                    <p className="text-muted-foreground mt-1">Choose your perfect package</p>
-                  </div>
-                </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {packages.map((pkg) => (
                     <Card
                       key={pkg.name}
                       variant={pkg.featured ? "featured" : "glass"}
-                      className={`relative transition-all duration-500 hover:scale-[1.02] ${
+                      className={`relative transition-all duration-500 hover:scale-[1.02] overflow-hidden ${
                         pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
                       }`}
                     >
+                      {/* Background Image */}
+                      <div className="absolute inset-0 z-0">
+                        <img
+                          src={categoryImages[category]}
+                          alt=""
+                          className="w-full h-full object-cover opacity-20"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-b from-card/80 via-card/95 to-card" />
+                      </div>
+
                       {pkg.featured && (
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full z-10">
                           <div className="flex items-center gap-1">
                             <Star className="w-3 h-3 fill-current" />
                             <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
                           </div>
                         </div>
                       )}
-                      <CardHeader className="text-center pb-4">
+                      <CardHeader className="text-center pb-4 relative z-10">
                         <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
                         <CardDescription>{pkg.description}</CardDescription>
                         <div className="mt-4">
@@ -444,7 +438,7 @@ const BookingPage = () => {
                           </span>
                         </div>
                       </CardHeader>
-                      <CardContent className="pb-6">
+                      <CardContent className="pb-6 relative z-10">
                         <ul className="space-y-3">
                           {pkg.features.map((feature) => (
                             <li key={feature} className="flex items-start gap-3">
@@ -454,7 +448,7 @@ const BookingPage = () => {
                           ))}
                         </ul>
                       </CardContent>
-                      <CardFooter>
+                      <CardFooter className="relative z-10">
                         <Button
                           variant={pkg.featured ? "hero" : "outline"}
                           className="w-full"
