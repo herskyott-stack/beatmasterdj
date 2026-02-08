@@ -12,6 +12,8 @@ import corporateHero from "@/assets/categories/corporate-hero.jpg";
 import schoolHero from "@/assets/categories/school-hero.jpg";
 import privateHero from "@/assets/categories/private-hero.jpg";
 import edmHero from "@/assets/categories/edm-hero.jpg";
+import karaokeHero from "@/assets/categories/karaoke-hero.jpg";
+import avHero from "@/assets/categories/av-hero.jpg";
 
 type Package = {
   name: string;
@@ -28,6 +30,8 @@ const categoryHeroImages: Record<string, string> = {
   schools: schoolHero,
   private: privateHero,
   edm: edmHero,
+  karaoke: karaokeHero,
+  av: avHero,
 };
 
 const packageData: Record<string, { title: string; description: string; packages: Package[] }> = {
@@ -364,6 +368,141 @@ const packageData: Record<string, { title: string; description: string; packages
           "Live production",
           "VIP area audio",
           "Recording included",
+        ],
+      },
+    ],
+  },
+  karaoke: {
+    title: "Karaoke Packages",
+    description: "Sing your heart out with 2 wireless microphones and projected lyrics on screen.",
+    packages: [
+      {
+        name: "Basic",
+        price: "$400",
+        priceNum: 400,
+        description: "Small gatherings",
+        features: [
+          "2 hours of karaoke",
+          "2 wireless microphones",
+          "Lyrics on TV screen",
+          "10,000+ song library",
+          "Basic sound system",
+        ],
+      },
+      {
+        name: "Standard",
+        price: "$600",
+        priceNum: 600,
+        description: "Perfect for parties",
+        features: [
+          "3 hours of karaoke",
+          "2 wireless microphones",
+          "Projected lyrics display",
+          "15,000+ song library",
+          "Premium sound system",
+          "Song request queue",
+        ],
+        featured: true,
+      },
+      {
+        name: "Premium",
+        price: "$850",
+        priceNum: 850,
+        description: "Enhanced experience",
+        features: [
+          "4 hours of karaoke",
+          "2 wireless microphones",
+          "Large screen projection",
+          "20,000+ song library",
+          "Concert sound system",
+          "Stage lighting",
+          "Song request queue",
+        ],
+      },
+      {
+        name: "Ultimate",
+        price: "$1,200",
+        priceNum: 1200,
+        description: "Full karaoke production",
+        features: [
+          "5+ hours of karaoke",
+          "2 wireless microphones",
+          "Dual screen setup",
+          "Unlimited song library",
+          "Professional sound system",
+          "Stage lighting & effects",
+          "Song request app",
+          "Backup equipment",
+        ],
+      },
+    ],
+  },
+  av: {
+    title: "AV Production Packages",
+    description: "Full audio-visual production with LED walls, staging, and professional sound systems.",
+    packages: [
+      {
+        name: "Basic AV",
+        price: "$2,500",
+        priceNum: 2500,
+        description: "Essential AV setup",
+        features: [
+          "Professional sound system",
+          "2 speaker stacks",
+          "Wireless microphones",
+          "Basic stage lighting",
+          "Setup & teardown",
+          "On-site technician",
+        ],
+      },
+      {
+        name: "Standard AV",
+        price: "$4,500",
+        priceNum: 4500,
+        description: "Enhanced production",
+        features: [
+          "Concert-grade sound",
+          "4 speaker stacks + subs",
+          "Multiple wireless mics",
+          "LED uplighting",
+          "Projector & screen",
+          "Setup & teardown",
+          "On-site technician",
+          "Backup equipment",
+        ],
+        featured: true,
+      },
+      {
+        name: "Premium AV",
+        price: "$7,500",
+        priceNum: 7500,
+        description: "Full production package",
+        features: [
+          "Stadium sound system",
+          "Line array speakers",
+          "Multiple wireless systems",
+          "LED video wall",
+          "Intelligent lighting rig",
+          "Stage design",
+          "Production team",
+          "Backup systems",
+        ],
+      },
+      {
+        name: "Enterprise AV",
+        price: "$12,000",
+        priceNum: 12000,
+        description: "Large-scale production",
+        features: [
+          "Multi-zone audio system",
+          "Large LED video walls",
+          "Full lighting design",
+          "Custom staging",
+          "Live video production",
+          "Multiple camera setup",
+          "Full production crew",
+          "24/7 support",
+          "Complete redundancy",
         ],
       },
     ],

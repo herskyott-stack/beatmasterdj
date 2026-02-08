@@ -13,6 +13,8 @@ import corporatePackageImg from "@/assets/packages/corporate-package.jpg";
 import schoolPackageImg from "@/assets/packages/school-package.jpg";
 import privatePackageImg from "@/assets/packages/private-package.jpg";
 import edmPackageImg from "@/assets/packages/edm-package.jpg";
+import karaokePackageImg from "@/assets/packages/karaoke-package.jpg";
+import avPackageImg from "@/assets/packages/av-package.jpg";
 
 type Package = {
   name: string;
@@ -30,6 +32,8 @@ const categoryImages: Record<string, string> = {
   schools: schoolPackageImg,
   private: privatePackageImg,
   edm: edmPackageImg,
+  karaoke: karaokePackageImg,
+  av: avPackageImg,
 };
 
 const packageData: Record<string, Package[]> = {
@@ -350,6 +354,133 @@ const packageData: Record<string, Package[]> = {
       ],
     },
   ],
+  karaoke: [
+    {
+      name: "Basic",
+      price: "$400",
+      priceNum: 400,
+      description: "Small gatherings",
+      features: [
+        "2 hours of karaoke",
+        "2 wireless microphones",
+        "Lyrics on TV screen",
+        "10,000+ song library",
+        "Basic sound system",
+      ],
+    },
+    {
+      name: "Standard",
+      price: "$600",
+      priceNum: 600,
+      description: "Perfect for parties",
+      features: [
+        "3 hours of karaoke",
+        "2 wireless microphones",
+        "Projected lyrics display",
+        "15,000+ song library",
+        "Premium sound system",
+        "Song request queue",
+      ],
+      featured: true,
+    },
+    {
+      name: "Premium",
+      price: "$850",
+      priceNum: 850,
+      description: "Enhanced experience",
+      features: [
+        "4 hours of karaoke",
+        "2 wireless microphones",
+        "Large screen projection",
+        "20,000+ song library",
+        "Concert sound system",
+        "Stage lighting",
+        "Song request queue",
+      ],
+    },
+    {
+      name: "Ultimate",
+      price: "$1,200",
+      priceNum: 1200,
+      description: "Full karaoke production",
+      features: [
+        "5+ hours of karaoke",
+        "2 wireless microphones",
+        "Dual screen setup",
+        "Unlimited song library",
+        "Professional sound system",
+        "Stage lighting & effects",
+        "Song request app",
+        "Backup equipment",
+      ],
+    },
+  ],
+  av: [
+    {
+      name: "Basic AV",
+      price: "$2,500",
+      priceNum: 2500,
+      description: "Essential AV setup",
+      features: [
+        "Professional sound system",
+        "2 speaker stacks",
+        "Wireless microphones",
+        "Basic stage lighting",
+        "Setup & teardown",
+        "On-site technician",
+      ],
+    },
+    {
+      name: "Standard AV",
+      price: "$4,500",
+      priceNum: 4500,
+      description: "Enhanced production",
+      features: [
+        "Concert-grade sound",
+        "4 speaker stacks + subs",
+        "Multiple wireless mics",
+        "LED uplighting",
+        "Projector & screen",
+        "Setup & teardown",
+        "On-site technician",
+        "Backup equipment",
+      ],
+      featured: true,
+    },
+    {
+      name: "Premium AV",
+      price: "$7,500",
+      priceNum: 7500,
+      description: "Full production package",
+      features: [
+        "Stadium sound system",
+        "Line array speakers",
+        "Multiple wireless systems",
+        "LED video wall",
+        "Intelligent lighting rig",
+        "Stage design",
+        "Production team",
+        "Backup systems",
+      ],
+    },
+    {
+      name: "Enterprise AV",
+      price: "$12,000",
+      priceNum: 12000,
+      description: "Large-scale production",
+      features: [
+        "Multi-zone audio system",
+        "Large LED video walls",
+        "Full lighting design",
+        "Custom staging",
+        "Live video production",
+        "Multiple camera setup",
+        "Full production crew",
+        "24/7 support",
+        "Complete redundancy",
+      ],
+    },
+  ],
 };
 
 const BookingPage = () => {
@@ -416,9 +547,9 @@ const BookingPage = () => {
                         <img
                           src={categoryImages[category]}
                           alt=""
-                          className="w-full h-full object-cover opacity-20"
+                          className="w-full h-full object-cover opacity-40"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-b from-card/80 via-card/95 to-card" />
+                        <div className="absolute inset-0 bg-gradient-to-b from-card/60 via-card/80 to-card" />
                       </div>
 
                       {pkg.featured && (

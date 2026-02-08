@@ -1,4 +1,4 @@
-import { Heart, Building2, GraduationCap, Users, Zap } from "lucide-react";
+import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 
@@ -8,6 +8,8 @@ import corporateImg from "@/assets/services/corporate-event.jpg";
 import schoolImg from "@/assets/services/school-event.jpg";
 import privateImg from "@/assets/services/private-party.jpg";
 import edmImg from "@/assets/services/edm-event.jpg";
+import karaokeImg from "@/assets/services/karaoke-service.jpg";
+import avImg from "@/assets/services/av-service.jpg";
 
 const services = [
   {
@@ -54,6 +56,24 @@ const services = [
     gradient: "from-primary/20 to-secondary/20",
     route: "/packages/edm",
     image: edmImg,
+  },
+  {
+    icon: Mic2,
+    title: "Karaoke",
+    description: "Sing your heart out with 2 wireless microphones and projected lyrics on screen.",
+    color: "text-accent",
+    gradient: "from-accent/20 to-secondary/20",
+    route: "/packages/karaoke",
+    image: karaokeImg,
+  },
+  {
+    icon: Monitor,
+    title: "AV Production",
+    description: "Full audio-visual production with LED walls, staging, and professional sound systems.",
+    color: "text-secondary",
+    gradient: "from-secondary/20 to-accent/20",
+    route: "/packages/av",
+    image: avImg,
   },
 ];
 
