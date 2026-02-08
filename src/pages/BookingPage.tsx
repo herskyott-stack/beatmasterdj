@@ -7,6 +7,13 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+// Package images
+import weddingPackageImg from "@/assets/packages/wedding-package.jpg";
+import corporatePackageImg from "@/assets/packages/corporate-package.jpg";
+import schoolPackageImg from "@/assets/packages/school-package.jpg";
+import privatePackageImg from "@/assets/packages/private-package.jpg";
+import edmPackageImg from "@/assets/packages/edm-package.jpg";
+
 type Package = {
   name: string;
   price: string;
@@ -14,6 +21,15 @@ type Package = {
   description: string;
   features: string[];
   featured?: boolean;
+};
+
+// Category images map
+const categoryImages: Record<string, string> = {
+  weddings: weddingPackageImg,
+  corporate: corporatePackageImg,
+  schools: schoolPackageImg,
+  private: privatePackageImg,
+  edm: edmPackageImg,
 };
 
 const packageData: Record<string, Package[]> = {
@@ -386,6 +402,22 @@ const BookingPage = () => {
 
             {Object.entries(packageData).map(([category, packages]) => (
               <TabsContent key={category} value={category} className="mt-0">
+                {/* Category Hero Image */}
+                <div className="relative h-48 md:h-64 rounded-2xl overflow-hidden mb-8">
+                  <img
+                    src={categoryImages[category]}
+                    alt={`${category} event`}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+                  <div className="absolute bottom-6 left-6">
+                    <h2 className="font-display text-3xl md:text-4xl font-bold gradient-text capitalize">
+                      {category}
+                    </h2>
+                    <p className="text-muted-foreground mt-1">Choose your perfect package</p>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                   {packages.map((pkg) => (
                     <Card
