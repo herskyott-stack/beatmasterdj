@@ -418,8 +418,8 @@ const packageData: Record<string, Package[]> = {
   av: [
     {
       name: "Basic AV",
-      price: "$2,500",
-      priceNum: 2500,
+      price: "$2,875",
+      priceNum: 2875,
       description: "Essential AV setup",
       features: [
         "Professional sound system",
@@ -432,8 +432,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Standard AV",
-      price: "$4,500",
-      priceNum: 4500,
+      price: "$5,175",
+      priceNum: 5175,
       description: "Enhanced production",
       features: [
         "Concert-grade sound",
@@ -449,8 +449,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Premium AV",
-      price: "$7,500",
-      priceNum: 7500,
+      price: "$8,625",
+      priceNum: 8625,
       description: "Full production package",
       features: [
         "Stadium sound system",
@@ -465,8 +465,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Enterprise AV",
-      price: "$12,000",
-      priceNum: 12000,
+      price: "$13,800",
+      priceNum: 13800,
       description: "Large-scale production",
       features: [
         "Multi-zone audio system",
