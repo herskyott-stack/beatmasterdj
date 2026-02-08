@@ -239,66 +239,50 @@ const ClientPortal = () => {
     const additionalSongs = musicRequests.filter(r => r.request_type === "additional");
     const doNotPlaySongs = musicRequests.filter(r => r.request_type === "do_not_play");
 
-    // Create form submission
-    const form = document.createElement("form");
-    form.action = "https://formsubmit.co/hersky.ott@gmail.com";
-    form.method = "POST";
+    try {
+      // Send email notification via edge function
+      const { error: emailError } = await supabase.functions.invoke("send-music-notification", {
+        body: {
+          clientName: `${profile.first_name} ${profile.last_name}`,
+          clientEmail: profile.email,
+          eventDate: profile.event_date,
+          eventLocation: profile.event_location,
+          prioritySongs: prioritySongs.map(s => ({
+            song_title: s.song_title,
+            artist: s.artist,
+            notes: s.notes,
+          })),
+          additionalSongs: additionalSongs.map(s => ({
+            song_title: s.song_title,
+            artist: s.artist,
+          })),
+          doNotPlaySongs: doNotPlaySongs.map(s => ({
+            song_title: s.song_title,
+            artist: s.artist,
+          })),
+        },
+      });
 
-    const addField = (name: string, value: string) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
-      form.appendChild(input);
-    };
+      if (emailError) {
+        console.error("Email notification error:", emailError);
+        // Continue anyway, the form submission is the backup
+      }
 
-    addField("_subject", `🎵 MUSIC PLAYLIST SUBMISSION - ${profile.first_name} ${profile.last_name}`);
-    addField("_template", "table");
-    addField("_captcha", "false");
-    addField("_next", window.location.origin + "/client-portal?submitted=true");
+      toast({
+        title: "Playlist Submitted!",
+        description: "Your music selection has been sent. We'll review it and get back to you!",
+      });
 
-    // Client info
-    addField("1. Client Name", `${profile.first_name} ${profile.last_name}`);
-    addField("2. Email", profile.email);
-    addField("3. Phone", profile.phone || "Not provided");
-    addField("4. Event Date", profile.event_date || "Not provided");
-    addField("5. Event Location", profile.event_location || "Not provided");
-
-    // Priority songs
-    if (prioritySongs.length > 0) {
-      const priorityList = prioritySongs.map((s, i) => 
-        `${i + 1}. ${s.song_title}${s.artist ? ` by ${s.artist}` : ""}${s.notes ? ` (${s.notes})` : ""}`
-      ).join("\n");
-      addField("6. PRIORITY SONGS (Grand Entrances, Special Moments)", priorityList);
-    } else {
-      addField("6. PRIORITY SONGS", "None");
+      // Navigate to success state
+      navigate("/client-portal?submitted=true");
+    } catch (error) {
+      console.error("Error submitting playlist:", error);
+      toast({
+        title: "Error",
+        description: "Failed to submit playlist. Please try again.",
+        variant: "destructive",
+      });
     }
-
-    // Additional songs
-    if (additionalSongs.length > 0) {
-      const additionalList = additionalSongs.map((s, i) => 
-        `${i + 1}. ${s.song_title}${s.artist ? ` by ${s.artist}` : ""}`
-      ).join("\n");
-      addField("7. ADDITIONAL SONGS (Party/Dancing)", additionalList);
-    } else {
-      addField("7. ADDITIONAL SONGS", "None");
-    }
-
-    // Do not play
-    if (doNotPlaySongs.length > 0) {
-      const doNotPlayList = doNotPlaySongs.map((s, i) => 
-        `${i + 1}. ${s.song_title}${s.artist ? ` by ${s.artist}` : ""}`
-      ).join("\n");
-      addField("8. DO NOT PLAY", doNotPlayList);
-    } else {
-      addField("8. DO NOT PLAY", "None");
-    }
-
-    addField("9. Submission Date", new Date().toLocaleString());
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
 
     setSubmitting(false);
   };

@@ -1,1 +1,10 @@
 project_id = "atxceyzigqadmsasxags"
+
+[functions.create-payment]
+verify_jwt = false
+
+[functions.send-music-notification]
+verify_jwt = false
+
+[functions.send-event-reminder]
+verify_jwt = false
