@@ -6,6 +6,13 @@ import { useCart } from "@/contexts/CartContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+// Import category hero images
+import weddingHero from "@/assets/categories/wedding-hero.jpg";
+import corporateHero from "@/assets/categories/corporate-hero.jpg";
+import schoolHero from "@/assets/categories/school-hero.jpg";
+import privateHero from "@/assets/categories/private-hero.jpg";
+import edmHero from "@/assets/categories/edm-hero.jpg";
+
 type Package = {
   name: string;
   price: string;
@@ -13,6 +20,14 @@ type Package = {
   description: string;
   features: string[];
   featured?: boolean;
+};
+
+const categoryHeroImages: Record<string, string> = {
+  weddings: weddingHero,
+  corporate: corporateHero,
+  schools: schoolHero,
+  private: privateHero,
+  edm: edmHero,
 };
 
 const packageData: Record<string, { title: string; description: string; packages: Package[] }> = {
@@ -161,8 +176,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Basic",
-        price: "$800",
-        priceNum: 800,
+        price: "$960",
+        priceNum: 960,
         description: "School dances & events",
         features: [
           "3 hours of DJ service",
@@ -174,8 +189,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Standard",
-        price: "$1,200",
-        priceNum: 1200,
+        price: "$1,440",
+        priceNum: 1440,
         description: "Enhanced school events",
         features: [
           "4 hours of DJ service",
@@ -189,8 +204,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Prom Package",
-        price: "$1,800",
-        priceNum: 1800,
+        price: "$2,160",
+        priceNum: 2160,
         description: "Perfect for prom night",
         features: [
           "5 hours of DJ service",
@@ -204,8 +219,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Homecoming",
-        price: "$2,500",
-        priceNum: 2500,
+        price: "$3,000",
+        priceNum: 3000,
         description: "Ultimate homecoming experience",
         features: [
           "6 hours of DJ service",
@@ -407,13 +422,21 @@ const PackagesPage = () => {
           </Button>
         </div>
 
-        {/* Header */}
+        {/* Hero Image Header */}
         <div className="container mx-auto px-4 mb-16">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
-              <span className="gradient-text">{categoryData.title.toUpperCase()}</span>
-            </h1>
-            <p className="text-muted-foreground text-lg">{categoryData.description}</p>
+          <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
+            <img
+              src={category ? categoryHeroImages[category] : weddingHero}
+              alt={categoryData.title}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-8 text-center">
+              <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
+                <span className="gradient-text">{categoryData.title.toUpperCase()}</span>
+              </h1>
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{categoryData.description}</p>
+            </div>
           </div>
         </div>
 

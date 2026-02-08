@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Star, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-dj.jpg";
+import heroImage from "@/assets/hero-wedding.jpg";
 
 const HeroSection = () => {
   return (
@@ -10,7 +10,7 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="DJ performing at event"
+          alt="Beautiful wedding celebration with DJ"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
@@ -57,7 +57,7 @@ const HeroSection = () => {
             {[
               { value: "500+", label: "Events Performed" },
               { value: "15+", label: "Years Experience" },
-              { value: "100%", label: "Satisfaction Rate" },
+              { value: "97%", label: "Satisfaction Rate" },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
                 <div className="font-display text-3xl md:text-4xl font-bold gradient-text">
