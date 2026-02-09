@@ -443,8 +443,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Basic AV",
-        price: "$2,900",
-        priceNum: 2900,
+        price: "$3,625",
+        priceNum: 3625,
         description: "Essential AV setup",
         features: [
           "Professional sound system",
@@ -457,8 +457,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Standard AV",
-        price: "$5,200",
-        priceNum: 5200,
+        price: "$6,500",
+        priceNum: 6500,
         description: "Enhanced production",
         features: [
           "Concert-grade sound",
@@ -474,8 +474,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Premium AV",
-        price: "$8,600",
-        priceNum: 8600,
+        price: "$10,750",
+        priceNum: 10750,
         description: "Full production package",
         features: [
           "Stadium sound system",
@@ -490,8 +490,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Enterprise AV",
-        price: "$13,800",
-        priceNum: 13800,
+        price: "$17,250",
+        priceNum: 17250,
         description: "Large-scale production",
         features: [
           "Multi-zone audio system",
