@@ -9,10 +9,10 @@ const cardVariants = cva(
       variant: {
         default: "border bg-card shadow-sm",
         glass: "bg-card/60 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_hsl(0,0%,0%,0.4)]",
-        neon: "bg-card/80 backdrop-blur-xl border border-primary/30 shadow-[0_0_20px_hsl(199,89%,48%,0.2)]",
-        neonPink: "bg-card/80 backdrop-blur-xl border border-secondary/30 shadow-[0_0_20px_hsl(320,80%,55%,0.2)]",
+        neon: "bg-card/80 backdrop-blur-xl border border-primary/30 shadow-[0_0_20px_hsl(38,85%,55%,0.2)]",
+        neonPink: "bg-card/80 backdrop-blur-xl border border-secondary/30 shadow-[0_0_20px_hsl(340,65%,62%,0.2)]",
         gradient: "bg-gradient-to-br from-card to-muted border border-white/10",
-        featured: "bg-gradient-to-br from-primary/20 to-accent/20 border-2 border-primary shadow-[0_0_30px_hsl(199,89%,48%,0.3)]",
+        featured: "bg-gradient-to-br from-primary/20 to-secondary/20 border-2 border-primary shadow-[0_0_30px_hsl(38,85%,55%,0.3)]",
       },
     },
     defaultVariants: {
