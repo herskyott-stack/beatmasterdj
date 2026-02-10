@@ -10,37 +10,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ArrowLeft, CreditCard, Mail, Copy, Check, FileText, PenTool, Plus, Loader2 } from "lucide-react";
+import { ArrowLeft, CreditCard, Check, FileText, PenTool, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import BookingAddons from "@/components/BookingAddons";
 
 const CheckoutPage = () => {
   const { items, eventDetails, updateEventDetails, removeItem, getSubtotal, getTax, getTotal, getDeposit, clearCart } = useCart();
   const navigate = useNavigate();
-  const [copied, setCopied] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [contractAgreed, setContractAgreed] = useState(false);
   const [signature, setSignature] = useState("");
   const [step, setStep] = useState<"addons" | "details" | "contract" | "payment">("addons");
 
-  const etransferEmail = "jacob.herscovitch@gmail.com";
   const subtotal = getSubtotal();
   const tax = getTax();
   const total = getTotal();
   const deposit = getDeposit();
   const pkg = items.find(i => i.type === "package");
   const addons = items.filter(i => i.type === "addon");
-
-  const handleCopyEmail = () => {
-    navigator.clipboard.writeText(etransferEmail);
-    setCopied(true);
-    toast({
-      title: "Email Copied",
-      description: "E-transfer email copied to clipboard",
-    });
-    setTimeout(() => setCopied(false), 2000);
-  };
 
   const handleDetailsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +68,7 @@ const CheckoutPage = () => {
   };
 
   const handleFinalSubmit = async () => {
-    setIsSubmitting(true);
+    // Submit booking details via FormSubmit
 
     // Create hidden form and submit to FormSubmit.co
     const form = document.createElement("form");
@@ -155,10 +142,8 @@ const CheckoutPage = () => {
 
     toast({
       title: "Booking Confirmed!",
-      description: "Your booking has been submitted. Please send your e-transfer deposit to secure your date.",
+      description: "Your booking has been submitted.",
     });
-
-    setIsSubmitting(false);
   };
 
   if (items.length === 0) {
@@ -516,41 +501,6 @@ const CheckoutPage = () => {
                       </Button>
                     </div>
 
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <Separator className="w-full bg-white/10" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card px-2 text-muted-foreground">Or pay via e-transfer</span>
-                      </div>
-                    </div>
-
-                    {/* E-Transfer Option */}
-                    <div className="bg-card/30 border border-white/10 rounded-lg p-6">
-                      <h3 className="font-display text-lg font-bold mb-2">E-Transfer Payment</h3>
-                      <p className="text-muted-foreground mb-4 text-sm">
-                        Send a <span className="text-primary font-bold">50% deposit of ${deposit}</span> via Interac e-Transfer.
-                      </p>
-                      
-                      <div className="bg-card/50 rounded-lg p-4 flex items-center justify-between mb-4">
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">Send e-Transfer to:</p>
-                          <code className="text-primary font-mono text-lg">{etransferEmail}</code>
-                        </div>
-                        <Button variant="outline" size="sm" onClick={handleCopyEmail}>
-                          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                        </Button>
-                      </div>
-
-                      <div className="bg-card/30 rounded-lg p-4 space-y-2">
-                        <p className="text-sm"><strong>In the e-Transfer message, include:</strong></p>
-                        <ul className="text-sm text-muted-foreground list-disc pl-5">
-                          <li>Your full name: {eventDetails.firstName} {eventDetails.lastName}</li>
-                          <li>Event date: {eventDetails.eventDate}</li>
-                          <li>Package: {pkg?.name}</li>
-                        </ul>
-                      </div>
-                    </div>
 
                     <Separator className="bg-white/10" />
 
@@ -590,16 +540,6 @@ const CheckoutPage = () => {
                     <div className="flex gap-4">
                       <Button variant="outline" onClick={() => setStep("contract")} className="flex-1">
                         Back
-                      </Button>
-                      <Button 
-                        variant="outline" 
-                        size="lg" 
-                        className="flex-1"
-                        onClick={handleFinalSubmit}
-                        disabled={isSubmitting}
-                      >
-                        <Mail className="w-5 h-5 mr-2" />
-                        {isSubmitting ? "Submitting..." : "Submit & Pay Later"}
                       </Button>
                     </div>
                   </CardContent>
