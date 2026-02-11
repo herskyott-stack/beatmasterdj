@@ -4,6 +4,11 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 
+import coldSparklers from "@/assets/addons/cold-sparklers.jpg";
+import photoBooth from "@/assets/addons/photo-booth.jpg";
+import karaoke from "@/assets/addons/karaoke.jpg";
+import dryIce from "@/assets/addons/dry-ice.jpg";
+
 const addons = [
   {
     id: "cold-sparklers",
@@ -13,6 +18,7 @@ const addons = [
     priceDisplay: "$300",
     description: "Stunning indoor-safe sparkler fountains for grand entrances, first dances, or finale moments.",
     popular: true,
+    image: coldSparklers,
   },
   {
     id: "photo-booth-basic",
@@ -22,6 +28,7 @@ const addons = [
     priceDisplay: "$750",
     description: "Premium photo booth with props and custom backdrops. Digital copies only.",
     popular: false,
+    image: photoBooth,
   },
   {
     id: "photo-booth-prints",
@@ -31,6 +38,7 @@ const addons = [
     priceDisplay: "$900",
     description: "Premium photo booth with props, custom backdrops, and unlimited instant prints for your guests.",
     popular: true,
+    image: photoBooth,
   },
   {
     id: "extra-hours",
@@ -40,6 +48,7 @@ const addons = [
     priceDisplay: "$400",
     description: "Extend the party! Add 2 additional hours of DJ service to keep the dance floor going.",
     popular: false,
+    image: null,
   },
   {
     id: "karaoke",
@@ -49,6 +58,7 @@ const addons = [
     priceDisplay: "$350",
     description: "Full karaoke setup with thousands of songs, lyrics display, and wireless microphones.",
     popular: false,
+    image: karaoke,
   },
   {
     id: "dry-ice",
@@ -58,6 +68,7 @@ const addons = [
     priceDisplay: "$250",
     description: "Dramatic low-lying fog effects for first dances, entrances, and special moments.",
     popular: true,
+    image: dryIce,
   },
 ];
 
@@ -105,11 +116,26 @@ const BookingAddons = () => {
             <Card
               key={addon.id}
               variant="glass"
-              className={`group transition-all duration-500 hover:scale-[1.02] ${
+              className={`group transition-all duration-500 hover:scale-[1.02] overflow-hidden flex flex-col ${
                 inCart ? "ring-2 ring-secondary" : ""
               }`}
             >
-              <CardContent className="p-6">
+              {addon.image && (
+                <div className="relative h-36 overflow-hidden">
+                  <img
+                    src={addon.image}
+                    alt={addon.name}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
+                  {addon.popular && (
+                    <span className="absolute top-3 right-3 px-2 py-1 text-xs font-display uppercase tracking-wider bg-gradient-to-r from-secondary to-accent rounded-full">
+                      Popular
+                    </span>
+                  )}
+                </div>
+              )}
+              <CardContent className="p-6 flex flex-col flex-1">
                 <div className="flex items-start justify-between mb-4">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-secondary/30 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -117,7 +143,7 @@ const BookingAddons = () => {
                       <addon.icon className="w-6 h-6 text-primary" />
                     </div>
                   </div>
-                  {addon.popular && (
+                  {!addon.image && addon.popular && (
                     <span className="px-2 py-1 text-xs font-display uppercase tracking-wider bg-gradient-to-r from-secondary to-accent rounded-full">
                       Popular
                     </span>
@@ -126,7 +152,7 @@ const BookingAddons = () => {
                 <h3 className="font-display text-lg font-bold mb-2">
                   {addon.name}
                 </h3>
-                <p className="text-muted-foreground text-sm mb-4">
+                <p className="text-muted-foreground text-sm mb-4 flex-1">
                   {addon.description}
                 </p>
                 <div className="flex items-center justify-between">
