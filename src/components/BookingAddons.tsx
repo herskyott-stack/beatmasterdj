@@ -8,6 +8,7 @@ import coldSparklers from "@/assets/addons/cold-sparklers.jpg";
 import photoBooth from "@/assets/addons/photo-booth.jpg";
 import karaoke from "@/assets/addons/karaoke.jpg";
 import dryIce from "@/assets/addons/dry-ice.jpg";
+import extraHours from "@/assets/addons/extra-hours.jpg";
 
 const addons = [
   {
@@ -48,7 +49,7 @@ const addons = [
     priceDisplay: "$400",
     description: "Extend the party! Add 2 additional hours of DJ service to keep the dance floor going.",
     popular: false,
-    image: null,
+    image: extraHours,
   },
   {
     id: "karaoke",
