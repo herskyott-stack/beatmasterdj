@@ -113,8 +113,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Starter",
-        price: "$1,500",
-        priceNum: 1500,
+      price: "$1,800",
+        priceNum: 1800,
         description: "Ideal for small gatherings",
         features: [
           "4 hours of DJ service",
@@ -180,8 +180,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Basic",
-        price: "$960",
-        priceNum: 960,
+      price: "$1,800",
+        priceNum: 1800,
         description: "School dances & events",
         features: [
           "3 hours of DJ service",
@@ -245,8 +245,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Party Starter",
-        price: "$1,000",
-        priceNum: 1000,
+      price: "$1,800",
+        priceNum: 1800,
         description: "Great for birthday parties",
         features: [
           "3 hours of DJ service",
