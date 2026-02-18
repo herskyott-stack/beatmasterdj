@@ -87,8 +87,8 @@ const packageData: Record<string, Package[]> = {
   corporate: [
     {
       name: "Starter",
-      price: "$1,500",
-      priceNum: 1500,
+      price: "$1,800",
+      priceNum: 1800,
       description: "Ideal for small gatherings",
       features: [
         "4 hours of DJ service",
@@ -150,8 +150,8 @@ const packageData: Record<string, Package[]> = {
   schools: [
     {
       name: "Basic",
-      price: "$800",
-      priceNum: 800,
+      price: "$1,800",
+      priceNum: 1800,
       description: "School dances & events",
       features: [
         "3 hours of DJ service",
@@ -211,8 +211,8 @@ const packageData: Record<string, Package[]> = {
   private: [
     {
       name: "Party Starter",
-      price: "$1,000",
-      priceNum: 1000,
+      price: "$1,800",
+      priceNum: 1800,
       description: "Great for birthday parties",
       features: [
         "3 hours of DJ service",
