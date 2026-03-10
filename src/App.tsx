@@ -16,6 +16,7 @@ import AuthPage from "./pages/AuthPage";
 import ClientPortal from "./pages/ClientPortal";
 import AdminDashboard from "./pages/AdminDashboard";
 import InstallPage from "./pages/InstallPage";
+import ContactPage from "./pages/ContactPage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 

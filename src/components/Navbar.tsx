@@ -14,7 +14,7 @@ const Navbar = () => {
     { href: "/about", label: "About", isRoute: true },
     { href: "/auth", label: "Client Portal", isRoute: true },
     { href: "/install", label: "Get App", isRoute: true },
-    { href: "#contact", label: "Contact" },
+    { href: "/contact", label: "Contact", isRoute: true },
   ];
 
   return (

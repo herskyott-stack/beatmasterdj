@@ -211,7 +211,7 @@ const AboutPage = () => {
                     <Link to="/book">Book Now</Link>
                   </Button>
                   <Button variant="outline" size="lg" asChild>
-                    <Link to="/#contact">Contact Us</Link>
+                    <Link to="/contact">Contact Us</Link>
                   </Button>
                 </div>
               </CardContent>
