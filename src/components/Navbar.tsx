@@ -1,4 +1,4 @@
-import { Music, Menu, X } from "lucide-react";
+import { Home, Menu, X, Music } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";

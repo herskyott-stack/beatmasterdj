@@ -70,12 +70,43 @@ const ContactSection = () => {
                     className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
                     required
                   >
-                    <option value="">Select event type</option>
-                    <option value="Wedding">Wedding</option>
-                    <option value="Corporate Event">Corporate Event</option>
-                    <option value="School Event">School Event</option>
-                    <option value="Private Party">Private Party</option>
-                    <option value="EDM Event">EDM Event</option>
+                    <option value="">Select event type or package</option>
+                    <optgroup label="Wedding">
+                      <option value="Wedding - General Inquiry">Wedding — General Inquiry</option>
+                      <option value="Wedding - Essential Package">Wedding — Essential ($1,750)</option>
+                      <option value="Wedding - Premium Package">Wedding — Premium ($2,800)</option>
+                      <option value="Wedding - Luxury Package">Wedding — Luxury ($4,200)</option>
+                    </optgroup>
+                    <optgroup label="Corporate Event">
+                      <option value="Corporate - General Inquiry">Corporate — General Inquiry</option>
+                      <option value="Corporate - Starter Package">Corporate — Starter ($1,800)</option>
+                      <option value="Corporate - Professional Package">Corporate — Professional ($3,000)</option>
+                      <option value="Corporate - Executive Package">Corporate — Executive ($5,000)</option>
+                    </optgroup>
+                    <optgroup label="School Event">
+                      <option value="School - General Inquiry">School — General Inquiry</option>
+                      <option value="School - Basic Package">School — Basic ($1,800)</option>
+                      <option value="School - Standard Package">School — Standard ($2,500)</option>
+                      <option value="School - Premium Package">School — Premium ($3,800)</option>
+                    </optgroup>
+                    <optgroup label="Private Party">
+                      <option value="Private - General Inquiry">Private Party — General Inquiry</option>
+                      <option value="Private - Party Starter Package">Private — Party Starter ($1,800)</option>
+                      <option value="Private - Party Pro Package">Private — Party Pro ($2,800)</option>
+                      <option value="Private - Ultimate Party Package">Private — Ultimate Party ($4,500)</option>
+                    </optgroup>
+                    <optgroup label="EDM Event">
+                      <option value="EDM - General Inquiry">EDM — General Inquiry</option>
+                      <option value="EDM - Club Night Package">EDM — Club Night ($2,000)</option>
+                      <option value="EDM - Festival Package">EDM — Festival ($4,000)</option>
+                      <option value="EDM - Mega Rave Package">EDM — Mega Rave ($7,000)</option>
+                    </optgroup>
+                    <optgroup label="Karaoke">
+                      <option value="Karaoke - General Inquiry">Karaoke — General Inquiry</option>
+                    </optgroup>
+                    <optgroup label="AV Production">
+                      <option value="AV Production - General Inquiry">AV Production — General Inquiry</option>
+                    </optgroup>
                   </select>
                 </div>
                 <div>
