@@ -16,7 +16,7 @@ const teamMembers = [
   {
     name: "Jacob Herscovitch",
     role: "Founder & Master DJ",
-    bio: "With over 15 years behind the decks, Jacob founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
+    bio: "DJing since the age of 12, Jacob founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
     specialties: ["Weddings", "Corporate Events", "EDM"],
   },
   {
