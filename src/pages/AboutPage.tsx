@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const stats = [
-  { number: "12+", label: "Years Experience", icon: Calendar },
+  { number: "14+", label: "Years Experience", icon: Calendar },
   { number: "2000+", label: "Events Completed", icon: Music },
   { number: "500+", label: "Happy Couples", icon: Heart },
   { number: "15+", label: "Professional DJs", icon: Users },
