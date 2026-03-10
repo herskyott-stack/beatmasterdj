@@ -46,6 +46,7 @@ function App() {
               <Route path="/client-portal" element={<ClientPortal />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/install" element={<InstallPage />} />
+              <Route path="/contact" element={<ContactPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
