@@ -18,16 +18,16 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-white/10">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 group">
+          <Link to="/" className="flex items-center gap-2 md:gap-3 group shrink-0">
             <div className="relative">
-              <Music className="w-10 h-10 text-primary transition-all duration-300 group-hover:text-secondary" />
+              <Music className="w-8 h-8 md:w-10 md:h-10 text-primary transition-all duration-300 group-hover:text-secondary" />
               <div className="absolute inset-0 bg-primary/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
-            <span className="font-display text-2xl font-bold gradient-text">
+            <span className="font-display text-lg md:text-2xl font-bold gradient-text whitespace-nowrap">
               HERSKY DJ & AV
             </span>
           </Link>
@@ -59,18 +59,18 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Buttons */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="md:hidden flex items-center gap-3">
             <Link
               to="/"
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 border border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_15px_hsl(38,85%,55%,0.3)] transition-all duration-300"
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(38,85%,55%,0.25)] transition-all duration-300"
             >
-              <Home className="w-5 h-5 text-primary" />
+              <Home className="w-4 h-4 text-primary" />
             </Link>
             <button
-              className="text-foreground p-2"
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
               onClick={() => setIsOpen(!isOpen)}
             >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
