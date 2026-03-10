@@ -114,7 +114,7 @@ const AboutPage = () => {
                       corporate galas, school proms to high-energy club nights – we've done it all.
                     </p>
                     <p>
-                      Today, with over a decade of experience and thousands of successful events 
+                      Today, with over 14 years of experience and thousands of successful events 
                       under our belt, we continue to innovate and elevate the standard of DJ 
                       entertainment in the Ottawa region and beyond.
                     </p>
