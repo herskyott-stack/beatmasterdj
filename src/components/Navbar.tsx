@@ -59,14 +59,15 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Buttons */}
-          <div className="md:hidden flex items-center gap-3">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/">
-                <Music className="w-5 h-5 text-primary" />
-              </Link>
-            </Button>
+          <div className="md:hidden flex items-center gap-2">
+            <Link
+              to="/"
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 border border-primary/30 hover:bg-primary/20 hover:border-primary/50 hover:shadow-[0_0_15px_hsl(38,85%,55%,0.3)] transition-all duration-300"
+            >
+              <Home className="w-5 h-5 text-primary" />
+            </Link>
             <button
-              className="text-foreground"
+              className="text-foreground p-2"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
