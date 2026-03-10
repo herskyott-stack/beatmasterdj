@@ -6,7 +6,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const stats = [
-  { number: "12+", label: "Years Experience", icon: Calendar },
+  { number: "14+", label: "Years Experience", icon: Calendar },
   { number: "2000+", label: "Events Completed", icon: Music },
   { number: "500+", label: "Happy Couples", icon: Heart },
   { number: "15+", label: "Professional DJs", icon: Users },
@@ -16,7 +16,7 @@ const teamMembers = [
   {
     name: "Jacob Herscovitch",
     role: "Founder & Master DJ",
-    bio: "With over 15 years behind the decks, Jacob founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
+    bio: "DJing since the age of 12, Jacob founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
     specialties: ["Weddings", "Corporate Events", "EDM"],
   },
   {
@@ -114,7 +114,7 @@ const AboutPage = () => {
                       corporate galas, school proms to high-energy club nights – we've done it all.
                     </p>
                     <p>
-                      Today, with over a decade of experience and thousands of successful events 
+                      Today, with over 14 years of experience and thousands of successful events 
                       under our belt, we continue to innovate and elevate the standard of DJ 
                       entertainment in the Ottawa region and beyond.
                     </p>
@@ -211,7 +211,7 @@ const AboutPage = () => {
                     <Link to="/book">Book Now</Link>
                   </Button>
                   <Button variant="outline" size="lg" asChild>
-                    <Link to="/#contact">Contact Us</Link>
+                    <Link to="/contact">Contact Us</Link>
                   </Button>
                 </div>
               </CardContent>

@@ -638,7 +638,7 @@ const PackagesPage = () => {
                 Contact us to create a tailored package for your specific needs
               </p>
               <Button variant="outline" asChild>
-                <Link to="/#contact">Contact Us</Link>
+                <Link to="/contact">Contact Us</Link>
               </Button>
             </CardContent>
           </Card>
