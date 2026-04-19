@@ -27,7 +27,7 @@ const Navbar = () => {
               <Music className="w-8 h-8 md:w-10 md:h-10 text-primary transition-all duration-300 group-hover:text-secondary" />
               <div className="absolute inset-0 bg-primary/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
-            <span className="font-display text-lg md:text-2xl font-bold gradient-text whitespace-nowrap">
+            <span className="font-display text-lg md:text-2xl font-bold gradient-text whitespace-nowrap glitch-text">
               HERSKY DJ & AV
             </span>
           </Link>
