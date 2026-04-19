@@ -12,6 +12,7 @@ const Navbar = () => {
     { href: "#packages", label: "Packages" },
     { href: "#addons", label: "Add-Ons" },
     { href: "/about", label: "About", isRoute: true },
+    { href: "/mentorship", label: "Mentorship", isRoute: true },
     { href: "/auth", label: "Client Portal", isRoute: true },
     { href: "/install", label: "Get App", isRoute: true },
     { href: "/contact", label: "Contact", isRoute: true },
