@@ -1,46 +1,31 @@
 
-The user dropped a big inspiration list, but most of the high-impact items (vinyl spinner, magnetic buttons, RGB glitch on hover, neon pulse glow, infinite marquee, mouse-follow spotlight via crosshair+glow trail, BPM pulse) are **already implemented** in the FX layer. So I'll only add the genuinely new, on-brand effects from their list — keeping it tight (3 new effects, not all 10) per their own pro-tip.
+User wants the page transition FX (currently `TapeWipe` — a tape/swipe wipe that plays on every route change) to **cycle through different FX styles** instead of always being the same swipe.
 
-## Plan: Add 3 new DJ FX
+## Current state
+`src/components/fx/TapeWipe.tsx` (already mounted in `FXLayer`) plays the same wipe animation every time `useLocation().pathname` changes.
 
-### 1. Audio Waveform Scroll Progress (`WaveformProgress.tsx`)
-- Fixed SVG strip pinned to the very top of viewport (above SpectrumStrip), height 6px, full width.
-- 80 vertical bars of varying heights (sine-wave shape) drawn in SVG.
-- Track scroll % via `window.scrollY / (scrollHeight - innerHeight)`; fill bars left→right with primary→secondary gradient as you scroll.
-- Gated by `fxEnabled`. Uses passive scroll listener + rAF throttle.
+## Plan
+Refactor `TapeWipe.tsx` into a **`PageTransitionFX.tsx`** component that randomly picks one of 6 transition styles on each route change, so every navigation feels fresh.
 
-### 2. Bass Drop Section Reveal (CSS-only, no Framer Motion)
-- New `.bass-drop` utility in `index.css`: starts at `scale(0.94) translateY(24px) opacity-0`, animates to `scale(1) translateY(0) opacity-1` with a spring-feel cubic-bezier `(0.34, 1.56, 0.64, 1)` (overshoot bounce).
-- Trigger via IntersectionObserver in a tiny shared hook `useRevealOnScroll.ts` that adds `.bass-drop-active` when in viewport.
-- Apply class to all `<section>` wrappers in: HeroSection (skip — already visible), ServicesSection, PackagesSection, AddonsSection, GallerySection, TestimonialsSection, ContactSection.
+### The 6 transitions
+1. **Tape Wipe** — current diagonal gold/rose swipe (kept).
+2. **Vinyl Spin Out** — full-screen vinyl record spins in from center, scales out.
+3. **Equalizer Bars** — vertical neon bars rise from bottom, cover screen, drop back.
+4. **Glitch RGB Split** — quick red/blue channel split flash with scanlines.
+5. **Beat Drop Flash** — radial gold burst from center (like a bass hit).
+6. **Curtain Reveal** — two halves (top + bottom) slam together then retract.
 
-### 3. Floating Parallax DJ Icons (`FloatingGear.tsx`)
-- Fixed-position layer, z-index between background and content (z-0, pointer-events-none).
-- 4 lucide icons: `Disc3`, `Headphones`, `Music2`, `Zap` — positioned at viewport corners with low opacity (0.06–0.10), large size (120–180px), tinted primary/secondary.
-- Parallax: translate Y based on `window.scrollY * factor` where each icon has a different factor (0.15, 0.25, 0.1, 0.2) for depth.
-- Subtle CSS float animation already on hand (`animate-float`).
-- Gated by `fxEnabled` and `isDesktop` (skip on mobile to keep it clean).
+### Implementation
+- Single new file `src/components/fx/PageTransitionFX.tsx` containing all 6 variants as inline styled divs/SVGs, each ~600ms.
+- On `pathname` change: pick `Math.floor(Math.random() * 6)` (avoid repeating the last index), render that variant for its duration, then unmount.
+- Gated by `fxEnabled` from `FXContext` (same as today).
+- Add the keyframes used by the new variants (`vinyl-spin-out`, `eq-rise`, `glitch-flash`, `beat-flash`, `curtain-slam`) to `src/index.css`.
+- Update `src/components/fx/FXLayer.tsx` to swap `TapeWipe` for `PageTransitionFX`.
+- Delete `TapeWipe.tsx` (logic absorbed).
 
-### What I'm explicitly NOT adding (already done or rejected)
-- Vinyl spinner ✅ exists
-- Magnetic buttons ✅ exists
-- Glitch text on hover ✅ exists (`.glitch-text`)
-- Neon pulse on Book Now ❌ user just asked to make it steady, not pulse — keep it static
-- Infinite marquee ✅ exists (promo ticker)
-- Crosshair + glow trail ✅ exists (covers spotlight idea)
-- Mesh gradient bg, vinyl page loader, scramble text, page transitions — skipping to avoid overload (user's own pro tip: pick 3–4)
+### Files
+- **Add**: `src/components/fx/PageTransitionFX.tsx`
+- **Edit**: `src/components/fx/FXLayer.tsx`, `src/index.css`
+- **Remove**: `src/components/fx/TapeWipe.tsx`
 
-### Files to add
-- `src/components/fx/WaveformProgress.tsx`
-- `src/components/fx/FloatingGear.tsx`
-- `src/hooks/useRevealOnScroll.ts`
-
-### Files to edit
-- `src/components/fx/FXLayer.tsx` — mount `WaveformProgress` + `FloatingGear`.
-- `src/index.css` — add `.bass-drop` / `.bass-drop-active` keyframes + utility.
-- `src/components/ServicesSection.tsx`, `PackagesSection.tsx`, `AddonsSection.tsx`, `GallerySection.tsx`, `TestimonialsSection.tsx`, `ContactSection.tsx` — add ref + `.bass-drop` class via the hook.
-
-### Performance
-- Scroll listener single, passive, rAF-throttled, shared between WaveformProgress and FloatingGear (one tiny module).
-- IntersectionObserver fires once per section (`unobserve` after reveal).
-- No new dependencies.
+No new dependencies. Pointer-events disabled on overlay so it never blocks clicks.
