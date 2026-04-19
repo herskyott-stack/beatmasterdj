@@ -28,7 +28,7 @@ const MagneticButton = ({ children, className = "" }: { children: ReactNode; cla
       ref={ref}
       onMouseMove={onMove}
       onMouseLeave={onLeave}
-      className={`inline-block transition-transform duration-200 ease-out ${fxEnabled ? "neon-glow-pulse" : ""} ${className}`}
+      className={`inline-block transition-transform duration-200 ease-out ${fxEnabled ? "neon-glow-static" : ""} ${className}`}
     >
       {children}
     </div>

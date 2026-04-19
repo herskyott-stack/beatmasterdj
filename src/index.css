@@ -236,6 +236,11 @@
     border-radius: 0.75rem;
   }
 
+  .neon-glow-static {
+    box-shadow: 0 0 18px hsl(var(--primary) / 0.55), 0 0 36px hsl(var(--secondary) / 0.25);
+    border-radius: 0.75rem;
+  }
+
   @keyframes bass-shake {
     0%, 100% { transform: translate(0,0); }
     20% { transform: translate(-2px,1px); }
