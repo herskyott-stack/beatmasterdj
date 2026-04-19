@@ -1,6 +1,7 @@
 import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 // Import real stock photos
 import weddingImg from "@/assets/services/wedding-dj.jpg";
@@ -78,8 +79,9 @@ const services = [
 ];
 
 const ServicesSection = () => {
+  const ref = useRevealOnScroll<HTMLElement>();
   return (
-    <section id="services" className="py-24 relative overflow-hidden">
+    <section ref={ref} id="services" className="py-24 relative overflow-hidden bass-drop">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />

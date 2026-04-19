@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { X } from "lucide-react";
+import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 // Import gallery images
 import gallery1 from "@/assets/gallery/gallery-1.jpg";
@@ -22,9 +23,10 @@ const galleryImages = [
 
 const GallerySection = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const ref = useRevealOnScroll<HTMLElement>();
 
   return (
-    <section id="gallery" className="py-24 relative overflow-hidden">
+    <section ref={ref} id="gallery" className="py-24 relative overflow-hidden bass-drop">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />

@@ -1,10 +1,12 @@
 import { Mail, Phone, MapPin, Send, Instagram, Facebook, Youtube } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 const ContactSection = () => {
+  const ref = useRevealOnScroll<HTMLElement>();
   return (
-    <section id="contact" className="py-24 relative overflow-hidden">
+    <section ref={ref} id="contact" className="py-24 relative overflow-hidden bass-drop">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
       <div className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
