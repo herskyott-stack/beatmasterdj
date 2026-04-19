@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Star, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-wedding.jpg";
+import MagneticButton from "@/components/fx/MagneticButton";
 
 const HeroSection = () => {
   return (
@@ -31,7 +32,7 @@ const HeroSection = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in" style={{ animationDelay: "0.1s" }}>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in glitch-text" style={{ animationDelay: "0.1s" }}>
             <span className="text-foreground">ELEVATE YOUR</span>
             <br />
             <span className="gradient-text">EVENT EXPERIENCE</span>
@@ -44,12 +45,14 @@ const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            <Button variant="hero" size="xl" asChild>
-              <Link to="/book">
-                <Calendar className="w-5 h-5" />
-                Book Your Event
-              </Link>
-            </Button>
+            <MagneticButton>
+              <Button variant="hero" size="xl" asChild>
+                <Link to="/book">
+                  <Calendar className="w-5 h-5" />
+                  Book Your Event
+                </Link>
+              </Button>
+            </MagneticButton>
           </div>
 
           {/* Stats */}
