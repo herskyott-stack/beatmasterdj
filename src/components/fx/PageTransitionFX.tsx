@@ -2,9 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useFX } from "@/contexts/FXContext";
 
-type Variant = "tape" | "vinyl" | "eq" | "glitch" | "beat" | "curtain";
-const VARIANTS: Variant[] = ["tape", "vinyl", "eq", "glitch", "beat", "curtain"];
-const DURATION = 600;
+type Variant = "sheen" | "iris" | "veil" | "bars";
+const VARIANTS: Variant[] = ["sheen", "iris", "veil", "bars"];
+const DURATION = 800;
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" &&
+  window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 const PageTransitionFX = () => {
   const { fxEnabled } = useFX();
@@ -19,6 +23,8 @@ const PageTransitionFX = () => {
       isFirst.current = false;
       return;
     }
+    if (prefersReducedMotion()) return;
+
     let idx = Math.floor(Math.random() * VARIANTS.length);
     if (idx === lastIdx.current) idx = (idx + 1) % VARIANTS.length;
     lastIdx.current = idx;
@@ -31,92 +37,63 @@ const PageTransitionFX = () => {
 
   const base = "fixed inset-0 z-[80] pointer-events-none overflow-hidden";
 
-  if (variant === "tape") {
-    return <div className={`${base} tape-wipe`} />;
-  }
-
-  if (variant === "vinyl") {
+  if (variant === "sheen") {
     return (
-      <div className={`${base} flex items-center justify-center`}>
-        <svg viewBox="0 0 64 64" className="w-[80vmin] h-[80vmin] pt-vinyl-spinout">
-          <defs>
-            <radialGradient id="pt-vinyl-grad" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="hsl(var(--primary))" />
-              <stop offset="40%" stopColor="hsl(var(--secondary))" />
-              <stop offset="100%" stopColor="hsl(20 15% 5%)" />
-            </radialGradient>
-          </defs>
-          <circle cx="32" cy="32" r="30" fill="hsl(20 15% 5%)" stroke="hsl(var(--primary))" strokeWidth="0.5" />
-          {[26, 22, 18, 14].map((r) => (
-            <circle key={r} cx="32" cy="32" r={r} fill="none" stroke="hsl(var(--muted-foreground) / 0.4)" strokeWidth="0.3" />
-          ))}
-          <circle cx="32" cy="32" r="10" fill="url(#pt-vinyl-grad)" />
-          <circle cx="32" cy="32" r="2" fill="hsl(20 15% 5%)" />
-        </svg>
-      </div>
-    );
-  }
-
-  if (variant === "eq") {
-    return (
-      <div className={`${base} flex items-end gap-1 px-2`}>
-        {Array.from({ length: 24 }).map((_, i) => (
-          <div
-            key={i}
-            className="flex-1 pt-eq-rise"
-            style={{
-              animationDelay: `${i * 12}ms`,
-              background:
-                "linear-gradient(to top, hsl(120,80%,50%) 0%, hsl(50,95%,55%) 60%, hsl(0,90%,55%) 100%)",
-              boxShadow: "0 0 12px hsl(var(--primary) / 0.6)",
-            }}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  if (variant === "glitch") {
-    return (
-      <>
-        <div className={`${base} pt-glitch-flash`} style={{ background: "hsl(0 100% 55% / 0.25)" }} />
-        <div className={`${base} pt-glitch-flash-2`} style={{ background: "hsl(195 100% 55% / 0.25)" }} />
+      <div className={base}>
         <div
-          className={base}
+          className="absolute inset-0 pt-sheen"
           style={{
-            backgroundImage:
-              "repeating-linear-gradient(0deg, hsl(var(--foreground)) 0 1px, transparent 1px 4px)",
-            opacity: 0.15,
-            mixBlendMode: "overlay",
+            background:
+              "linear-gradient(115deg, transparent 35%, hsl(var(--primary) / 0.18) 48%, hsl(var(--foreground) / 0.08) 52%, transparent 65%)",
+            filter: "blur(8px)",
           }}
         />
-      </>
+      </div>
     );
   }
 
-  if (variant === "beat") {
+  if (variant === "iris") {
     return (
       <div
-        className={`${base} pt-beat-flash`}
+        className={`${base} pt-iris`}
         style={{
-          background:
-            "radial-gradient(circle at center, hsl(var(--primary) / 0.85) 0%, hsl(var(--secondary) / 0.5) 30%, transparent 70%)",
+          background: "hsl(var(--background))",
         }}
       />
     );
   }
 
-  // curtain
+  if (variant === "veil") {
+    return (
+      <div className={base}>
+        <div
+          className="absolute inset-x-0 bottom-0 h-full pt-veil"
+          style={{
+            background:
+              "linear-gradient(180deg, hsl(var(--background)) 0%, hsl(20 12% 8%) 100%)",
+            borderTop: "1px solid hsl(var(--primary) / 0.6)",
+            boxShadow: "0 -1px 24px hsl(var(--primary) / 0.15)",
+          }}
+        />
+      </div>
+    );
+  }
+
+  // bars
   return (
     <div className={base}>
-      <div
-        className="absolute left-0 right-0 top-0 h-1/2 pt-curtain-top"
-        style={{ background: "linear-gradient(180deg, hsl(var(--primary)), hsl(var(--secondary)))" }}
-      />
-      <div
-        className="absolute left-0 right-0 bottom-0 h-1/2 pt-curtain-bottom"
-        style={{ background: "linear-gradient(0deg, hsl(var(--secondary)), hsl(var(--accent)))" }}
-      />
+      {[0, 1, 2].map((i) => (
+        <div
+          key={i}
+          className="absolute inset-x-0 pt-bar-fade"
+          style={{
+            top: `${i * 33.34}%`,
+            height: "33.34%",
+            background: "hsl(var(--background))",
+            animationDelay: `${i * 80}ms`,
+          }}
+        />
+      ))}
     </div>
   );
 };
