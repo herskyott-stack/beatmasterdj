@@ -445,22 +445,22 @@ const ClientPortal = () => {
                             {getSongsByType(activeTab).map((song) => (
                               <div
                                 key={song.id}
-                                className="flex items-center justify-between p-3 bg-card/30 rounded-lg border border-white/5"
+                                className="flex items-center justify-between gap-2 p-3 bg-card/30 rounded-lg border border-white/5"
                               >
-                                <div>
-                                  <p className="font-medium">{song.song_title}</p>
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-medium truncate">{song.song_title}</p>
                                   {song.artist && (
-                                    <p className="text-sm text-muted-foreground">{song.artist}</p>
+                                    <p className="text-sm text-muted-foreground truncate">{song.artist}</p>
                                   )}
                                   {song.notes && (
-                                    <p className="text-xs text-primary mt-1">{song.notes}</p>
+                                    <p className="text-xs text-primary mt-1 truncate">{song.notes}</p>
                                   )}
                                 </div>
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleDeleteSong(song.id)}
-                                  className="text-destructive hover:text-destructive"
+                                  className="text-destructive hover:text-destructive shrink-0"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
