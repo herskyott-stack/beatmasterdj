@@ -323,16 +323,16 @@ const ClientPortal = () => {
                   : "Manage your music requests below"}
               </p>
             </div>
-            <div className="flex gap-3 mt-4 md:mt-0">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 md:mt-0 w-full md:w-auto">
               {isAdmin && (
-                <Button variant="hero" asChild>
+                <Button variant="hero" asChild className="w-full sm:w-auto">
                   <Link to="/admin">
                     <Shield className="w-4 h-4 mr-2" />
                     Admin Dashboard
                   </Link>
                 </Button>
               )}
-              <Button variant="outline" onClick={handleSignOut}>
+              <Button variant="outline" onClick={handleSignOut} className="w-full sm:w-auto">
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>
