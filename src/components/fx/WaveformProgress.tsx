@@ -76,8 +76,8 @@ const WaveformProgress = () => {
             })}
           </div>
 
-          {/* Tick marks (right side) */}
-          <div className="absolute right-0.5 top-0 bottom-0 flex flex-col justify-between py-0.5">
+          {/* Tick marks (right side, desktop only) */}
+          <div className="hidden sm:flex absolute right-0.5 top-0 bottom-0 flex-col justify-between py-0.5">
             {Array.from({ length: TICKS }).map((_, i) => {
               const isMajor = i % 5 === 0;
               const isCenter = i === Math.floor(TICKS / 2);
@@ -97,7 +97,7 @@ const WaveformProgress = () => {
 
           {/* Thumb (slider handle) */}
           <div
-            className="absolute left-1/2 -translate-x-1/2 w-6 h-4 rounded-sm transition-[top] duration-150 ease-out"
+            className="absolute left-1/2 -translate-x-1/2 w-3 h-3 sm:w-6 sm:h-4 rounded-sm transition-[top] duration-150 ease-out"
             style={{
               top: `${thumbTop}%`,
               transform: "translate(-50%, -50%)",
@@ -112,8 +112,8 @@ const WaveformProgress = () => {
           </div>
         </div>
 
-        {/* TEMPO label */}
-        <div className="font-mono text-[7px] text-muted-foreground/70 tracking-[0.15em] mt-1 leading-none">
+        {/* TEMPO label (desktop only) */}
+        <div className="hidden sm:block font-mono text-[7px] text-muted-foreground/70 tracking-[0.15em] mt-1 leading-none">
           TEMPO
         </div>
       </div>
