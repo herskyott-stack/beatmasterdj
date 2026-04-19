@@ -30,9 +30,9 @@ const WaveformProgress = () => {
       window.removeEventListener("resize", onScroll);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [fxEnabled]);
+  }, []);
 
-  if (!fxEnabled) return null;
+
 
   // Tempo fader: center is 0%, top is +pitch, bottom is -pitch.
   // Map scroll 0..1 to thumb top 4%..96%.
