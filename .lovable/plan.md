@@ -1,34 +1,38 @@
 
-User wants the page transition FX to feel **professional** (think Apple/Stripe/Linear/Awwwards-tier studio sites), not loud arcade/club effects. The current 6 are too gimmicky: glitch RGB, EQ bars, vinyl spin, beat flash, curtain slam — all read as "club kid demo," not "premium AV production company."
 
-## Direction
-Replace the 6 loud variants with **4 refined, cinematic transitions** — slower easing, subtle gradients, monochrome-to-brand color, no shaky/glitchy motion. Inspired by editorial/agency sites. All ~700–900ms with cubic-bezier `(0.65, 0, 0.35, 1)` (Apple's standard ease).
+## Mobile fit audit — issues found at 360px width
 
-## The new 4 variants
+### ClientPortal (`/client-portal`)
+1. **Header buttons overflow** — "Admin Dashboard" + "Sign Out" sit in a `flex gap-3` row that stays horizontal on mobile (no `flex-col` fallback). On 360px with admin user, the two buttons can wrap awkwardly or push past the edge.
+2. **Tab triggers too cramped** — "Do Not Play" label + count gets tight at 360px since icons hide below `sm:` but text is `text-xs` only.
+3. **Sidebar Summary card** uses `sticky top-24` which is fine on desktop but on mobile it's just a regular block (lg breakpoint) — OK, but the contact card phone number `font-display` may be large.
+4. **Add Song / Bulk Paste inputs** are fine (single-column at 360px), but the Textarea `rows={5}` placeholder text wraps OK.
+5. **Song list rows** — delete button is far right, but long song titles don't have `truncate` / `min-w-0` so a very long title can push the trash button off-screen.
+6. **Welcome heading** `text-3xl` is fine, but date subtext can be long.
 
-1. **Sheen Sweep** — A single soft diagonal gradient sheen (subtle gold→transparent) sweeps across once. Low opacity (~0.3), blurred edges. Feels like light catching on glass.
+### AuthPage (`/auth`)
+1. **Sign Up form: First/Last name grid** uses `grid-cols-2` always — on 360px the two inputs + their labels work but are tight. Acceptable but could stack.
+2. **Tab labels** "Sign In" / "Create Account" — "Create Account" may feel cramped at 360px; fine but verify.
+3. **Date input** native picker can overflow on small iOS — usually OK.
+4. Overall padding `p-6` on card + `px-4` container = 56px of horizontal chrome on a 360px screen, leaving 304px for inputs. Inputs with `pl-10` icon are tight but fit.
 
-2. **Iris Reveal** — A solid dark panel covers the screen, then a circular mask opens from center outward, revealing the new page. Smooth, cinematic — like a camera shutter.
+## Fixes (concise, mobile-only — no desktop regressions)
 
-3. **Slide Veil** — A single thin panel (background color with subtle gradient + 1px primary top border) slides up from bottom past the viewport. Clean, editorial.
+### `src/pages/ClientPortal.tsx`
+- Header action buttons: change `flex gap-3 mt-4 md:mt-0` → `flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 md:mt-0 w-full md:w-auto`, and make buttons `w-full sm:w-auto` so they stack cleanly on phone.
+- Welcome heading: drop to `text-2xl md:text-4xl` for safety.
+- Tabs: keep current, but shorten `Do Not Play` label to `Skip` on mobile via `<span className="sm:hidden">Skip</span><span className="hidden sm:inline">Do Not Play</span>` pattern — or just reduce padding on `TabsTrigger` with `px-1 sm:px-3`.
+- Song list row: add `min-w-0` to outer flex item, `truncate` on `<p>` song title and artist, and `shrink-0` on the delete button so long titles never push it off-screen.
+- Card padding: change `CardContent` default to be lighter on mobile if needed (already `p-6`-ish via card defaults — fine).
+- Contact card phone number: ensure `text-lg` not larger.
 
-4. **Fade Bars** — Three horizontal bands (top/middle/bottom) fade in then out in sequence with slight stagger. Minimal, premium.
+### `src/pages/AuthPage.tsx`
+- Signup form: change First/Last name grid from `grid-cols-2 gap-4` → `grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4` so they stack on phone, removing tightness.
+- Card padding: change `CardContent p-6` → `p-4 sm:p-6` so inputs gain ~16px of width on mobile.
+- Container top padding: `pt-32` is OK; leave it.
 
-## What's removed
-- Vinyl spin out (too loud)
-- EQ bars (too club)
-- Glitch RGB split (looks broken/amateur)
-- Beat drop radial flash (gaudy)
-- Curtain slam (heavy)
-- Tape wipe diagonal stripes (busy)
+### Files
+- **Edit**: `src/pages/ClientPortal.tsx`, `src/pages/AuthPage.tsx`
 
-## Implementation
-- Rewrite `src/components/fx/PageTransitionFX.tsx`: same random-pick logic, but with the 4 new variants and longer duration (800ms).
-- Replace the page-transition keyframes in `src/index.css`: remove `pt-vinyl-spinout-kf`, `pt-eq-rise-kf`, `pt-glitch-flash-kf`, `pt-beat-flash-kf`, `pt-curtain-top-kf`, `pt-curtain-bottom-kf`, and the `tape-wipe` animation. Add `pt-sheen-kf`, `pt-iris-kf`, `pt-veil-kf`, `pt-bar-fade-kf`.
-- All variants respect `prefers-reduced-motion` (skip animation entirely if reduced motion is set).
-- Keep `fxEnabled` gate.
+No new files, no dependencies. Pure responsive class adjustments.
 
-## Files
-- **Edit**: `src/components/fx/PageTransitionFX.tsx`, `src/index.css`
-
-No new dependencies. No other files touched.
