@@ -9,7 +9,7 @@ import VinylSpinner from "./VinylSpinner";
 import BeatDropBurst from "./BeatDropBurst";
 import LaserSweep from "./LaserSweep";
 import SpectrumStrip from "./SpectrumStrip";
-import TapeWipe from "./TapeWipe";
+import PageTransitionFX from "./PageTransitionFX";
 import GlowTrail from "./GlowTrail";
 import MarqueeTicker from "./MarqueeTicker";
 import WaveformProgress from "./WaveformProgress";
@@ -31,7 +31,7 @@ const FXLayer = () => {
       <EqualizerBars />
       <VinylSpinner />
       <BeatDropBurst />
-      <TapeWipe />
+      <PageTransitionFX />
       <FXToggle />
     </>
   );
