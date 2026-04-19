@@ -53,7 +53,7 @@ const WaveformProgress = () => {
       className="fixed right-1.5 top-24 bottom-24 z-[60] pointer-events-none flex items-stretch"
       aria-hidden="true"
     >
-      <div className="relative w-7 rounded-md bg-gradient-to-b from-zinc-900 via-black to-zinc-900 border border-white/10 shadow-[inset_0_0_8px_rgba(0,0,0,0.8),0_0_12px_rgba(0,0,0,0.5)] flex flex-col items-center py-2">
+      <div className="relative w-7 rounded-md bg-gradient-to-b from-card via-background to-card border border-border shadow-[inset_0_0_8px_hsl(var(--background)/0.8),0_0_12px_hsl(var(--background)/0.5)] flex flex-col items-center py-2">
         {/* Pitch label at top */}
         <div className="font-mono text-[8px] text-primary/80 tracking-wider mb-1 leading-none">
           {pitchLabel}
