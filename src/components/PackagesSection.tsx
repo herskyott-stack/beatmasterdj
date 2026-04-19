@@ -339,6 +339,7 @@ const packageData: Record<string, Package[]> = {
 const PackagesSection = () => {
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const revealRef = useRevealOnScroll<HTMLElement>();
   const packagesRef = useRef<HTMLDivElement>(null);
 
   const handleSelectPackage = (category: string, pkg: Package) => {
