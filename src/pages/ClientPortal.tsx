@@ -313,7 +313,7 @@ const ClientPortal = () => {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
+              <h1 className="font-display text-2xl md:text-4xl font-bold mb-2">
                 <span className="text-foreground">Welcome, </span>
                 <span className="gradient-text">{profile?.first_name}!</span>
               </h1>
