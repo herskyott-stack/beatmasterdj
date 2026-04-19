@@ -6,13 +6,10 @@ import { useFX } from "@/contexts/FXContext";
  * Sits on the right edge. The thumb position tracks scroll progress.
  */
 const WaveformProgress = () => {
-  const { fxEnabled } = useFX();
   const [progress, setProgress] = useState(0);
   const rafRef = useRef(0);
 
   useEffect(() => {
-    if (!fxEnabled) return;
-
     const update = () => {
       const scrollable = document.documentElement.scrollHeight - window.innerHeight;
       const p = scrollable > 0 ? window.scrollY / scrollable : 0;
