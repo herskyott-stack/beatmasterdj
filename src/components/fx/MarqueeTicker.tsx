@@ -1,7 +1,7 @@
 import { useFX } from "@/contexts/FXContext";
 
 const MESSAGE =
-  "● LIVE MIX ● UPCOMING: WEDDING SEASON 2026 ● BOOK NOW ● BPM: 128 ● OTTAWA, ON ● HERSKY DJ & AV ● 14+ YEARS ● ";
+  "● UPCOMING ● SAVE 15% OFF UNTIL END OF MAY ● SAVE 20% IF YOU BOOK BEFORE APRIL 30TH ● HERSKY DJ & AV ● OTTAWA, ON ● ";
 
 const MarqueeTicker = () => {
   const { fxEnabled } = useFX();
