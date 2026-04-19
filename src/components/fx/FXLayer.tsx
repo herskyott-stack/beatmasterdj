@@ -26,7 +26,7 @@ const FXLayer = () => {
       <CrosshairCursor />
       <GlowTrail />
       <HUDCorners />
-      <SpectrumStrip />
+      {/* <SpectrumStrip /> removed — replaced by vertical tempo fader */}
       <MarqueeTicker />
       <EqualizerBars />
       <VinylSpinner />
