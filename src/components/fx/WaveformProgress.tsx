@@ -46,12 +46,12 @@ const WaveformProgress = () => {
 
   return (
     <div
-      className="fixed right-1.5 top-24 bottom-24 z-[60] pointer-events-none flex items-stretch"
+      className="fixed right-0.5 sm:right-1.5 top-16 bottom-16 sm:top-24 sm:bottom-24 z-[60] pointer-events-none flex items-stretch"
       aria-hidden="true"
     >
-      <div className="relative w-7 rounded-md bg-gradient-to-b from-card via-background to-card border border-border shadow-[inset_0_0_8px_hsl(var(--background)/0.8),0_0_12px_hsl(var(--background)/0.5)] flex flex-col items-center py-2">
-        {/* Pitch label at top */}
-        <div className="font-mono text-[8px] text-primary/80 tracking-wider mb-1 leading-none">
+      <div className="relative w-4 sm:w-7 rounded-md bg-gradient-to-b from-card via-background to-card border border-border shadow-[inset_0_0_8px_hsl(var(--background)/0.8),0_0_12px_hsl(var(--background)/0.5)] flex flex-col items-center py-2">
+        {/* Pitch label at top (desktop only) */}
+        <div className="hidden sm:block font-mono text-[8px] text-primary/80 tracking-wider mb-1 leading-none">
           {pitchLabel}
         </div>
 
@@ -60,8 +60,8 @@ const WaveformProgress = () => {
           {/* Center line guide */}
           <div className="absolute left-0 right-0 top-1/2 h-px bg-primary/40" />
 
-          {/* Tick marks (left side) */}
-          <div className="absolute left-0.5 top-0 bottom-0 flex flex-col justify-between py-0.5">
+          {/* Tick marks (left side, desktop only) */}
+          <div className="hidden sm:flex absolute left-0.5 top-0 bottom-0 flex-col justify-between py-0.5">
             {Array.from({ length: TICKS }).map((_, i) => {
               const isMajor = i % 5 === 0;
               const isCenter = i === Math.floor(TICKS / 2);
