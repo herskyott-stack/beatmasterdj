@@ -62,7 +62,7 @@ const TestimonialsSection = () => {
           <span className="font-display text-sm uppercase tracking-widest text-primary mb-4 block">
             Testimonials
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="font-display text-4xl md:text-5xl font-bold mb-6 dj-heading glitch-text">
             <span className="text-foreground">WHAT OUR </span>
             <span className="gradient-text">CLIENTS SAY</span>
           </h2>

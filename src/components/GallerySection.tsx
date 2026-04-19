@@ -35,7 +35,7 @@ const GallerySection = () => {
           <span className="font-display text-sm uppercase tracking-widest text-primary mb-4 block">
             Our Work
           </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4">
+          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
             <span className="text-foreground">EVENT </span>
             <span className="gradient-text">GALLERY</span>
           </h2>

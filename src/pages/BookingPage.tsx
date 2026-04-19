@@ -508,7 +508,7 @@ const BookingPage = () => {
         {/* Header */}
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
               <span className="text-foreground">BOOK YOUR </span>
               <span className="gradient-text">EVENT</span>
             </h1>
