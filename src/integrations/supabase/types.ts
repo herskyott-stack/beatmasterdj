@@ -90,6 +90,7 @@ export type Database = {
           id: string
           lesson_number: number
           module_id: string
+          quiz_group: number
           title: string
           updated_at: string
           youtube_url: string | null
@@ -102,6 +103,7 @@ export type Database = {
           id?: string
           lesson_number: number
           module_id: string
+          quiz_group?: number
           title: string
           updated_at?: string
           youtube_url?: string | null
@@ -114,6 +116,7 @@ export type Database = {
           id?: string
           lesson_number?: number
           module_id?: string
+          quiz_group?: number
           title?: string
           updated_at?: string
           youtube_url?: string | null
