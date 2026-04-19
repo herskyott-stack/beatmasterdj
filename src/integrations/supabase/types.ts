@@ -14,6 +14,297 @@ export type Database = {
   }
   public: {
     Tables: {
+      lesson_access: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          granted_at: string
+          granted_by: string | null
+          id: string
+          is_active: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lesson_answers: {
+        Row: {
+          answer_text: string
+          created_at: string
+          display_order: number
+          id: string
+          is_correct: boolean
+          question_id: string
+        }
+        Insert: {
+          answer_text: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_correct?: boolean
+          question_id: string
+        }
+        Update: {
+          answer_text?: string
+          created_at?: string
+          display_order?: number
+          id?: string
+          is_correct?: boolean
+          question_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_answers_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_lessons: {
+        Row: {
+          additional_notes: string | null
+          created_at: string
+          description: string | null
+          id: string
+          lesson_number: number
+          module_id: string
+          title: string
+          updated_at: string
+          youtube_url: string | null
+          youtube_video_id: string | null
+        }
+        Insert: {
+          additional_notes?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          lesson_number: number
+          module_id: string
+          title: string
+          updated_at?: string
+          youtube_url?: string | null
+          youtube_video_id?: string | null
+        }
+        Update: {
+          additional_notes?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          lesson_number?: number
+          module_id?: string
+          title?: string
+          updated_at?: string
+          youtube_url?: string | null
+          youtube_video_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_lessons_module_id_fkey"
+            columns: ["module_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_modules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_modules: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          module_number: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          module_number: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          module_number?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      lesson_progress: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          lesson_id: string
+          quiz_attempts: number
+          quiz_score: number | null
+          status: Database["public"]["Enums"]["lesson_status"]
+          student_notes: string | null
+          updated_at: string
+          user_id: string
+          video_watched: boolean
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id: string
+          quiz_attempts?: number
+          quiz_score?: number | null
+          status?: Database["public"]["Enums"]["lesson_status"]
+          student_notes?: string | null
+          updated_at?: string
+          user_id: string
+          video_watched?: boolean
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lesson_id?: string
+          quiz_attempts?: number
+          quiz_score?: number | null
+          status?: Database["public"]["Enums"]["lesson_status"]
+          student_notes?: string | null
+          updated_at?: string
+          user_id?: string
+          video_watched?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_progress_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_questions: {
+        Row: {
+          created_at: string
+          explanation: string
+          id: string
+          lesson_id: string
+          question_order: number
+          question_text: string
+          question_type: Database["public"]["Enums"]["question_type"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          explanation?: string
+          id?: string
+          lesson_id: string
+          question_order?: number
+          question_text: string
+          question_type?: Database["public"]["Enums"]["question_type"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          explanation?: string
+          id?: string
+          lesson_id?: string
+          question_order?: number
+          question_text?: string
+          question_type?: Database["public"]["Enums"]["question_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_questions_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_lessons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      lesson_quiz_attempts: {
+        Row: {
+          attempt_number: number
+          attempted_at: string
+          id: string
+          is_correct: boolean
+          lesson_id: string
+          question_id: string
+          selected_answer_id: string | null
+          short_answer_text: string | null
+          user_id: string
+        }
+        Insert: {
+          attempt_number?: number
+          attempted_at?: string
+          id?: string
+          is_correct?: boolean
+          lesson_id: string
+          question_id: string
+          selected_answer_id?: string | null
+          short_answer_text?: string | null
+          user_id: string
+        }
+        Update: {
+          attempt_number?: number
+          attempted_at?: string
+          id?: string
+          is_correct?: boolean
+          lesson_id?: string
+          question_id?: string
+          selected_answer_id?: string | null
+          short_answer_text?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lesson_quiz_attempts_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_lessons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_quiz_attempts_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lesson_quiz_attempts_selected_answer_id_fkey"
+            columns: ["selected_answer_id"]
+            isOneToOne: false
+            referencedRelation: "lesson_answers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       music_requests: {
         Row: {
           artist: string | null
@@ -118,6 +409,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_lesson_access: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -128,6 +420,8 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      lesson_status: "not_started" | "in_progress" | "completed"
+      question_type: "multiple_choice" | "true_false" | "short_answer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -256,6 +550,8 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      lesson_status: ["not_started", "in_progress", "completed"],
+      question_type: ["multiple_choice", "true_false", "short_answer"],
     },
   },
 } as const
