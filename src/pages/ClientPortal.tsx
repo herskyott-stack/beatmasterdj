@@ -313,7 +313,7 @@ const ClientPortal = () => {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold mb-2">
+              <h1 className="font-display text-2xl md:text-4xl font-bold mb-2">
                 <span className="text-foreground">Welcome, </span>
                 <span className="gradient-text">{profile?.first_name}!</span>
               </h1>
@@ -323,16 +323,16 @@ const ClientPortal = () => {
                   : "Manage your music requests below"}
               </p>
             </div>
-            <div className="flex gap-3 mt-4 md:mt-0">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 md:mt-0 w-full md:w-auto">
               {isAdmin && (
-                <Button variant="hero" asChild>
+                <Button variant="hero" asChild className="w-full sm:w-auto">
                   <Link to="/admin">
                     <Shield className="w-4 h-4 mr-2" />
                     Admin Dashboard
                   </Link>
                 </Button>
               )}
-              <Button variant="outline" onClick={handleSignOut}>
+              <Button variant="outline" onClick={handleSignOut} className="w-full sm:w-auto">
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
               </Button>
@@ -355,17 +355,18 @@ const ClientPortal = () => {
                 <CardContent>
                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <TabsList className="grid w-full grid-cols-3 mb-6">
-                      <TabsTrigger value="priority" className="text-xs sm:text-sm">
+                      <TabsTrigger value="priority" className="text-xs sm:text-sm px-1 sm:px-3">
                         <Star className="w-4 h-4 mr-1 hidden sm:inline" />
                         Priority
                       </TabsTrigger>
-                      <TabsTrigger value="additional" className="text-xs sm:text-sm">
+                      <TabsTrigger value="additional" className="text-xs sm:text-sm px-1 sm:px-3">
                         <Plus className="w-4 h-4 mr-1 hidden sm:inline" />
                         Additional
                       </TabsTrigger>
-                      <TabsTrigger value="do_not_play" className="text-xs sm:text-sm">
+                      <TabsTrigger value="do_not_play" className="text-xs sm:text-sm px-1 sm:px-3">
                         <X className="w-4 h-4 mr-1 hidden sm:inline" />
-                        Do Not Play
+                        <span className="sm:hidden">Skip</span>
+                        <span className="hidden sm:inline">Do Not Play</span>
                       </TabsTrigger>
                     </TabsList>
 
@@ -444,22 +445,22 @@ const ClientPortal = () => {
                             {getSongsByType(activeTab).map((song) => (
                               <div
                                 key={song.id}
-                                className="flex items-center justify-between p-3 bg-card/30 rounded-lg border border-white/5"
+                                className="flex items-center justify-between gap-2 p-3 bg-card/30 rounded-lg border border-white/5"
                               >
-                                <div>
-                                  <p className="font-medium">{song.song_title}</p>
+                                <div className="min-w-0 flex-1">
+                                  <p className="font-medium truncate">{song.song_title}</p>
                                   {song.artist && (
-                                    <p className="text-sm text-muted-foreground">{song.artist}</p>
+                                    <p className="text-sm text-muted-foreground truncate">{song.artist}</p>
                                   )}
                                   {song.notes && (
-                                    <p className="text-xs text-primary mt-1">{song.notes}</p>
+                                    <p className="text-xs text-primary mt-1 truncate">{song.notes}</p>
                                   )}
                                 </div>
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   onClick={() => handleDeleteSong(song.id)}
-                                  className="text-destructive hover:text-destructive"
+                                  className="text-destructive hover:text-destructive shrink-0"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </Button>
