@@ -1,55 +1,33 @@
 
-Build a comprehensive DJ Lessons LMS inside the admin portal with student access control, 24 modules, video-based quiz lessons, progress tracking, and answer explanations.
+You want every lesson to have a real (non-blank) YouTube video and quizzes restructured to **1 quiz per 5 lessons**. Quick reality check before I commit:
 
-## Scope
+## The honest scope
+- 24 modules × ~10 lessons = **~240 lessons** needing videos
+- 1 quiz per 5 lessons = **~48 quizzes** × 5 questions = **240 questions** with explanations
 
-A full Learning Management System (LMS) with two surfaces:
-- **Admin** (`/admin/lessons`) — author/manage curriculum, grant access to clients, track every student's progress.
-- **Student** (`/lessons`) — granted clients see their assigned modules, watch YouTube videos, take quizzes, get explanations, take notes.
+I can't *guarantee* every YouTube ID I write is live and exactly on-topic without verifying each one against the YouTube API — which would need a key from you. So I need to know your preference before generating content.
 
-## Database (new tables)
+## What I'll change either way
 
-1. **`lesson_modules`** — 24 top-level modules
-   - `id`, `module_number` (1–24), `title`, `description`, `created_at`
-2. **`lesson_lessons`** — 8–12 sub-lessons per module
-   - `id`, `module_id` (FK), `lesson_number`, `title`, `description`, `youtube_url`, `youtube_video_id`, `additional_notes` (rich text)
-3. **`lesson_questions`** — quiz questions per lesson
-   - `id`, `lesson_id` (FK), `question_order`, `question_text`, `question_type` (`multiple_choice` | `true_false` | `short_answer`), `explanation` (the "why this is correct" text)
-4. **`lesson_answers`** — answer choices per question
-   - `id`, `question_id` (FK), `answer_text`, `is_correct`, `display_order`
-5. **`lesson_access`** — which users can see lessons
-   - `id`, `user_id` (FK auth.users), `granted_by` (admin uid), `granted_at`, `expires_at` (nullable), `is_active`
-6. **`lesson_progress`** — per-user per-lesson state
-   - `id`, `user_id`, `lesson_id`, `status` (`not_started`|`in_progress`|`completed`), `video_watched`, `quiz_score`, `quiz_attempts`, `completed_at`, `student_notes` (textarea)
-7. **`lesson_quiz_attempts`** — every quiz submission for review
-   - `id`, `user_id`, `lesson_id`, `question_id`, `selected_answer_id` (nullable for short answer), `short_answer_text`, `is_correct`, `attempted_at`
+**Schema:** add `quiz_group` int column to `lesson_lessons`, backfilled as `ceil(lesson_number / 5)`. Quiz questions stay attached to the **last lesson** of each group of 5 (lesson 5, 10, 15…).
 
-**RLS**: Students read/write only their own progress/attempts and only see lessons if they have an active row in `lesson_access`. Admins (via `has_role`) full read on everything.
+**Student UI (`Lessons.tsx` / `LessonView.tsx`):**
+- Lessons visually grouped: "Chapter 1 — Lessons 1–5 → Quiz 1"
+- Quiz only unlocks when all 5 videos in the group are marked watched
+- Passing the quiz (≥70%) marks all 5 lessons complete
 
-## Admin section — `src/pages/admin/LessonsAdmin.tsx`
+**Admin UI (`CurriculumEditor.tsx`):** group lessons by `quiz_group`, move `QuestionEditor` from per-lesson to per-group.
 
-Linked from the existing AdminDashboard. Three tabs:
+**Memory:** update `mem://features/dj-lessons-lms.md` to reflect new quiz model.
 
-1. **Curriculum** — Tree view: 24 modules → expand → lessons → expand → questions. Inline create/edit/delete. Each lesson editor has: title, description, YouTube URL (auto-extract video ID + show preview), notes (Textarea). Each question editor: type selector, answers list with "mark correct" toggle, **explanation** field (mandatory).
-2. **Student Access** — List of all profiles (reuses existing `profiles` query). Toggle switch per client to grant/revoke access, optional expiration date. Shows "Active" / "Inactive" badge.
-3. **Progress Tracking** — Pick a student → see overall % complete, per-module completion, per-lesson quiz scores, all quiz attempts (question + their answer + correct answer + ✓/✗ + explanation), and their personal notes. Bulk export per-student CSV.
+## The content question
 
-## Student section — `src/pages/Lessons.tsx` + `src/pages/LessonView.tsx`
+Pick one — I need your call:
 
-- Linked from ClientPortal with a "DJ Lessons" card (only visible if `lesson_access` row exists for the user).
-- **`/lessons`** — module grid showing progress bars, locked icons until granted.
-- **`/lessons/:moduleId`** — lesson list with checkmarks for completed.
-- **`/lessons/:moduleId/:lessonId`** — embedded YouTube player → "I've watched this" button → quiz appears → submit → results page showing each question with their answer, correct answer, ✓/✗, and the **explanation** of why it's correct. Personal notes textarea (auto-saves) on the side.
+**A) Full seed, all 24 modules** — I write a curated YouTube URL for all ~240 lessons (using stable channels: Crossfader, DJcityTV, Digital DJ Tips, Pioneer DJ, Phil Harris) plus all 48 quizzes × 5 questions. Fast coverage. **You must spot-check links before granting student access** — I'll add a banner in admin reminding you.
 
-## Seed data
+**B) Verified first 6 modules only** — I carefully populate modules 1–6 (~60 lessons, 12 quizzes) with high-confidence links and quality questions. Modules 7–24 stay placeholders. Higher quality, less risk of dead links.
 
-Create the 24 modules with sensible DJ curriculum titles (Beginner Basics → Equipment → Beatmatching → Mixing Theory → EQ & Filters → Phrasing → Harmonic Mixing → Loops & Hot Cues → Effects → Genres → Reading the Crowd → Wedding/Event Mixing → Business → etc.). Insert empty placeholder lessons (8–12 per module) so the admin sees the structure and just fills in YouTube URLs + questions. **Admin authors actual content** (videos/questions/explanations) — not auto-generated.
+**C) Build a YouTube auto-fill tool** — I add an admin button "Search YouTube for this lesson" that lets you pick the right video. Needs you to add a `YOUTUBE_API_KEY` secret. Highest quality; you co-author.
 
-## Files
-
-- **DB migration** for the 7 tables + RLS + indexes.
-- **Add**: `src/pages/admin/LessonsAdmin.tsx`, `src/pages/Lessons.tsx`, `src/pages/LessonView.tsx`, `src/components/lessons/CurriculumEditor.tsx`, `src/components/lessons/QuestionEditor.tsx`, `src/components/lessons/StudentAccessManager.tsx`, `src/components/lessons/StudentProgressViewer.tsx`, `src/components/lessons/QuizPlayer.tsx`, `src/components/lessons/YouTubeEmbed.tsx`, `src/hooks/useLessonAccess.ts`.
-- **Edit**: `src/App.tsx` (4 new routes), `src/pages/AdminDashboard.tsx` (link to Lessons admin), `src/pages/ClientPortal.tsx` (conditional "DJ Lessons" card).
-- **Memory**: add `mem://features/dj-lessons-lms`, update index.
-
-No new npm dependencies — uses existing shadcn (Tabs, Accordion, Card, Switch, RadioGroup, Progress, Textarea, Table) + native YouTube iframe embed.
+Reply **A**, **B**, or **C** and I'll build it. (I recommend **B + C**: ship verified first 6 modules now, then add the auto-fill tool so you can finish the rest yourself with confidence.)
