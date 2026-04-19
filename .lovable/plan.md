@@ -1,31 +1,34 @@
 
-User wants the page transition FX (currently `TapeWipe` — a tape/swipe wipe that plays on every route change) to **cycle through different FX styles** instead of always being the same swipe.
+User wants the page transition FX to feel **professional** (think Apple/Stripe/Linear/Awwwards-tier studio sites), not loud arcade/club effects. The current 6 are too gimmicky: glitch RGB, EQ bars, vinyl spin, beat flash, curtain slam — all read as "club kid demo," not "premium AV production company."
 
-## Current state
-`src/components/fx/TapeWipe.tsx` (already mounted in `FXLayer`) plays the same wipe animation every time `useLocation().pathname` changes.
+## Direction
+Replace the 6 loud variants with **4 refined, cinematic transitions** — slower easing, subtle gradients, monochrome-to-brand color, no shaky/glitchy motion. Inspired by editorial/agency sites. All ~700–900ms with cubic-bezier `(0.65, 0, 0.35, 1)` (Apple's standard ease).
 
-## Plan
-Refactor `TapeWipe.tsx` into a **`PageTransitionFX.tsx`** component that randomly picks one of 6 transition styles on each route change, so every navigation feels fresh.
+## The new 4 variants
 
-### The 6 transitions
-1. **Tape Wipe** — current diagonal gold/rose swipe (kept).
-2. **Vinyl Spin Out** — full-screen vinyl record spins in from center, scales out.
-3. **Equalizer Bars** — vertical neon bars rise from bottom, cover screen, drop back.
-4. **Glitch RGB Split** — quick red/blue channel split flash with scanlines.
-5. **Beat Drop Flash** — radial gold burst from center (like a bass hit).
-6. **Curtain Reveal** — two halves (top + bottom) slam together then retract.
+1. **Sheen Sweep** — A single soft diagonal gradient sheen (subtle gold→transparent) sweeps across once. Low opacity (~0.3), blurred edges. Feels like light catching on glass.
 
-### Implementation
-- Single new file `src/components/fx/PageTransitionFX.tsx` containing all 6 variants as inline styled divs/SVGs, each ~600ms.
-- On `pathname` change: pick `Math.floor(Math.random() * 6)` (avoid repeating the last index), render that variant for its duration, then unmount.
-- Gated by `fxEnabled` from `FXContext` (same as today).
-- Add the keyframes used by the new variants (`vinyl-spin-out`, `eq-rise`, `glitch-flash`, `beat-flash`, `curtain-slam`) to `src/index.css`.
-- Update `src/components/fx/FXLayer.tsx` to swap `TapeWipe` for `PageTransitionFX`.
-- Delete `TapeWipe.tsx` (logic absorbed).
+2. **Iris Reveal** — A solid dark panel covers the screen, then a circular mask opens from center outward, revealing the new page. Smooth, cinematic — like a camera shutter.
 
-### Files
-- **Add**: `src/components/fx/PageTransitionFX.tsx`
-- **Edit**: `src/components/fx/FXLayer.tsx`, `src/index.css`
-- **Remove**: `src/components/fx/TapeWipe.tsx`
+3. **Slide Veil** — A single thin panel (background color with subtle gradient + 1px primary top border) slides up from bottom past the viewport. Clean, editorial.
 
-No new dependencies. Pointer-events disabled on overlay so it never blocks clicks.
+4. **Fade Bars** — Three horizontal bands (top/middle/bottom) fade in then out in sequence with slight stagger. Minimal, premium.
+
+## What's removed
+- Vinyl spin out (too loud)
+- EQ bars (too club)
+- Glitch RGB split (looks broken/amateur)
+- Beat drop radial flash (gaudy)
+- Curtain slam (heavy)
+- Tape wipe diagonal stripes (busy)
+
+## Implementation
+- Rewrite `src/components/fx/PageTransitionFX.tsx`: same random-pick logic, but with the 4 new variants and longer duration (800ms).
+- Replace the page-transition keyframes in `src/index.css`: remove `pt-vinyl-spinout-kf`, `pt-eq-rise-kf`, `pt-glitch-flash-kf`, `pt-beat-flash-kf`, `pt-curtain-top-kf`, `pt-curtain-bottom-kf`, and the `tape-wipe` animation. Add `pt-sheen-kf`, `pt-iris-kf`, `pt-veil-kf`, `pt-bar-fade-kf`.
+- All variants respect `prefers-reduced-motion` (skip animation entirely if reduced motion is set).
+- Keep `fxEnabled` gate.
+
+## Files
+- **Edit**: `src/components/fx/PageTransitionFX.tsx`, `src/index.css`
+
+No new dependencies. No other files touched.
