@@ -1,6 +1,7 @@
 import { Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 const testimonials = [
   {
@@ -48,8 +49,9 @@ const testimonials = [
 ];
 
 const TestimonialsSection = () => {
+  const ref = useRevealOnScroll<HTMLElement>();
   return (
-    <section className="py-24 bg-gradient-to-b from-muted/50 to-background relative overflow-hidden">
+    <section ref={ref} className="py-24 bg-gradient-to-b from-muted/50 to-background relative overflow-hidden bass-drop">
       {/* Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />

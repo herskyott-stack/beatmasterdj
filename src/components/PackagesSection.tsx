@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useRef } from "react";
+import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 type Package = {
   name: string;
@@ -338,6 +339,7 @@ const packageData: Record<string, Package[]> = {
 const PackagesSection = () => {
   const navigate = useNavigate();
   const { addItem } = useCart();
+  const revealRef = useRevealOnScroll<HTMLElement>();
   const packagesRef = useRef<HTMLDivElement>(null);
 
   const handleSelectPackage = (category: string, pkg: Package) => {
@@ -360,7 +362,7 @@ const PackagesSection = () => {
   };
 
   return (
-    <section id="packages" className="py-24 relative overflow-hidden">
+    <section ref={revealRef} id="packages" className="py-24 relative overflow-hidden bass-drop">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
       <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
