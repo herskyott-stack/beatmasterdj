@@ -6,7 +6,7 @@ import MagneticButton from "@/components/fx/MagneticButton";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 md:pt-32">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
