@@ -36,9 +36,9 @@ function App() {
           <TooltipProvider>
             <Toaster />
             <Sonner />
-            <FXLayer />
             <BrowserRouter>
               <ScrollToTop />
+              <FXLayer />
               <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/book" element={<BookingPage />} />
