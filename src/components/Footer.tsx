@@ -20,6 +20,9 @@ const Footer = () => {
 
           {/* Links */}
           <div className="flex items-center gap-6">
+            <a href="/mentorship" className="drumpad-link text-sm text-muted-foreground transition-colors">
+              Mentorship
+            </a>
             <a href="#" className="drumpad-link text-sm text-muted-foreground transition-colors">
               Privacy Policy
             </a>
