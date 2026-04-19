@@ -55,21 +55,6 @@ function App() {
               <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
-              <Route path="/" element={<Index />} />
-              <Route path="/book" element={<BookingPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/booking-confirmed" element={<BookingConfirmed />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/packages/:category" element={<PackagesPage />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/client-portal" element={<ClientPortal />} />
-              <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/install" element={<InstallPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
           </TooltipProvider>
         </CartProvider>
       </FXProvider>
