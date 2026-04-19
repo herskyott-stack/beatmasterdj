@@ -1,61 +1,55 @@
 
-Add a new **DJ Mentorship** section to the site with the two-track pricing structure and an Apply Now flow.
+Build a comprehensive DJ Lessons LMS inside the admin portal with student access control, 24 modules, video-based quiz lessons, progress tracking, and answer explanations.
 
 ## Scope
-- New page **`/mentorship`** (follows the project's "dedicated routes, never anchors" rule).
-- Add navigation link in `Navbar` (desktop + mobile menu) and a Footer link.
-- Add a card/teaser on the homepage (below `PackagesSection`) linking to the page.
 
-## Page structure: `src/pages/MentorshipPage.tsx`
+A full Learning Management System (LMS) with two surfaces:
+- **Admin** (`/admin/lessons`) — author/manage curriculum, grant access to clients, track every student's progress.
+- **Student** (`/lessons`) — granted clients see their assigned modules, watch YouTube videos, take quizzes, get explanations, take notes.
 
-1. **Hero** — "DJ Mentorship Programs" headline, sub-copy about turning passion into a career, two CTAs: "View Pathways" / "Apply Now".
+## Database (new tables)
 
-2. **Track Toggle** — A sleek `Switch`-style toggle at the top: **"I Have My Own Gear"** ↔ **"I Need Gear"**. Default: "Have Gear". State managed via `useState`. Toggle styled to match brand (gold/rose pills, not the raw shadcn switch).
+1. **`lesson_modules`** — 24 top-level modules
+   - `id`, `module_number` (1–24), `title`, `description`, `created_at`
+2. **`lesson_lessons`** — 8–12 sub-lessons per module
+   - `id`, `module_id` (FK), `lesson_number`, `title`, `description`, `youtube_url`, `youtube_video_id`, `additional_notes` (rich text)
+3. **`lesson_questions`** — quiz questions per lesson
+   - `id`, `lesson_id` (FK), `question_order`, `question_text`, `question_type` (`multiple_choice` | `true_false` | `short_answer`), `explanation` (the "why this is correct" text)
+4. **`lesson_answers`** — answer choices per question
+   - `id`, `question_id` (FK), `answer_text`, `is_correct`, `display_order`
+5. **`lesson_access`** — which users can see lessons
+   - `id`, `user_id` (FK auth.users), `granted_by` (admin uid), `granted_at`, `expires_at` (nullable), `is_active`
+6. **`lesson_progress`** — per-user per-lesson state
+   - `id`, `user_id`, `lesson_id`, `status` (`not_started`|`in_progress`|`completed`), `video_watched`, `quiz_score`, `quiz_attempts`, `completed_at`, `student_notes` (textarea)
+7. **`lesson_quiz_attempts`** — every quiz submission for review
+   - `id`, `user_id`, `lesson_id`, `question_id`, `selected_answer_id` (nullable for short answer), `short_answer_text`, `is_correct`, `attempted_at`
 
-3. **Pathways grid** — 3 cards per track (Hobbyist / Performer / Pro Entrepreneur), middle card "featured" (Performer) with "Most Popular" badge. Each card shows:
-   - Pathway name + tagline
-   - Price (large, gradient text) + "/month"
-   - Duration badge
-   - Goal, Focus, Outcome (or Setup/Benefit for All-In)
-   - "Apply for this Pathway" button → scrolls to Apply form with pathway pre-selected
+**RLS**: Students read/write only their own progress/attempts and only see lessons if they have an active row in `lesson_access`. Admins (via `has_role`) full read on everything.
 
-4. **What's Included / Why Choose Us** — short trust strip (4 icons): Industry-Standard Gear, 1-on-1 Weekly Sessions, Real Gig Prep, Business & Marketing Coaching.
+## Admin section — `src/pages/admin/LessonsAdmin.tsx`
 
-5. **Apply Now form** (anchor `#apply` on same page, server-backed):
-   - First name, Last name (stack on mobile)
-   - Email, Phone
-   - Age (number) — flag if under 18 → optional parent/guardian name + email
-   - Current skill level: radio (`Complete Beginner`, `Some Experience`, `Intermediate`, `Advanced`)
-   - Gear status: radio (`I own a controller`, `I need gear provided`) — auto-syncs with the toggle
-   - Pathway interested in: select (6 options, pre-filled from card click)
-   - Music genres of interest: multi-checkbox (House, Hip-Hop, EDM, Top 40, Latin, Other)
-   - Goals (textarea, 500 char limit)
-   - Preferred start month
-   - Submission via `FormSubmit.co` (matches existing project pattern in `mem://tech/form-submission`) routed to `hersky.ott@gmail.com`.
-   - Validate with **zod** (per project security standard): trimmed strings, email format, max lengths.
+Linked from the existing AdminDashboard. Three tabs:
 
-6. **FAQ accordion** (4–5 Qs): Do I need gear to start? Where are lessons held? Are sessions in-person or online? Refund policy? Do you teach kids?
+1. **Curriculum** — Tree view: 24 modules → expand → lessons → expand → questions. Inline create/edit/delete. Each lesson editor has: title, description, YouTube URL (auto-extract video ID + show preview), notes (Textarea). Each question editor: type selector, answers list with "mark correct" toggle, **explanation** field (mandatory).
+2. **Student Access** — List of all profiles (reuses existing `profiles` query). Toggle switch per client to grant/revoke access, optional expiration date. Shows "Active" / "Inactive" badge.
+3. **Progress Tracking** — Pick a student → see overall % complete, per-module completion, per-lesson quiz scores, all quiz attempts (question + their answer + correct answer + ✓/✗ + explanation), and their personal notes. Bulk export per-student CSV.
 
-## Pricing data
-Hardcoded in the page file, structured as:
-```ts
-const tracks = {
-  haveGear: [Hobbyist $400, Performer $375 (featured), Pro $350],
-  needGear: [Hobbyist $525, Performer $495 (featured), Pro $485],
-}
-```
-Pro "Need Gear" card highlights "Pro DJ controller included — yours to keep".
+## Student section — `src/pages/Lessons.tsx` + `src/pages/LessonView.tsx`
 
-## Other touches
-- Reveal-on-scroll using existing `useRevealOnScroll` hook.
-- Glass cards matching `PackagesSection` style.
-- Mobile: cards stack single-column, toggle full-width, form inputs full-width.
-- Add `<Route path="/mentorship" element={<MentorshipPage />} />` to `App.tsx`.
-- Add memory entry `mem://features/mentorship-program` documenting the two tracks + pricing, and update `mem://index.md`.
+- Linked from ClientPortal with a "DJ Lessons" card (only visible if `lesson_access` row exists for the user).
+- **`/lessons`** — module grid showing progress bars, locked icons until granted.
+- **`/lessons/:moduleId`** — lesson list with checkmarks for completed.
+- **`/lessons/:moduleId/:lessonId`** — embedded YouTube player → "I've watched this" button → quiz appears → submit → results page showing each question with their answer, correct answer, ✓/✗, and the **explanation** of why it's correct. Personal notes textarea (auto-saves) on the side.
+
+## Seed data
+
+Create the 24 modules with sensible DJ curriculum titles (Beginner Basics → Equipment → Beatmatching → Mixing Theory → EQ & Filters → Phrasing → Harmonic Mixing → Loops & Hot Cues → Effects → Genres → Reading the Crowd → Wedding/Event Mixing → Business → etc.). Insert empty placeholder lessons (8–12 per module) so the admin sees the structure and just fills in YouTube URLs + questions. **Admin authors actual content** (videos/questions/explanations) — not auto-generated.
 
 ## Files
-- **Add**: `src/pages/MentorshipPage.tsx`
-- **Edit**: `src/App.tsx` (route), `src/components/Navbar.tsx` (nav link), `src/components/Footer.tsx` (footer link), `src/pages/Index.tsx` (teaser card), `mem://index.md`
-- **Add memory**: `mem://features/mentorship-program`
 
-No new dependencies (zod, react-hook-form, FormSubmit.co already in use).
+- **DB migration** for the 7 tables + RLS + indexes.
+- **Add**: `src/pages/admin/LessonsAdmin.tsx`, `src/pages/Lessons.tsx`, `src/pages/LessonView.tsx`, `src/components/lessons/CurriculumEditor.tsx`, `src/components/lessons/QuestionEditor.tsx`, `src/components/lessons/StudentAccessManager.tsx`, `src/components/lessons/StudentProgressViewer.tsx`, `src/components/lessons/QuizPlayer.tsx`, `src/components/lessons/YouTubeEmbed.tsx`, `src/hooks/useLessonAccess.ts`.
+- **Edit**: `src/App.tsx` (4 new routes), `src/pages/AdminDashboard.tsx` (link to Lessons admin), `src/pages/ClientPortal.tsx` (conditional "DJ Lessons" card).
+- **Memory**: add `mem://features/dj-lessons-lms`, update index.
+
+No new npm dependencies — uses existing shadcn (Tabs, Accordion, Card, Switch, RadioGroup, Progress, Textarea, Table) + native YouTube iframe embed.
