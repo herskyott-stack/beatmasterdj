@@ -4,8 +4,10 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/contexts/CartContext";
+import { FXProvider } from "@/contexts/FXContext";
 import { useEffect } from "react";
 import { initializeNativeFeatures } from "@/lib/native";
+import FXLayer from "@/components/fx/FXLayer";
 import Index from "./pages/Index";
 import BookingPage from "./pages/BookingPage";
 import CheckoutPage from "./pages/CheckoutPage";
@@ -29,13 +31,15 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <CartProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <ScrollToTop />
-            <Routes>
+      <FXProvider>
+        <CartProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <FXLayer />
+            <BrowserRouter>
+              <ScrollToTop />
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/book" element={<BookingPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
