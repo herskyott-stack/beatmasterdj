@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { Music, Star, Plus, Trash2, Send, LogOut, Clipboard, X, Check, Shield } from "lucide-react";
+import { Music, Star, Plus, Trash2, Send, LogOut, Clipboard, X, Check, Shield, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import type { User } from "@supabase/supabase-js";
@@ -324,6 +324,12 @@ const ClientPortal = () => {
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mt-4 md:mt-0 w-full md:w-auto">
+              <Button variant="outline" asChild className="w-full sm:w-auto">
+                <Link to="/lessons">
+                  <GraduationCap className="w-4 h-4 mr-2" />
+                  DJ Lessons
+                </Link>
+              </Button>
               {isAdmin && (
                 <Button variant="hero" asChild className="w-full sm:w-auto">
                   <Link to="/admin">

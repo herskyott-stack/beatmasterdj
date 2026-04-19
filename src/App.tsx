@@ -17,6 +17,9 @@ import PackagesPage from "./pages/PackagesPage";
 import AuthPage from "./pages/AuthPage";
 import ClientPortal from "./pages/ClientPortal";
 import AdminDashboard from "./pages/AdminDashboard";
+import LessonsAdmin from "./pages/admin/LessonsAdmin";
+import Lessons from "./pages/Lessons";
+import LessonView from "./pages/LessonView";
 import InstallPage from "./pages/InstallPage";
 import ContactPage from "./pages/ContactPage";
 import MentorshipPage from "./pages/MentorshipPage";
@@ -50,6 +53,10 @@ function App() {
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/client-portal" element={<ClientPortal />} />
               <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/lessons" element={<LessonsAdmin />} />
+              <Route path="/lessons" element={<Lessons />} />
+              <Route path="/lessons/:moduleId" element={<LessonView />} />
+              <Route path="/lessons/:moduleId/:lessonId" element={<LessonView />} />
               <Route path="/install" element={<InstallPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/mentorship" element={<MentorshipPage />} />

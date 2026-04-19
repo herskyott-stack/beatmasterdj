@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
@@ -129,7 +129,11 @@ const AdminDashboard = () => {
                 View and manage all client events and music selections
               </p>
             </div>
-            <div className="flex gap-3 mt-4 md:mt-0">
+            <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
+              <Button variant="hero" onClick={() => navigate("/admin/lessons")}>
+                <GraduationCap className="w-4 h-4 mr-2" />
+                DJ Lessons LMS
+              </Button>
               <Button variant="outline" onClick={() => navigate("/client-portal")}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Client Portal
