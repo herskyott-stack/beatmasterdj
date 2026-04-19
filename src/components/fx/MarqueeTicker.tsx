@@ -8,7 +8,7 @@ const MarqueeTicker = () => {
   if (!fxEnabled) return null;
 
   return (
-    <div className="fixed top-[72px] left-0 right-0 z-[45] pointer-events-none overflow-hidden h-6 bg-background/60 backdrop-blur-sm border-y border-primary/20">
+    <div className="fixed top-16 md:top-20 left-0 right-0 z-[45] pointer-events-none overflow-hidden h-6 bg-background/60 backdrop-blur-sm border-b border-primary/20">
       <div className="marquee-track font-mono text-[11px] text-primary/80 whitespace-nowrap leading-6">
         <span>{MESSAGE.repeat(4)}</span>
         <span>{MESSAGE.repeat(4)}</span>
