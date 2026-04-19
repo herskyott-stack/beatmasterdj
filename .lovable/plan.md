@@ -1,33 +1,43 @@
 
-You want every lesson to have a real (non-blank) YouTube video and quizzes restructured to **1 quiz per 5 lessons**. Quick reality check before I commit:
+Add file upload capability to the admin LMS so you can attach supporting materials (PDFs, images, audio, slides, etc.) to lessons. Files persist in storage and stay attached after refresh.
 
-## The honest scope
-- 24 modules × ~10 lessons = **~240 lessons** needing videos
-- 1 quiz per 5 lessons = **~48 quizzes** × 5 questions = **240 questions** with explanations
+## Scope
 
-I can't *guarantee* every YouTube ID I write is live and exactly on-topic without verifying each one against the YouTube API — which would need a key from you. So I need to know your preference before generating content.
+**Per-lesson file attachments** in the Curriculum editor. Each lesson can have multiple files (cheat sheets, sample tracks, slide decks, reference images). Students with access see them on the lesson page as a downloadable "Resources" list.
 
-## What I'll change either way
+## Database
 
-**Schema:** add `quiz_group` int column to `lesson_lessons`, backfilled as `ceil(lesson_number / 5)`. Quiz questions stay attached to the **last lesson** of each group of 5 (lesson 5, 10, 15…).
+New table `lesson_files`:
+- `id`, `lesson_id` (FK), `file_name`, `file_path` (storage key), `file_size`, `mime_type`, `uploaded_by`, `created_at`
 
-**Student UI (`Lessons.tsx` / `LessonView.tsx`):**
-- Lessons visually grouped: "Chapter 1 — Lessons 1–5 → Quiz 1"
-- Quiz only unlocks when all 5 videos in the group are marked watched
-- Passing the quiz (≥70%) marks all 5 lessons complete
+RLS:
+- Admins: full ALL
+- Granted students: SELECT only (via `has_lesson_access`)
 
-**Admin UI (`CurriculumEditor.tsx`):** group lessons by `quiz_group`, move `QuestionEditor` from per-lesson to per-group.
+## Storage
 
-**Memory:** update `mem://features/dj-lessons-lms.md` to reflect new quiz model.
+New private bucket `lesson-files` (not public — served via signed URLs).
 
-## The content question
+Storage RLS policies on `storage.objects`:
+- Admin INSERT/UPDATE/DELETE on `lesson-files`
+- Admin + granted students SELECT on `lesson-files`
 
-Pick one — I need your call:
+## UI changes
 
-**A) Full seed, all 24 modules** — I write a curated YouTube URL for all ~240 lessons (using stable channels: Crossfader, DJcityTV, Digital DJ Tips, Pioneer DJ, Phil Harris) plus all 48 quizzes × 5 questions. Fast coverage. **You must spot-check links before granting student access** — I'll add a banner in admin reminding you.
+**`CurriculumEditor.tsx`** — under each lesson editor, add a "Resources" panel:
+- Drag-and-drop / file picker (multi-file, 20 MB cap each)
+- Upload progress indicator
+- List of attached files with name, size, delete button, and download link
+- Files save immediately to storage + `lesson_files` row on upload (no separate "save" click needed)
 
-**B) Verified first 6 modules only** — I carefully populate modules 1–6 (~60 lessons, 12 quizzes) with high-confidence links and quality questions. Modules 7–24 stay placeholders. Higher quality, less risk of dead links.
+**`LessonView.tsx`** (student) — add a "Resources" card above the quiz showing each file with a download button (uses signed URL via `supabase.storage.from('lesson-files').createSignedUrl`).
 
-**C) Build a YouTube auto-fill tool** — I add an admin button "Search YouTube for this lesson" that lets you pick the right video. Needs you to add a `YOUTUBE_API_KEY` secret. Highest quality; you co-author.
+**New component**: `src/components/lessons/LessonFilesManager.tsx` (admin upload UI) and `src/components/lessons/LessonFilesList.tsx` (student-facing list).
 
-Reply **A**, **B**, or **C** and I'll build it. (I recommend **B + C**: ship verified first 6 modules now, then add the auto-fill tool so you can finish the rest yourself with confidence.)
+## Files
+
+- **Migration**: create `lesson_files` table + RLS, create `lesson-files` storage bucket + storage RLS policies
+- **Add**: `src/components/lessons/LessonFilesManager.tsx`, `src/components/lessons/LessonFilesList.tsx`
+- **Edit**: `src/components/lessons/CurriculumEditor.tsx` (mount manager per lesson), `src/pages/LessonView.tsx` (mount student list)
+
+No new dependencies — uses native `<input type="file">` and Supabase Storage SDK already imported.
