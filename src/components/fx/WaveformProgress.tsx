@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { useFX } from "@/contexts/FXContext";
 
 /**
  * Vertical tempo fader (CDJ-3000 style) that doubles as a scroll indicator.
