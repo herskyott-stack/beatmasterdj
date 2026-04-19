@@ -20,10 +20,10 @@ const Footer = () => {
 
           {/* Links */}
           <div className="flex items-center gap-6">
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="drumpad-link text-sm text-muted-foreground transition-colors">
               Privacy Policy
             </a>
-            <a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+            <a href="#" className="drumpad-link text-sm text-muted-foreground transition-colors">
               Terms of Service
             </a>
           </div>

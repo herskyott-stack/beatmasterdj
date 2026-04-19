@@ -61,7 +61,7 @@ const AboutPage = () => {
               <span className="font-display text-sm uppercase tracking-widest text-primary mb-4 block">
                 Our Story
               </span>
-              <h1 className="font-display text-5xl md:text-6xl font-bold mb-6">
+              <h1 className="font-display text-5xl md:text-6xl font-bold mb-6 dj-heading glitch-text">
                 <span className="text-foreground">ABOUT </span>
                 <span className="gradient-text">HERSKY DJ & AV</span>
               </h1>

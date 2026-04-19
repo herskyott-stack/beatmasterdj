@@ -20,7 +20,7 @@ const BookingConfirmed = () => {
             </div>
 
             {/* Title */}
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4">
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
               <span className="text-foreground">BOOKING </span>
               <span className="gradient-text">CONFIRMED!</span>
             </h1>

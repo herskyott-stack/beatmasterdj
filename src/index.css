@@ -249,6 +249,190 @@
     text-shadow: 2px 0 hsl(0,100%,55%), -2px 0 hsl(195,100%,55%);
   }
 
+  /* === DJ FX Overdrive === */
+  @keyframes eq-bounce {
+    0%, 100% { height: 10%; }
+    25% { height: 80%; }
+    50% { height: 35%; }
+    75% { height: 95%; }
+  }
+  .eq-bar {
+    height: 30%;
+    background: linear-gradient(to top,
+      hsl(120, 80%, 50%) 0%,
+      hsl(120, 80%, 50%) 55%,
+      hsl(50, 95%, 55%) 55%,
+      hsl(50, 95%, 55%) 80%,
+      hsl(0, 90%, 55%) 80%,
+      hsl(0, 90%, 55%) 100%);
+    animation: eq-bounce 0.468s infinite ease-in-out;
+    border-radius: 1px;
+    opacity: 0.85;
+  }
+
+  @keyframes vinyl-spin-kf {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  .vinyl-spin {
+    animation: vinyl-spin-kf 3s linear infinite;
+    filter: drop-shadow(0 0 8px hsl(var(--primary) / 0.5));
+  }
+
+  @keyframes beat-burst {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+  .beat-particle {
+    position: absolute;
+    left: 0; top: 0;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px currentColor;
+    animation: beat-burst 0.65s cubic-bezier(0.2, 0.8, 0.3, 1) forwards;
+    pointer-events: none;
+  }
+
+  @keyframes laser-sweep-kf {
+    0% { transform: translateX(-120%) rotate(-18deg); }
+    100% { transform: translateX(120vw) rotate(-18deg); }
+  }
+  .laser-beam {
+    position: absolute;
+    top: -50%;
+    left: 0;
+    width: 200px;
+    height: 200vh;
+    opacity: 0.18;
+    filter: blur(6px);
+    transform-origin: center;
+  }
+  .laser-magenta {
+    background: linear-gradient(90deg, transparent, hsl(var(--secondary)), transparent);
+    animation: laser-sweep-kf 7s linear infinite;
+  }
+  .laser-cyan {
+    background: linear-gradient(90deg, transparent, hsl(195, 100%, 60%), transparent);
+    animation: laser-sweep-kf 9s linear infinite;
+    animation-delay: -3.5s;
+  }
+
+  @keyframes spectrum-wobble {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .spectrum-strip {
+    background: linear-gradient(90deg,
+      hsl(var(--primary)) 0%,
+      hsl(var(--secondary)) 25%,
+      hsl(195, 100%, 55%) 50%,
+      hsl(var(--accent)) 75%,
+      hsl(var(--primary)) 100%);
+    background-size: 200% 100%;
+    animation: spectrum-wobble 0.936s ease-in-out infinite;
+    box-shadow: 0 0 8px hsl(var(--primary) / 0.6);
+  }
+
+  @keyframes tape-wipe-kf {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .tape-wipe {
+    background: repeating-linear-gradient(
+      45deg,
+      hsl(var(--primary) / 0.3) 0,
+      hsl(var(--primary) / 0.3) 8px,
+      hsl(var(--secondary) / 0.3) 8px,
+      hsl(var(--secondary) / 0.3) 16px
+    );
+    animation: tape-wipe-kf 0.35s ease-out forwards;
+    mix-blend-mode: screen;
+  }
+
+  @keyframes marquee-scroll-kf {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .marquee-track {
+    display: inline-flex;
+    animation: marquee-scroll-kf 40s linear infinite;
+    will-change: transform;
+  }
+  .marquee-track > span {
+    padding-right: 2rem;
+  }
+
+  /* DJ heading: animated underline + bass-shake on hover */
+  .dj-heading {
+    position: relative;
+    display: inline-block;
+  }
+  .dj-heading::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    height: 3px;
+    width: 100%;
+    background: linear-gradient(90deg,
+      hsl(var(--primary)),
+      hsl(var(--secondary)),
+      hsl(var(--accent)),
+      hsl(var(--primary)));
+    background-size: 200% 100%;
+    border-radius: 2px;
+    animation: spectrum-wobble 1.4s ease-in-out infinite;
+    box-shadow: 0 0 12px hsl(var(--primary) / 0.5);
+    transform-origin: left;
+    transform: scaleX(0.4);
+    transition: transform 0.4s ease;
+  }
+  .dj-heading:hover::after {
+    transform: scaleX(1);
+  }
+  .dj-heading:hover {
+    animation: bass-shake 0.18s infinite;
+  }
+
+  /* Turntable hover for service/package cards */
+  .turntable-hover {
+    position: relative;
+    overflow: hidden;
+  }
+  .turntable-hover::before {
+    content: '';
+    position: absolute;
+    inset: 50% 50% auto auto;
+    width: 80%;
+    aspect-ratio: 1;
+    transform: translate(50%, -50%);
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at center, hsl(var(--primary) / 0.5) 0 6%, transparent 7%),
+      repeating-radial-gradient(circle, hsl(0 0% 100% / 0.08) 0 2px, transparent 2px 5px);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .turntable-hover:hover::before {
+    opacity: 0.6;
+    animation: vinyl-spin-kf 4s linear infinite;
+  }
+
+  /* Drumpad-style footer/social link hover */
+  .drumpad-link {
+    transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
+  }
+  .drumpad-link:hover {
+    transform: scale(1.15);
+    color: hsl(var(--primary));
+    text-shadow: 0 0 12px hsl(var(--primary) / 0.8), 0 0 4px hsl(var(--secondary) / 0.6);
+  }
+  .drumpad-link:active {
+    transform: scale(0.92);
+  }
+
   ::-webkit-scrollbar {
     width: 10px;
   }
