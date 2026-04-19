@@ -176,7 +176,7 @@ const AuthPage = () => {
             </div>
 
             <Card variant="glass">
-              <CardContent className="p-6">
+              <CardContent className="p-4 sm:p-6">
                 <Tabs defaultValue="signin" className="w-full">
                   <TabsList className="grid w-full grid-cols-2 mb-6">
                     <TabsTrigger value="signin">Sign In</TabsTrigger>
