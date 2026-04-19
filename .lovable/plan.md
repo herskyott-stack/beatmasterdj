@@ -1,14 +1,15 @@
 
-User wants the colorful green/yellow/red vertical bar on the right (the custom-styled scrollbar) replaced by the tempo fader. So: move tempo fader to the right edge (it's already there) and hide/remove the colorful scrollbar styling so the tempo fader takes that spot cleanly.
+The tempo fader on mobile (360px viewport) is `w-7` (28px) and sits at `right-1.5`, overlapping content. Make it smaller and more flush on mobile while keeping the desktop look.
 
-Plan:
-1. Remove the custom green/yellow/red `::-webkit-scrollbar-thumb` gradient in `src/index.css` — revert to a subtle neutral scrollbar (or hide it) so the colorful bar is gone.
-2. Keep the tempo fader on the right edge where it already sits (`right-1.5`), so it visually replaces the colorful bar.
+## Change
 
-## Changes
+**`src/components/fx/WaveformProgress.tsx`** — make the fader responsive:
+- Width: `w-4` on mobile, `w-7` on desktop (`sm:w-7`)
+- Right offset: `right-0.5` on mobile, `sm:right-1.5`
+- Top/bottom inset: `top-16 bottom-16` on mobile (smaller), `sm:top-24 sm:bottom-24`
+- Hide tick marks and TEMPO/pitch labels on mobile (only show the slim track + thumb), restore on `sm:` breakpoint
+- Shrink thumb on mobile: `w-3 h-3`, `sm:w-6 sm:h-4`
 
-**`src/index.css`** — replace the colorful scrollbar thumb gradient with a slim neutral thumb (`hsl(var(--muted))`) so the right edge is clean and the tempo fader is the only colorful element there.
+Result: on phones the fader becomes a slim ~16px-wide unobtrusive scroll indicator hugging the right edge; on tablet/desktop the full CDJ-style fader with ticks and labels returns.
 
-**`src/components/fx/WaveformProgress.tsx`** — no change needed; already on right edge.
-
-That's it. One file edited.
+One file edited.
