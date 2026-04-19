@@ -11,6 +11,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import YouTubeEmbed from "@/components/lessons/YouTubeEmbed";
 import QuizPlayer from "@/components/lessons/QuizPlayer";
+import LessonFilesList from "@/components/lessons/LessonFilesList";
 import { toast } from "@/hooks/use-toast";
 
 const LessonView = () => {
@@ -190,6 +191,8 @@ const LessonView = () => {
                     </CardContent>
                   </Card>
                 )}
+
+                <LessonFilesList lessonId={lessonId} />
 
                 {!videoWatched ? (
                   <Button onClick={markVideoWatched} className="w-full" disabled={!currentLesson.youtube_video_id}>
