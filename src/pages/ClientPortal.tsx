@@ -355,17 +355,18 @@ const ClientPortal = () => {
                 <CardContent>
                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <TabsList className="grid w-full grid-cols-3 mb-6">
-                      <TabsTrigger value="priority" className="text-xs sm:text-sm">
+                      <TabsTrigger value="priority" className="text-xs sm:text-sm px-1 sm:px-3">
                         <Star className="w-4 h-4 mr-1 hidden sm:inline" />
                         Priority
                       </TabsTrigger>
-                      <TabsTrigger value="additional" className="text-xs sm:text-sm">
+                      <TabsTrigger value="additional" className="text-xs sm:text-sm px-1 sm:px-3">
                         <Plus className="w-4 h-4 mr-1 hidden sm:inline" />
                         Additional
                       </TabsTrigger>
-                      <TabsTrigger value="do_not_play" className="text-xs sm:text-sm">
+                      <TabsTrigger value="do_not_play" className="text-xs sm:text-sm px-1 sm:px-3">
                         <X className="w-4 h-4 mr-1 hidden sm:inline" />
-                        Do Not Play
+                        <span className="sm:hidden">Skip</span>
+                        <span className="hidden sm:inline">Do Not Play</span>
                       </TabsTrigger>
                     </TabsList>
 
