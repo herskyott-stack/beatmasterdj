@@ -10,6 +10,7 @@ import { Plus, Save, Trash2, Youtube } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import YouTubeEmbed, { extractYouTubeId } from "./YouTubeEmbed";
 import QuestionEditor from "./QuestionEditor";
+import LessonFilesManager from "./LessonFilesManager";
 
 type Module = { id: string; module_number: number; title: string; description: string | null };
 type Lesson = {
@@ -201,6 +202,11 @@ const CurriculumEditor = () => {
                           <Button size="sm" variant="destructive" onClick={() => deleteLesson(l.id)}>
                             <Trash2 className="w-3 h-3 mr-1" /> Delete
                           </Button>
+                        </div>
+
+                        <div className="pt-4 border-t border-white/10">
+                          <p className="font-semibold mb-3">Resources / files</p>
+                          <LessonFilesManager lessonId={l.id} />
                         </div>
 
                         <div className="pt-4 border-t border-white/10">
