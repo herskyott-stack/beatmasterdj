@@ -12,11 +12,15 @@ import SpectrumStrip from "./SpectrumStrip";
 import TapeWipe from "./TapeWipe";
 import GlowTrail from "./GlowTrail";
 import MarqueeTicker from "./MarqueeTicker";
+import WaveformProgress from "./WaveformProgress";
+import FloatingGear from "./FloatingGear";
 
 const FXLayer = () => {
   return (
     <>
+      <FloatingGear />
       <ParticleField />
+      <WaveformProgress />
       <ScanlineOverlay />
       <LaserSweep />
       <CrosshairCursor />
