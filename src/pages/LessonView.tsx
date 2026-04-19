@@ -134,7 +134,7 @@ const LessonView = () => {
                   >
                     <CardContent className="pt-4 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        {done ? <CheckCircle2 className="w-5 h-5 text-green-500" /> : <Circle className="w-5 h-5 text-muted-foreground" />}
+                        {done ? <CheckCircle2 className="w-5 h-5 text-primary" /> : <Circle className="w-5 h-5 text-muted-foreground" />}
                         <div>
                           <p className="font-medium">Lesson {l.lesson_number}: {l.title}</p>
                           {p?.quiz_score !== null && p?.quiz_score !== undefined && (

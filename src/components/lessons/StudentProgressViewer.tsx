@@ -158,18 +158,18 @@ const StudentProgressViewer = () => {
                     <div key={a.id} className="p-3 border border-white/10 rounded-md bg-background/40">
                       <div className="flex items-start justify-between gap-2">
                         <p className="text-sm font-medium">{q?.question_text || "Question"}</p>
-                        {a.is_correct ? <Check className="w-4 h-4 text-green-500 shrink-0" /> : <X className="w-4 h-4 text-destructive shrink-0" />}
+                        {a.is_correct ? <Check className="w-4 h-4 text-primary shrink-0" /> : <X className="w-4 h-4 text-destructive shrink-0" />}
                       </div>
                       <p className="text-xs mt-2">
                         <span className="text-muted-foreground">Their answer: </span>
-                        <span className={a.is_correct ? "text-green-500" : "text-destructive"}>
+                        <span className={a.is_correct ? "text-primary" : "text-destructive"}>
                           {theirAns?.answer_text || a.short_answer_text || "—"}
                         </span>
                       </p>
                       {!a.is_correct && correctAns && (
                         <p className="text-xs">
                           <span className="text-muted-foreground">Correct answer: </span>
-                          <span className="text-green-500">{(correctAns as any).answer_text}</span>
+                          <span className="text-primary">{(correctAns as any).answer_text}</span>
                         </p>
                       )}
                       {q?.explanation && (

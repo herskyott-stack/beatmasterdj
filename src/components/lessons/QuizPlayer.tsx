@@ -162,7 +162,7 @@ const QuizPlayer = ({
                 <p className="font-medium">
                   {qi + 1}. {q.question_text}
                 </p>
-                {submitted && (isCorrect ? <Check className="w-5 h-5 text-green-500" /> : <X className="w-5 h-5 text-destructive" />)}
+                {submitted && (isCorrect ? <Check className="w-5 h-5 text-primary" /> : <X className="w-5 h-5 text-destructive" />)}
               </div>
 
               {q.question_type === "short_answer" ? (
@@ -185,7 +185,7 @@ const QuizPlayer = ({
                       <div
                         key={a.id}
                         className={`flex items-center gap-2 p-2 rounded-md border ${
-                          showCorrect ? "border-green-500/50 bg-green-500/10" :
+                          showCorrect ? "border-primary/60 bg-primary/10" :
                           showWrong ? "border-destructive/50 bg-destructive/10" :
                           "border-white/10"
                         }`}
@@ -199,14 +199,14 @@ const QuizPlayer = ({
               )}
 
               {submitted && (
-                <div className={`text-sm p-3 rounded-md ${isCorrect ? "bg-green-500/10" : "bg-destructive/10"}`}>
+                <div className={`text-sm p-3 rounded-md ${isCorrect ? "bg-primary/10" : "bg-destructive/10"}`}>
                   <p className="font-semibold mb-1">
                     {isCorrect ? "Correct!" : "Not quite."}
                   </p>
                   {!isCorrect && correctAns && (
                     <p className="text-xs mb-1">
                       <span className="text-muted-foreground">Correct answer: </span>
-                      <span className="text-green-500">{correctAns.answer_text}</span>
+                      <span className="text-primary">{correctAns.answer_text}</span>
                     </p>
                   )}
                   {q.explanation && (
