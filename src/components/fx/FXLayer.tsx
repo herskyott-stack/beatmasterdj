@@ -28,7 +28,6 @@ const FXLayer = () => {
       <HUDCorners />
       {/* <SpectrumStrip /> removed — replaced by vertical tempo fader */}
       <MarqueeTicker />
-      <EqualizerBars />
       <VinylSpinner />
       <BeatDropBurst />
       <PageTransitionFX />
