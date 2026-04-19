@@ -50,7 +50,7 @@ const WaveformProgress = () => {
 
   return (
     <div
-      className="fixed left-1.5 top-24 bottom-24 z-[60] pointer-events-none hidden md:flex items-stretch"
+      className="fixed right-1.5 top-24 bottom-24 z-[60] pointer-events-none hidden md:flex items-stretch"
       aria-hidden="true"
     >
       <div className="relative w-7 rounded-md bg-gradient-to-b from-card via-background to-card border border-border shadow-[inset_0_0_8px_hsl(var(--background)/0.8),0_0_12px_hsl(var(--background)/0.5)] flex flex-col items-center py-2">
