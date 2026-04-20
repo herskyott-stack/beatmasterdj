@@ -3,7 +3,7 @@ import CrosshairCursor from "./CrosshairCursor";
 import ParticleField from "./ParticleField";
 import ScanlineOverlay from "./ScanlineOverlay";
 // import ScrollBlur from "./ScrollBlur"; // disabled per user request
-import FXToggle from "./FXToggle";
+
 import EqualizerBars from "./EqualizerBars";
 import VinylSpinner from "./VinylSpinner";
 import BeatDropBurst from "./BeatDropBurst";
@@ -32,7 +32,7 @@ const FXLayer = () => {
       <VinylSpinner />
       <BeatDropBurst />
       <PageTransitionFX />
-      <FXToggle />
+      
     </>
   );
 };
