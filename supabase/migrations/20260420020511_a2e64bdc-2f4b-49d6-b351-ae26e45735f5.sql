@@ -1,0 +1,1 @@
+GRANT EXECUTE ON FUNCTION public.bulk_update_lesson_notes(jsonb) TO anon, authenticated;
