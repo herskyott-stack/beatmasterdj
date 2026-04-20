@@ -25,12 +25,6 @@ const HeroSection = () => {
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 mb-8 animate-fade-in">
-            <Star className="w-4 h-4 text-primary" />
-            <span className="text-sm font-medium">Premier DJ Entertainment Services</span>
-          </div>
-
           {/* Main Heading */}
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in glitch-text" style={{ animationDelay: "0.1s" }}>
             <span className="text-foreground">ELEVATE YOUR</span>
