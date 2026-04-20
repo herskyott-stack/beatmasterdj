@@ -14,6 +14,8 @@ import UploadedVideoPlayer from "@/components/lessons/UploadedVideoPlayer";
 import QuizPlayer from "@/components/lessons/QuizPlayer";
 import LessonFilesList from "@/components/lessons/LessonFilesList";
 import { toast } from "@/hooks/use-toast";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 const LessonView = () => {
   const { moduleId, lessonId } = useParams();
@@ -190,9 +192,22 @@ const LessonView = () => {
 
                 {currentLesson.additional_notes && (
                   <Card>
-                    <CardContent className="pt-4">
-                      <p className="font-semibold mb-2">Lesson notes</p>
-                      <p className="whitespace-pre-wrap text-sm text-muted-foreground">{currentLesson.additional_notes}</p>
+                    <CardContent className="pt-6">
+                      <article className="prose prose-invert prose-sm md:prose-base max-w-none
+                        prose-headings:font-display prose-headings:text-foreground
+                        prose-h2:text-2xl prose-h2:mt-6 prose-h2:mb-3 prose-h2:text-primary
+                        prose-h3:text-lg prose-h3:mt-5 prose-h3:mb-2 prose-h3:text-secondary
+                        prose-p:text-muted-foreground prose-p:leading-relaxed
+                        prose-strong:text-foreground
+                        prose-a:text-primary hover:prose-a:text-primary/80 prose-a:underline
+                        prose-ul:text-muted-foreground prose-li:my-1
+                        prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]} components={{
+                          a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
+                        }}>
+                          {currentLesson.additional_notes}
+                        </ReactMarkdown>
+                      </article>
                     </CardContent>
                   </Card>
                 )}
