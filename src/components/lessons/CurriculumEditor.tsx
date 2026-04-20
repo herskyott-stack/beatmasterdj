@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import YouTubeEmbed, { extractYouTubeId } from "./YouTubeEmbed";
 import QuestionEditor from "./QuestionEditor";
 import LessonFilesManager from "./LessonFilesManager";
+import LessonVideoUploader from "./LessonVideoUploader";
 
 type Module = { id: string; module_number: number; title: string; description: string | null };
 type Lesson = {
@@ -22,6 +23,7 @@ type Lesson = {
   youtube_url: string | null;
   youtube_video_id: string | null;
   additional_notes: string | null;
+  video_file_path: string | null;
 };
 
 const CurriculumEditor = () => {
@@ -176,23 +178,29 @@ const CurriculumEditor = () => {
                             onChange={(e) => updateLesson(l.id, m.id, { description: e.target.value })}
                           />
                         </div>
+                        <LessonVideoUploader
+                          lessonId={l.id}
+                          currentPath={l.video_file_path}
+                          onChange={(p) => updateLesson(l.id, m.id, { video_file_path: p })}
+                        />
                         <div>
-                          <Label>YouTube URL</Label>
+                          <Label>YouTube URL (used if no uploaded video)</Label>
                           <Input
                             value={l.youtube_url || ""}
                             onChange={(e) => updateLesson(l.id, m.id, { youtube_url: e.target.value })}
                             placeholder="https://www.youtube.com/watch?v=..."
                           />
                         </div>
-                        {l.youtube_url && extractYouTubeId(l.youtube_url) && (
+                        {l.youtube_url && extractYouTubeId(l.youtube_url) && !l.video_file_path && (
                           <YouTubeEmbed videoId={extractYouTubeId(l.youtube_url)!} title={l.title} />
                         )}
                         <div>
-                          <Label>Additional notes / lesson content</Label>
+                          <Label>No video? Write a guide here →</Label>
                           <Textarea
                             value={l.additional_notes || ""}
                             onChange={(e) => updateLesson(l.id, m.id, { additional_notes: e.target.value })}
                             rows={4}
+                            placeholder="Step 1: ... Step 2: ... Add screenshots in the Resources section below."
                           />
                         </div>
                         <div className="flex gap-2">
