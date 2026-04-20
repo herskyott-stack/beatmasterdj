@@ -1,28 +1,66 @@
 
-Add "DJ Mentorship" as the 8th service card on the homepage Services grid, linking to `/mentorship`. Generate a brand image for it.
+Three features. Let me scope cleanly.
 
-## Changes
+## 1. Homepage Media Gallery (admin-uploaded)
 
-**1. Generate image** `src/assets/services/mentorship.jpg`
-Use Lovable AI image gen (google/gemini-3.1-flash-image-preview) to create: a DJ instructor wearing a black t-shirt with "HERSKY DJ & AV" text in gold, teaching a student at a Pioneer DJ controller in a warmly-lit studio. Cinematic, gold/amber lighting to match brand palette.
+**New table** `home_media`: id, type ('image'|'video'), file_path, title, caption, display_order, created_at, uploaded_by.
+**New storage bucket** `home-media` (public, 50 MB cap for video).
+**RLS**: anyone can SELECT; only admins INSERT/UPDATE/DELETE.
 
-**2. `src/components/ServicesSection.tsx`**
-- Import `mentorshipImg` and `GraduationCap` (already imported elsewhere — verify).
-- Append 8th entry to `services` array:
-  - icon: `GraduationCap`
-  - title: "DJ Mentorship"
-  - description: "1-on-1 weekly lessons with a working pro DJ. Hobbyist to Pro Entrepreneur tracks."
-  - color: `text-primary`
-  - gradient: `from-primary/20 to-secondary/20`
-  - route: `/mentorship`
-  - image: mentorshipImg
-- Remove the special `index === 4` col-span hack (with 8 cards the 3-col grid balances naturally: 3+3+2, or change to make last row centered). Simpler: drop the conditional so all cards are uniform.
+**Admin tab** in `/admin` (new tab "Home Media"):
+- Upload images (jpg/png/webp) or videos (mp4/webm)
+- Title + caption fields, drag-to-reorder
+- Delete per item, preview thumbnails
 
-**3. `src/pages/Index.tsx`** (homepage)
-- The dedicated mentorship teaser card between Packages and Addons becomes redundant once mentorship is in Services. Keep it OR remove it — I'll **keep** it (it's a stronger CTA with pricing) but you can tell me to remove.
+**Homepage** (`Index.tsx`): new `<FeaturedGallery />` section between Services and Packages. Only renders if `home_media` has rows. Layout: masonry grid for images (3-col desktop, 1-col mobile), videos play inline with controls, lightbox on click. Gold border + glass card styling to match brand.
 
-## Files touched
-- `src/assets/services/mentorship.jpg` (new, AI-generated)
-- `src/components/ServicesSection.tsx` (add card, drop col-span hack)
+## 2. Lesson Videos — Already Exists + Polish
 
-That's it — `/mentorship` route already exists.
+Lessons already have `youtube_url` field + working YouTube embed. The pain point you described is *uploading* videos. Two paths:
+
+- **YouTube (current)**: paste URL → auto-embeds. Easy, free, no storage cost. Already works.
+- **NEW: Direct video upload**: extend `lesson-files` bucket to accept video, OR add new `lesson_video_path` column on `lesson_lessons`. Player plays uploaded MP4 if present, falls back to YouTube.
+
+I'll add **direct upload** to the curriculum editor:
+- New "Upload video file" button in each lesson row (max 200 MB)
+- Stored in existing `lesson-files` bucket under `videos/{lesson_id}/`
+- Player in `LessonView` prefers uploaded file over YouTube
+- Delete button right next to it
+
+For the **"write a paragraph with pictures and arrows"** fallback — that's the existing `additional_notes` field + the `LessonFilesManager` (already supports image uploads). I'll just make it more obvious in the editor with a clear section label "No video? Write a guide here →".
+
+## 3. Module Descriptions + Per-Module Quiz
+
+For all 24 modules:
+- AI-generate a 1-paragraph description (4-6 sentences, brand tone) → write to `lesson_modules.description`
+- Generate a 5-question multiple-choice quiz per module covering the paragraph
+
+**Quiz storage**: I'll add a special "module overview" lesson at `lesson_number = 0` for each module (or use `quiz_group = 0`) holding the paragraph as `additional_notes` and 5 questions in `lesson_questions`. Student sees it as "Module Intro & Quiz" at top of each module on `/lessons`.
+
+This is a one-time AI generation pass via Lovable AI (`google/gemini-2.5-flash`). I'll do all 24 in one run.
+
+## Files
+
+**New**
+- migration: `home_media` table + RLS + `home-media` bucket
+- migration (optional): add `video_file_path` column to `lesson_lessons`
+- `src/components/admin/HomeMediaManager.tsx`
+- `src/components/home/FeaturedGallery.tsx`
+
+**Edited**
+- `src/pages/AdminDashboard.tsx` — add "Home Media" tab
+- `src/pages/Index.tsx` — render `<FeaturedGallery />` conditionally
+- `src/components/lessons/CurriculumEditor.tsx` — add direct video upload + clearer "no video?" guide section
+- `src/pages/LessonView.tsx` — prefer uploaded video over YouTube
+- `src/integrations/supabase/types.ts` — auto-regenerated
+
+**Data writes**
+- 24 module descriptions
+- 24 × 5 = 120 quiz questions + answers
+
+## Caveats
+- Direct video uploads >200 MB will be rejected (Supabase storage practical limit for browser uploads)
+- AI-generated quizzes need your review — easy to edit in the existing curriculum editor
+- The runtime error showing in preview is from a browser extension, not the app — I'll ignore it
+
+Approve and I'll build all 3 in one pass.
