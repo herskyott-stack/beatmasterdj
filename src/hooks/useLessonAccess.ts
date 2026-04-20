@@ -15,6 +15,20 @@ export const useLessonAccess = () => {
         return;
       }
       setUserId(session.user.id);
+
+      // Admins always have access (no lesson_access row needed)
+      const { data: roleRow } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (roleRow) {
+        setHasAccess(true);
+        setLoading(false);
+        return;
+      }
+
       const { data } = await supabase
         .from("lesson_access")
         .select("is_active, expires_at")

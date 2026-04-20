@@ -4,7 +4,7 @@ import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, GraduationCap, Users, BarChart3, BookOpen } from "lucide-react";
+import { ArrowLeft, GraduationCap, Users, BarChart3, BookOpen, Eye } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import CurriculumEditor from "@/components/lessons/CurriculumEditor";
@@ -40,9 +40,14 @@ const LessonsAdmin = () => {
               </h1>
               <p className="text-muted-foreground">Manage curriculum, student access, and track progress.</p>
             </div>
-            <Button variant="outline" onClick={() => navigate("/admin")}>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Admin
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="default" onClick={() => window.open("/lessons", "_blank")}>
+                <Eye className="w-4 h-4 mr-2" /> Preview as student
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/admin")}>
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Admin
+              </Button>
+            </div>
           </div>
 
           <Tabs defaultValue="curriculum">
