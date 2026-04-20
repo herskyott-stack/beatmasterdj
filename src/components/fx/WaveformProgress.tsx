@@ -50,48 +50,8 @@ const WaveformProgress = () => {
       aria-hidden="true"
     >
       <div className="relative w-4 sm:w-7 rounded-md bg-gradient-to-b from-card via-background to-card border border-border shadow-[inset_0_0_8px_hsl(var(--background)/0.8),0_0_12px_hsl(var(--background)/0.5)] flex flex-col items-center py-2">
-        {/* Pitch label at top (desktop only) */}
-        <div className="hidden sm:block font-mono text-[8px] text-primary/80 tracking-wider mb-1 leading-none">
-          {pitchLabel}
-        </div>
-
         {/* Fader track */}
         <div className="relative flex-1 w-full flex justify-center">
-          {/* Center line guide */}
-          <div className="absolute left-0 right-0 top-1/2 h-px bg-primary/40" />
-
-          {/* Tick marks (left side, desktop only) */}
-          <div className="hidden sm:flex absolute left-0.5 top-0 bottom-0 flex-col justify-between py-0.5">
-            {Array.from({ length: TICKS }).map((_, i) => {
-              const isMajor = i % 5 === 0;
-              const isCenter = i === Math.floor(TICKS / 2);
-              return (
-                <div
-                  key={i}
-                  className={`${isMajor ? "w-2" : "w-1"} h-px ${
-                    isCenter ? "bg-primary" : "bg-white/30"
-                  }`}
-                />
-              );
-            })}
-          </div>
-
-          {/* Tick marks (right side, desktop only) */}
-          <div className="hidden sm:flex absolute right-0.5 top-0 bottom-0 flex-col justify-between py-0.5">
-            {Array.from({ length: TICKS }).map((_, i) => {
-              const isMajor = i % 5 === 0;
-              const isCenter = i === Math.floor(TICKS / 2);
-              return (
-                <div
-                  key={i}
-                  className={`${isMajor ? "w-2" : "w-1"} h-px ${
-                    isCenter ? "bg-primary" : "bg-white/30"
-                  }`}
-                />
-              );
-            })}
-          </div>
-
           {/* Center groove */}
           <div className="w-[2px] h-full bg-black/80 rounded-full shadow-[inset_0_0_2px_rgba(0,0,0,0.9)]" />
 
@@ -110,11 +70,6 @@ const WaveformProgress = () => {
             {/* Thumb center notch */}
             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-primary shadow-[0_0_4px_hsl(var(--primary))]" />
           </div>
-        </div>
-
-        {/* TEMPO label (desktop only) */}
-        <div className="hidden sm:block font-mono text-[7px] text-muted-foreground/70 tracking-[0.15em] mt-1 leading-none">
-          TEMPO
         </div>
       </div>
     </div>
