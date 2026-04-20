@@ -492,6 +492,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      bulk_update_lesson_notes: { Args: { _payload: Json }; Returns: number }
       has_lesson_access: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
