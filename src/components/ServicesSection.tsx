@@ -1,4 +1,5 @@
 import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor } from "lucide-react";
+import mentorshipImg from "@/assets/services/mentorship.jpg";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
@@ -76,6 +77,15 @@ const services = [
     route: "/packages/av",
     image: avImg,
   },
+  {
+    icon: GraduationCap,
+    title: "DJ Mentorship",
+    description: "1-on-1 weekly lessons with a working pro DJ. Hobbyist to Pro Entrepreneur tracks.",
+    color: "text-primary",
+    gradient: "from-primary/20 to-secondary/20",
+    route: "/mentorship",
+    image: mentorshipImg,
+  },
 ];
 
 const ServicesSection = () => {
@@ -100,11 +110,11 @@ const ServicesSection = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {services.map((service, index) => (
+          {services.map((service) => (
             <Link
               key={service.title}
               to={service.route}
-              className={`block ${index === 4 ? "md:col-span-2 lg:col-span-1" : ""}`}
+              className="block"
             >
               <Card
                 variant="glass"
