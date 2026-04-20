@@ -278,16 +278,6 @@ const AdminDashboard = () => {
             </TabsContent>
           </Tabs>
 
-          {filteredProfiles.length === 0 && (
-            <Card variant="glass">
-              <CardContent className="py-12 text-center">
-                <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <p className="text-muted-foreground">
-                  {searchTerm ? "No clients found matching your search." : "No clients yet."}
-                </p>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </main>
       <Footer />
