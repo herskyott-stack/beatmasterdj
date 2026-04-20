@@ -24,4 +24,5 @@ Security: All Edge Functions require JWT + RBAC (admin: hersky.ott@gmail.com).
 - [Edge Function Security](mem://tech/security-standard) — JWT and RBAC requirements for Supabase backend
 - [Contact System](mem://features/contact-system) — Combined inquiry and categorized package selection form
 - [Mentorship Program](mem://features/mentorship-program) — Two-track DJ mentorship pathways, pricing, and apply flow at /mentorship
+- [Home Media Gallery](mem://features/home-media-gallery) — Admin-uploaded homepage gallery + direct lesson video uploads + AI module overview quizzes
 - [DJ Lessons LMS](mem://features/dj-lessons-lms) — Internal 24-module video+quiz course with access control and progress tracking
