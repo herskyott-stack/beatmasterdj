@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRight, CheckCircle2, Circle, GraduationCap } from "luci
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import YouTubeEmbed from "@/components/lessons/YouTubeEmbed";
+import UploadedVideoPlayer from "@/components/lessons/UploadedVideoPlayer";
 import QuizPlayer from "@/components/lessons/QuizPlayer";
 import LessonFilesList from "@/components/lessons/LessonFilesList";
 import { toast } from "@/hooks/use-toast";
@@ -181,7 +182,11 @@ const LessonView = () => {
                   )}
                 </div>
 
-                <YouTubeEmbed videoId={currentLesson.youtube_video_id || ""} title={currentLesson.title} />
+                {currentLesson.video_file_path ? (
+                  <UploadedVideoPlayer path={currentLesson.video_file_path} />
+                ) : (
+                  <YouTubeEmbed videoId={currentLesson.youtube_video_id || ""} title={currentLesson.title} />
+                )}
 
                 {currentLesson.additional_notes && (
                   <Card>
@@ -195,9 +200,15 @@ const LessonView = () => {
                 <LessonFilesList lessonId={lessonId} />
 
                 {!videoWatched ? (
-                  <Button onClick={markVideoWatched} className="w-full" disabled={!currentLesson.youtube_video_id}>
+                  <Button
+                    onClick={markVideoWatched}
+                    className="w-full"
+                    disabled={!currentLesson.youtube_video_id && !currentLesson.video_file_path}
+                  >
                     <CheckCircle2 className="w-4 h-4 mr-2" />
-                    {currentLesson.youtube_video_id ? "I've watched this — start quiz" : "No video assigned yet"}
+                    {currentLesson.youtube_video_id || currentLesson.video_file_path
+                      ? "I've watched this — start quiz"
+                      : "No video assigned yet"}
                   </Button>
                 ) : (
                   <Card variant="neon">
