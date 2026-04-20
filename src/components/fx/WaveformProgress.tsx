@@ -71,11 +71,6 @@ const WaveformProgress = () => {
             <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-primary shadow-[0_0_4px_hsl(var(--primary))]" />
           </div>
         </div>
-
-        {/* TEMPO label (desktop only) */}
-        <div className="hidden sm:block font-mono text-[7px] text-muted-foreground/70 tracking-[0.15em] mt-1 leading-none">
-          TEMPO
-        </div>
       </div>
     </div>
   );
