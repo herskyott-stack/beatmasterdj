@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      home_media: {
+        Row: {
+          caption: string | null
+          created_at: string
+          display_order: number
+          file_path: string
+          id: string
+          title: string | null
+          type: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          display_order?: number
+          file_path: string
+          id?: string
+          title?: string | null
+          type: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          display_order?: number
+          file_path?: string
+          id?: string
+          title?: string | null
+          type?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: []
+      }
       lesson_access: {
         Row: {
           created_at: string
@@ -134,6 +170,7 @@ export type Database = {
           quiz_group: number
           title: string
           updated_at: string
+          video_file_path: string | null
           youtube_url: string | null
           youtube_video_id: string | null
         }
@@ -147,6 +184,7 @@ export type Database = {
           quiz_group?: number
           title: string
           updated_at?: string
+          video_file_path?: string | null
           youtube_url?: string | null
           youtube_video_id?: string | null
         }
@@ -160,6 +198,7 @@ export type Database = {
           quiz_group?: number
           title?: string
           updated_at?: string
+          video_file_path?: string | null
           youtube_url?: string | null
           youtube_video_id?: string | null
         }
