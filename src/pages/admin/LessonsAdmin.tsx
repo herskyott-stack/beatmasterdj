@@ -40,9 +40,14 @@ const LessonsAdmin = () => {
               </h1>
               <p className="text-muted-foreground">Manage curriculum, student access, and track progress.</p>
             </div>
-            <Button variant="outline" onClick={() => navigate("/admin")}>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Back to Admin
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="default" onClick={() => window.open("/lessons", "_blank")}>
+                <Eye className="w-4 h-4 mr-2" /> Preview as student
+              </Button>
+              <Button variant="outline" onClick={() => navigate("/admin")}>
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Admin
+              </Button>
+            </div>
           </div>
 
           <Tabs defaultValue="curriculum">
