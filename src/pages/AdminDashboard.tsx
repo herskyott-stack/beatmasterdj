@@ -195,72 +195,88 @@ const AdminDashboard = () => {
             </Card>
           </div>
 
-          {/* Search */}
-          <div className="mb-6">
-            <div className="relative max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by name, email, location..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 bg-card/50 border-white/10"
-              />
-            </div>
-          </div>
+          <Tabs defaultValue="clients" className="w-full">
+            <TabsList className="mb-6">
+              <TabsTrigger value="clients">
+                <Users className="w-4 h-4 mr-2" /> Clients & Events
+              </TabsTrigger>
+              <TabsTrigger value="home-media">
+                <ImagePlus className="w-4 h-4 mr-2" /> Home Media
+              </TabsTrigger>
+            </TabsList>
 
-          {/* Upcoming Events */}
-          {upcomingEvents.length > 0 && (
-            <Card variant="neon" className="mb-8">
-              <CardHeader>
-                <CardTitle className="font-display text-xl flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-primary" />
-                  Upcoming Events ({upcomingEvents.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <EventTable 
-                  profiles={upcomingEvents} 
-                  onClientClick={setSelectedClient} 
-                />
-              </CardContent>
-            </Card>
-          )}
+            <TabsContent value="clients">
+              {/* Search */}
+              <div className="mb-6">
+                <div className="relative max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, email, location..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 bg-card/50 border-white/10"
+                  />
+                </div>
+              </div>
 
-          {/* Past Events */}
-          {pastEvents.length > 0 && (
-            <Card variant="glass" className="mb-8">
-              <CardHeader>
-                <CardTitle className="font-display text-xl flex items-center gap-2 text-muted-foreground">
-                  <Calendar className="w-5 h-5" />
-                  Past Events ({pastEvents.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <EventTable 
-                  profiles={pastEvents} 
-                  onClientClick={setSelectedClient}
-                />
-              </CardContent>
-            </Card>
-          )}
+              {upcomingEvents.length > 0 && (
+                <Card variant="neon" className="mb-8">
+                  <CardHeader>
+                    <CardTitle className="font-display text-xl flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-primary" />
+                      Upcoming Events ({upcomingEvents.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <EventTable profiles={upcomingEvents} onClientClick={setSelectedClient} />
+                  </CardContent>
+                </Card>
+              )}
 
-          {/* No Date Events */}
-          {noDateEvents.length > 0 && (
-            <Card variant="glass" className="mb-8">
-              <CardHeader>
-                <CardTitle className="font-display text-xl flex items-center gap-2 text-muted-foreground">
-                  <Users className="w-5 h-5" />
-                  No Date Set ({noDateEvents.length})
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <EventTable 
-                  profiles={noDateEvents} 
-                  onClientClick={setSelectedClient}
-                />
-              </CardContent>
-            </Card>
-          )}
+              {pastEvents.length > 0 && (
+                <Card variant="glass" className="mb-8">
+                  <CardHeader>
+                    <CardTitle className="font-display text-xl flex items-center gap-2 text-muted-foreground">
+                      <Calendar className="w-5 h-5" />
+                      Past Events ({pastEvents.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <EventTable profiles={pastEvents} onClientClick={setSelectedClient} />
+                  </CardContent>
+                </Card>
+              )}
+
+              {noDateEvents.length > 0 && (
+                <Card variant="glass" className="mb-8">
+                  <CardHeader>
+                    <CardTitle className="font-display text-xl flex items-center gap-2 text-muted-foreground">
+                      <Users className="w-5 h-5" />
+                      No Date Set ({noDateEvents.length})
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <EventTable profiles={noDateEvents} onClientClick={setSelectedClient} />
+                  </CardContent>
+                </Card>
+              )}
+
+              {filteredProfiles.length === 0 && (
+                <Card variant="glass">
+                  <CardContent className="py-12 text-center">
+                    <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground">
+                      {searchTerm ? "No clients found matching your search." : "No clients yet."}
+                    </p>
+                  </CardContent>
+                </Card>
+              )}
+            </TabsContent>
+
+            <TabsContent value="home-media">
+              <HomeMediaManager />
+            </TabsContent>
+          </Tabs>
 
           {filteredProfiles.length === 0 && (
             <Card variant="glass">
