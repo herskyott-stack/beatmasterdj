@@ -1,0 +1,1 @@
+DROP FUNCTION IF EXISTS public.bulk_update_lesson_notes(jsonb);
