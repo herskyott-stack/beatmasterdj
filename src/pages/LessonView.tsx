@@ -203,12 +203,18 @@ const LessonView = () => {
                   <Button
                     onClick={markVideoWatched}
                     className="w-full"
-                    disabled={!currentLesson.youtube_video_id && !currentLesson.video_file_path}
+                    disabled={
+                      !currentLesson.youtube_video_id &&
+                      !currentLesson.video_file_path &&
+                      !currentLesson.additional_notes
+                    }
                   >
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     {currentLesson.youtube_video_id || currentLesson.video_file_path
                       ? "I've watched this — start quiz"
-                      : "No video assigned yet"}
+                      : currentLesson.additional_notes
+                      ? "I've read this — start quiz"
+                      : "No content assigned yet"}
                   </Button>
                 ) : (
                   <Card variant="neon">
