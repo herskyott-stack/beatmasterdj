@@ -1,42 +1,42 @@
 
-The user wants every lesson across all 24 modules to have substantially longer, in-depth text content with cited sources at the bottom.
+User wants AI-generated multiple-choice quizzes for every lesson based on the long-form content I just wrote into `additional_notes`.
 
 ## Current state
-- 24 modules, each with ~10 lessons + 1 module overview lesson (lesson_number=0)
-- Most lessons have short or empty `additional_notes`
-- Need to fill `additional_notes` with rich, sourced content
+- 244 lessons across 24 modules now have rich Markdown content in `additional_notes`
+- Module overview lessons (lesson_number=0) already have 5-question quizzes
+- Regular lessons (lesson_number 1+) mostly have NO questions, or just placeholder ones
 
 ## Plan
 
-**Single AI generation pass** to populate `lesson_lessons.additional_notes` for every lesson (regular + module overviews) across Modules 1–24.
+**Generate 5 multiple-choice questions per regular lesson** (skip module overviews — they already have quizzes), grounded in the actual `additional_notes` content of each lesson.
 
-For each lesson, generate:
-1. **Intro** — what this lesson covers + why it matters (2-3 sentences)
-2. **Core concepts** — 4–8 detailed sections with headings, ~600–900 words each lesson total
-3. **Practical tips / common mistakes** — bulleted, actionable
-4. **Practice exercise** — concrete drill the student can do
-5. **Sources** — 3–6 cited references (DJcityTV, Digital DJ Tips, Crossfader, Pioneer DJ Academy, Native Instruments docs, Mixmag, DJ Mag, Serato blog, Wikipedia for theory)
+For each lesson:
+- 5 multiple-choice questions, 4 options each, exactly 1 correct
+- Each question includes an `explanation` (why the right answer is right) so students learn from mistakes
+- Questions reference specific concepts from that lesson's notes (not generic DJ trivia)
 
-Stored as Markdown in `additional_notes` (already rendered as `whitespace-pre-wrap` in `LessonView`; will switch to a lightweight markdown renderer so headings/links look professional).
+## Approach (one batch run)
 
-## Approach (one run)
-
-1. Use Lovable AI script (`google/gemini-2.5-pro` for quality) via `/tmp/lovable_ai.py` to generate content for all ~264 lessons in batches by module (24 batches × ~11 lessons each).
-2. Build a SQL UPDATE script writing `additional_notes` per lesson_id.
-3. Run via the data insert tool.
-4. Add `react-markdown` rendering to `LessonView.tsx` so the new long-form notes display with proper headings, lists, and clickable source links. Same for the curriculum editor preview.
+1. Fetch all lessons with `lesson_number > 0` and non-empty `additional_notes` (~220 lessons).
+2. Skip lessons that already have 3+ questions (preserves any manual edits).
+3. Use Lovable AI (`google/gemini-2.5-flash`) with structured tool-calling output to generate `{questions: [{question_text, explanation, answers: [{text, is_correct}]}]}` per lesson.
+4. Bulk-insert into `lesson_questions` + `lesson_answers` via a temporary `SECURITY DEFINER` RPC (same pattern used for the notes update), then drop the helper.
+5. Run via `code--exec` using the `ai-gateway` skill script.
 
 ## Files
 
-**Edited**
-- `src/pages/LessonView.tsx` — render `additional_notes` with `react-markdown` instead of plain `<p>`
-- `package.json` — add `react-markdown` + `remark-gfm` (auto via npm install)
+**New (temporary)**
+- migration: create + drop `bulk_insert_lesson_quizzes(jsonb)` helper
+- `/tmp/gen_quizzes.py` — generation script (ephemeral)
 
-**Data writes**
-- ~264 UPDATE statements on `lesson_lessons.additional_notes`
+**No frontend changes** — `QuizPlayer.tsx` already loads from `lesson_questions` / `lesson_answers` and renders correctly.
+
+## Data writes
+- ~220 lessons × 5 questions = ~1,100 new `lesson_questions` rows
+- ~1,100 × 4 options = ~4,400 new `lesson_answers` rows
 
 ## Caveats
-- AI-generated content needs your spot-check; you can edit any lesson in the curriculum editor
-- Sources are real publications but the AI picks article titles plausibly — you may want to verify any specific URL before relying on it in marketing
-- Will take 2–4 minutes of generation time
-- Skips lessons that already have substantial notes (>500 chars) so your existing edits aren't overwritten — say "overwrite everything" if you want a full reset
+- Generation takes ~5–8 minutes
+- AI quizzes need spot-check; editable in the curriculum editor's Question Editor
+- Lessons with very short notes (<300 chars) are skipped — they don't have enough material for a good quiz
+- I won't touch existing module-overview quizzes or any lesson that already has questions
