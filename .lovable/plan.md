@@ -1,42 +1,83 @@
 
-User wants AI-generated multiple-choice quizzes for every lesson based on the long-form content I just wrote into `additional_notes`.
 
-## Current state
-- 244 lessons across 24 modules now have rich Markdown content in `additional_notes`
-- Module overview lessons (lesson_number=0) already have 5-question quizzes
-- Regular lessons (lesson_number 1+) mostly have NO questions, or just placeholder ones
+## Admin "Record Mode" for Lessons
 
-## Plan
+A dedicated admin-only studio view where you can go through each lesson exactly like a student, with a side panel for uploading the video for that lesson and a teleprompter-style script generated from the lesson content.
 
-**Generate 5 multiple-choice questions per regular lesson** (skip module overviews — they already have quizzes), grounded in the actual `additional_notes` content of each lesson.
+## What you'll get
 
-For each lesson:
-- 5 multiple-choice questions, 4 options each, exactly 1 correct
-- Each question includes an `explanation` (why the right answer is right) so students learn from mistakes
-- Questions reference specific concepts from that lesson's notes (not generic DJ trivia)
+**New route: `/admin/lessons/record`**
+- Sidebar listing all 24 modules → all lessons, with a ✓ badge next to lessons that already have a video uploaded (YouTube ID or `video_file_path`).
+- Click any lesson to open it in the main pane.
 
-## Approach (one batch run)
+**Main pane (3-column layout on desktop):**
 
-1. Fetch all lessons with `lesson_number > 0` and non-empty `additional_notes` (~220 lessons).
-2. Skip lessons that already have 3+ questions (preserves any manual edits).
-3. Use Lovable AI (`google/gemini-2.5-flash`) with structured tool-calling output to generate `{questions: [{question_text, explanation, answers: [{text, is_correct}]}]}` per lesson.
-4. Bulk-insert into `lesson_questions` + `lesson_answers` via a temporary `SECURITY DEFINER` RPC (same pattern used for the notes update), then drop the helper.
-5. Run via `code--exec` using the `ai-gateway` skill script.
+```text
+┌────────────────────┬──────────────────────────┬────────────────────┐
+│ Lesson nav         │ Lesson preview (student  │ Record panel       │
+│ Module 1           │ view: title, video slot, │ ┌────────────────┐ │
+│  • Lesson 1 ✓      │ markdown notes, quiz)    │ │ Teleprompter   │ │
+│  • Lesson 2        │                          │ │ (auto-scroll,  │ │
+│  • Lesson 3 ✓      │                          │ │ font size +/-) │ │
+│ Module 2           │                          │ └────────────────┘ │
+│  • …               │                          │ [Upload video]     │
+│                    │                          │ [Paste YouTube URL]│
+│                    │                          │ [Copy script .txt] │
+└────────────────────┴──────────────────────────┴────────────────────┘
+```
 
-## Files
+**Center pane** = exact student rendering (YouTubeEmbed / UploadedVideoPlayer + Markdown notes + QuizPlayer) so you see what students see.
 
-**New (temporary)**
-- migration: create + drop `bulk_insert_lesson_quizzes(jsonb)` helper
-- `/tmp/gen_quizzes.py` — generation script (ephemeral)
+**Right panel:**
+1. **Teleprompter** — large, readable script auto-generated from the lesson's `additional_notes` + title + description. Controls: play/pause auto-scroll, speed slider, font-size +/-, mirror toggle (for teleprompter glass).
+2. **Video upload** — reuses existing `LessonVideoUploader` (200 MB MP4/WebM → `lesson-videos` bucket).
+3. **YouTube URL** — paste field that extracts the ID and saves to `youtube_video_id` (same logic already in `CurriculumEditor`).
+4. **Copy script** button — copies the full teleprompter text to clipboard so you can paste into a real teleprompter app.
+5. **Download .txt** — saves the script as `Module-X-Lesson-Y.txt`.
 
-**No frontend changes** — `QuizPlayer.tsx` already loads from `lesson_questions` / `lesson_answers` and renders correctly.
+**Script generation (no AI call needed — we already have rich `additional_notes`):**
+The script is built deterministically from each lesson:
+```text
+[Intro]
+"Welcome back to the Hersky DJ Mentorship. I'm Hersky, and in this lesson —
+Module {X}, Lesson {Y}: {title} — we're going to cover {description}."
 
-## Data writes
-- ~220 lessons × 5 questions = ~1,100 new `lesson_questions` rows
-- ~1,100 × 4 options = ~4,400 new `lesson_answers` rows
+[Main content]
+{additional_notes converted from markdown to spoken plain text:
+ - headings become section pauses ("Let's talk about ___")
+ - bullet lists become "First, ... Second, ... Third, ..."
+ - code/inline formatting stripped
+ - sources section trimmed off the end}
 
-## Caveats
-- Generation takes ~5–8 minutes
-- AI quizzes need spot-check; editable in the curriculum editor's Question Editor
-- Lessons with very short notes (<300 chars) are skipped — they don't have enough material for a good quiz
-- I won't touch existing module-overview quizzes or any lesson that already has questions
+[Outro]
+"That wraps up this lesson. Hit the quiz below to lock it in,
+and I'll see you in Lesson {Y+1}."
+```
+
+If a lesson has empty notes, the script falls back to a short outline based on the title only and shows a yellow "thin notes — consider expanding first" warning.
+
+## Access
+
+- Route guarded by `useAdminCheck` — redirects non-admins to `/auth`.
+- Entry point: new "Record Mode" button on `/admin/lessons` next to the existing "Preview as student" button.
+
+## Files to create / change
+
+**New**
+- `src/pages/admin/LessonsRecordStudio.tsx` — the page.
+- `src/components/lessons/admin/RecordSidebar.tsx` — module/lesson tree with upload status.
+- `src/components/lessons/admin/Teleprompter.tsx` — auto-scroll script viewer with controls.
+- `src/lib/lessonScript.ts` — pure function `buildScript(lesson, module)` that converts markdown notes → spoken script.
+
+**Edited**
+- `src/App.tsx` — add `/admin/lessons/record` and `/admin/lessons/record/:lessonId` routes.
+- `src/pages/admin/LessonsAdmin.tsx` — add "Record Mode" button.
+
+## No DB changes
+Everything reuses existing tables (`lesson_modules`, `lesson_lessons`) and the existing `lesson-videos` storage bucket. No migrations.
+
+## Out of scope (say the word and I'll add)
+- In-browser webcam recording (would need MediaRecorder + bigger upload pipeline).
+- AI-rewritten conversational scripts (current plan is deterministic from your notes).
+- Saving custom edited scripts back to the DB.
+
