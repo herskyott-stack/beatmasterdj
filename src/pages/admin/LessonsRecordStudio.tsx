@@ -306,8 +306,8 @@ const LessonsRecordStudio = () => {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {thinNotes && (
-                        <div className="flex items-start gap-2 rounded-md border border-yellow-500/40 bg-yellow-500/10 p-2 text-xs text-yellow-200">
-                          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                        <div className="flex items-start gap-2 rounded-md border border-destructive/40 bg-destructive/10 p-2 text-xs text-destructive-foreground">
+                          <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-destructive" />
                           <span>
                             Thin notes — script is mostly placeholder. Add detailed notes in the
                             curriculum editor for a richer script.
