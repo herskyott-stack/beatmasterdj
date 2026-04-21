@@ -18,6 +18,7 @@ import AuthPage from "./pages/AuthPage";
 import ClientPortal from "./pages/ClientPortal";
 import AdminDashboard from "./pages/AdminDashboard";
 import LessonsAdmin from "./pages/admin/LessonsAdmin";
+import LessonsRecordStudio from "./pages/admin/LessonsRecordStudio";
 import Lessons from "./pages/Lessons";
 import LessonView from "./pages/LessonView";
 import InstallPage from "./pages/InstallPage";
@@ -54,6 +55,8 @@ function App() {
               <Route path="/client-portal" element={<ClientPortal />} />
               <Route path="/admin" element={<AdminDashboard />} />
               <Route path="/admin/lessons" element={<LessonsAdmin />} />
+              <Route path="/admin/lessons/record" element={<LessonsRecordStudio />} />
+              <Route path="/admin/lessons/record/:lessonId" element={<LessonsRecordStudio />} />
               <Route path="/lessons" element={<Lessons />} />
               <Route path="/lessons/:moduleId" element={<LessonView />} />
               <Route path="/lessons/:moduleId/:lessonId" element={<LessonView />} />
