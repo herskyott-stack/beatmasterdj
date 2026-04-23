@@ -19,8 +19,9 @@ export const FXProvider = ({ children }: { children: ReactNode }) => {
   const [isDesktop, setIsDesktop] = useState(true);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "true") setFxEnabled(true);
+    // FX disabled by default; ignore any previously stored "true"
+    localStorage.setItem(STORAGE_KEY, "false");
+    setFxEnabled(false);
 
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 768);
     checkDesktop();
