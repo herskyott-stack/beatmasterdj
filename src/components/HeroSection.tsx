@@ -26,7 +26,7 @@ const HeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Main Heading */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in glitch-text" style={{ animationDelay: "0.1s" }}>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in" style={{ animationDelay: "0.1s" }}>
             <span className="text-foreground">ELEVATE YOUR</span>
             <br />
             <span className="gradient-text">EVENT EXPERIENCE</span>
