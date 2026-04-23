@@ -12,7 +12,7 @@ import SpectrumStrip from "./SpectrumStrip";
 import PageTransitionFX from "./PageTransitionFX";
 import GlowTrail from "./GlowTrail";
 import MarqueeTicker from "./MarqueeTicker";
-import WaveformProgress from "./WaveformProgress";
+// import WaveformProgress from "./WaveformProgress"; // disabled per user request
 import FloatingGear from "./FloatingGear";
 
 const FXLayer = () => {
@@ -20,7 +20,7 @@ const FXLayer = () => {
     <>
       <FloatingGear />
       <ParticleField />
-      <WaveformProgress />
+      {/* <WaveformProgress /> disabled per user request */}
       <ScanlineOverlay />
       <LaserSweep />
       <CrosshairCursor />
