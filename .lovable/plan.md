@@ -1,30 +1,76 @@
-## Calm down the "ELEVATE YOUR EVENT EXPERIENCE" hero heading
+## Two improvements
 
-You've told me the big hero headline on the home page is flashing/glitching and you want it to stop. Right now that heading has two effects layered on it:
+### 1. Click a package card → it lights up (selection state)
 
-1. **`glitch-text`** class — triggers a hard RGB-split glitch animation on hover (red/cyan offset, 0.4s infinite). On touch/trackpad it can flicker every time the cursor passes over it.
-2. **`gradient-text`** on "EVENT EXPERIENCE" — static gold gradient, not animated, keep as-is.
-3. The pulsing glow blobs behind the hero (`animate-pulse-slow`) — slow breathing, not flashing. Keep.
-4. Global FX layer (laser sweep, scanlines, beat-drop burst) — these run site-wide, not specific to the heading.
+**File:** `src/pages/PackagesPage.tsx`
 
-## Change
+Right now only the `featured` (Most Popular) package gets the gold "lit" treatment with the `featured` Card variant + ring. Clicking "Select Package" immediately sends you to checkout with no visual confirmation.
 
-**File: `src/components/HeroSection.tsx`** (line 29)
+**Change:** Track a locally-selected package and highlight it. Then "Select Package" on the highlighted card adds to cart + navigates.
 
-Remove `glitch-text` from the H1 so the headline stays perfectly still:
+- Add `const [selectedName, setSelectedName] = useState<string | null>(null)`
+- Clicking anywhere on a card (or a new "Select" toggle) sets `selectedName = pkg.name`
+- The selected card gets:
+  - `variant="featured"` styling override (gold gradient border + glow)
+  - An extra ring: `ring-2 ring-primary shadow-[0_0_40px_hsl(var(--primary)/0.4)]`
+  - Slight scale bump
+- The "Most Popular" badge still only shows on `pkg.featured` (unchanged)
+- Button label becomes "Continue to Checkout" when selected, "Select Package" otherwise
+- Clicking the button when selected → existing `handleSelectPackage` flow (add to cart + navigate)
+- First click selects, second click checks out — prevents accidental cart adds
 
-```tsx
-// before
-<h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in glitch-text" ...>
+This makes any clicked package light up like the recommended one, while keeping the "Most Popular" star badge for `Classic`, `Professional`, etc.
 
-// after
-<h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in" ...>
+### 2. Add-ons get dedicated detail pages
+
+**New route:** `/addons/:addonId` → new page `src/pages/AddonDetailPage.tsx`
+
+**Files touched:**
+- New: `src/pages/AddonDetailPage.tsx`
+- New: `src/data/addons.ts` (extract shared addon data so both Home `AddonsSection` and the detail page read from one source)
+- Edit: `src/components/AddonsSection.tsx` — wrap each card in a `<Link to={/addons/${addon.id}}>` and change "Add to Package" → "Learn More"
+- Edit: `src/components/BookingAddons.tsx` — add a small "Details" link below each card pointing to `/addons/:id` (keep existing Add/Remove behavior intact)
+- Edit: `src/App.tsx` — register the new route
+
+**Addon data shape (in `src/data/addons.ts`):**
+
+```ts
+{
+  id: "cold-sparklers",
+  name: "Cold Sparklers",
+  price: 300,
+  priceDisplay: "$300",
+  shortDescription: "...",      // current 1-liner
+  longDescription: "...",       // 2-3 paragraph deep dive
+  whatsIncluded: string[],      // bullet list
+  perfectFor: string[],         // event types
+  technicalDetails: string[],   // setup time, power needs, safety, etc.
+  faq: { q: string; a: string }[],
+  image: ...,
+  icon: ...,
+  popular: boolean,
+}
 ```
 
-The one-time `animate-fade-in` on page load stays (it's a smooth fade, not a flash). The gold gradient on "EVENT EXPERIENCE" stays.
+**Detail page layout:**
+```text
+[ Back to Add-ons ]
+[ Hero image w/ overlay title + price ]
+[ Long description ]
+[ What's Included | Perfect For ]   (two-column on desktop)
+[ Technical / Logistics ]
+[ FAQ accordion ]
+[ Sticky-ish CTA: "Add to Booking" → adds via CartContext + toast ]
+[ "Back to Packages" + "Contact Us" buttons ]
+```
 
-## Out of scope (tell me if you also want these)
+Uses existing primitives: `Card`, `Button`, `Accordion`, `Navbar`, `Footer`. Same gold/lavender theme. No new dependencies.
 
-- Removing `glitch-text` from other section headers (Services, Packages, Contact, etc.).
-- Disabling the global FX layer (laser sweep / scanlines / beat-drop) over the hero specifically.
-- Removing the pulsing background glow blobs.
+**Detailed copy will be written for all 7 add-ons:**
+Cold Sparklers, Photo Booth (No Prints), Photo Booth (Unlimited Prints), Extra Hours, Karaoke Package, Dry Ice Effects, Custom Add-On (Custom routes to `/contact` instead of a detail page).
+
+## Out of scope (say the word and I'll add)
+- Persisting "selected package" across page reloads
+- A comparison view (side-by-side package compare)
+- Real photos for each add-on detail page beyond the existing thumbnail
+- Editing add-on copy through the admin dashboard
