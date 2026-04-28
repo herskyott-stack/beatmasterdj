@@ -23,6 +23,7 @@ import Lessons from "./pages/Lessons";
 import LessonView from "./pages/LessonView";
 import InstallPage from "./pages/InstallPage";
 import ContactPage from "./pages/ContactPage";
+import AddonDetailPage from "./pages/AddonDetailPage";
 import MentorshipPage from "./pages/MentorshipPage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -62,6 +63,7 @@ function App() {
               <Route path="/lessons/:moduleId/:lessonId" element={<LessonView />} />
               <Route path="/install" element={<InstallPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/addons/:addonId" element={<AddonDetailPage />} />
               <Route path="/mentorship" element={<MentorshipPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

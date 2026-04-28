@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -513,6 +514,7 @@ const PackagesPage = () => {
   const navigate = useNavigate();
   const { category } = useParams<{ category: string }>();
   const { addItem } = useCart();
+  const [selectedName, setSelectedName] = useState<string | null>(null);
 
   const categoryData = category ? packageData[category] : null;
 
@@ -582,50 +584,72 @@ const PackagesPage = () => {
         {/* Packages Grid */}
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-            {categoryData.packages.map((pkg) => (
-              <Card
-                key={pkg.name}
-                variant={pkg.featured ? "featured" : "glass"}
-                className={`relative transition-all duration-500 hover:scale-[1.02] ${
-                  pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
-                }`}
-              >
-                {pkg.featured && (
-                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
-                    <div className="flex items-center gap-1">
-                      <Star className="w-3 h-3 fill-current" />
-                      <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+            {categoryData.packages.map((pkg) => {
+              const isSelected = selectedName === pkg.name;
+              const isLit = isSelected || pkg.featured;
+              return (
+                <Card
+                  key={pkg.name}
+                  variant={isLit ? "featured" : "glass"}
+                  onClick={() => setSelectedName(pkg.name)}
+                  className={`relative transition-all duration-500 cursor-pointer ${
+                    isSelected
+                      ? "scale-[1.04] ring-2 ring-primary shadow-[0_0_50px_hsl(var(--primary)/0.45)]"
+                      : "hover:scale-[1.02]"
+                  } ${pkg.featured && !isSelected ? "lg:-mt-4 lg:mb-4" : ""}`}
+                >
+                  {pkg.featured && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-3 h-3 fill-current" />
+                        <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+                      </div>
                     </div>
-                  </div>
-                )}
-                <CardHeader className="text-center pb-4">
-                  <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
-                  <CardDescription>{pkg.description}</CardDescription>
-                  <div className="mt-4">
-                    <span className="font-display text-4xl font-bold gradient-text">{pkg.price}</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-6">
-                  <ul className="space-y-3">
-                    {pkg.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-3">
-                        <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
-                        <span className="text-sm text-muted-foreground">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    variant={pkg.featured ? "hero" : "outline"}
-                    className="w-full"
-                    onClick={() => handleSelectPackage(pkg)}
-                  >
-                    Select Package
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+                  )}
+                  {isSelected && !pkg.featured && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                      <div className="flex items-center gap-1">
+                        <Check className="w-3 h-3" />
+                        <span className="text-xs font-display uppercase tracking-wider">Selected</span>
+                      </div>
+                    </div>
+                  )}
+                  <CardHeader className="text-center pb-4">
+                    <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                    <CardDescription>{pkg.description}</CardDescription>
+                    <div className="mt-4">
+                      <span className="font-display text-4xl font-bold gradient-text">{pkg.price}</span>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pb-6">
+                    <ul className="space-y-3">
+                      {pkg.features.map((feature) => (
+                        <li key={feature} className="flex items-start gap-3">
+                          <Check className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                          <span className="text-sm text-muted-foreground">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <CardFooter>
+                    <Button
+                      variant={isLit ? "hero" : "outline"}
+                      className="w-full"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (isSelected) {
+                          handleSelectPackage(pkg);
+                        } else {
+                          setSelectedName(pkg.name);
+                        }
+                      }}
+                    >
+                      {isSelected ? "Continue to Checkout" : "Select Package"}
+                    </Button>
+                  </CardFooter>
+                </Card>
+              );
+            })}
           </div>
         </div>
 
