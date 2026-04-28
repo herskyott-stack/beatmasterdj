@@ -1,6 +1,7 @@
-import { Sparkles, Camera, Clock, Mic, Wind, Plus } from "lucide-react";
+import { Sparkles, Camera, Clock, Mic, Wind, Plus, Info } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 
@@ -156,17 +157,25 @@ const BookingAddons = () => {
                 <p className="text-muted-foreground text-sm mb-4 flex-1">
                   {addon.description}
                 </p>
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-2">
                   <span className="font-display text-xl font-bold text-primary">
                     {addon.priceDisplay}
                   </span>
-                  <Button
-                    variant={inCart ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => handleToggleAddon(addon)}
-                  >
-                    {inCart ? "Remove" : "Add"}
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="sm" asChild>
+                      <Link to={`/addons/${addon.id}`} className="gap-1">
+                        <Info className="w-3.5 h-3.5" />
+                        Details
+                      </Link>
+                    </Button>
+                    <Button
+                      variant={inCart ? "secondary" : "outline"}
+                      size="sm"
+                      onClick={() => handleToggleAddon(addon)}
+                    >
+                      {inCart ? "Remove" : "Add"}
+                    </Button>
+                  </div>
                 </div>
               </CardContent>
             </Card>
