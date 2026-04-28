@@ -595,7 +595,7 @@ const PackagesPage = () => {
                   className={`relative transition-all duration-500 cursor-pointer ${
                     isSelected
                       ? "scale-[1.04] ring-2 ring-primary shadow-[0_0_50px_hsl(var(--primary)/0.45)]"
-                      : "hover:scale-[1.02]"
+                      : "hover:scale-[1.02] hover:ring-1 hover:ring-primary/50 hover:shadow-[0_0_35px_hsl(var(--primary)/0.35)]"
                   } ${pkg.featured && !isSelected ? "lg:-mt-4 lg:mb-4" : ""}`}
                 >
                   {pkg.featured && (
