@@ -42,8 +42,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Essential",
-        price: "$1,750",
-        priceNum: 1750,
+        price: "$1,800",
+        priceNum: 1800,
         description: "Perfect for intimate ceremonies",
         features: [
           "4 hours of DJ service",
@@ -127,8 +127,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Professional",
-        price: "$2,500",
-        priceNum: 2500,
+        price: "$2,800",
+        priceNum: 2800,
         description: "Perfect for corporate celebrations",
         features: [
           "6 hours of DJ service",
@@ -181,8 +181,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Basic",
-      price: "$1,800",
-        priceNum: 1800,
+      price: "$1,200",
+        priceNum: 1200,
         description: "School dances & events",
         features: [
           "3 hours of DJ service",
@@ -194,8 +194,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Standard",
-        price: "$1,440",
-        priceNum: 1440,
+        price: "$1,600",
+        priceNum: 1600,
         description: "Enhanced school events",
         features: [
           "4 hours of DJ service",
@@ -246,8 +246,8 @@ const packageData: Record<string, { title: string; description: string; packages
     packages: [
       {
         name: "Party Starter",
-      price: "$1,800",
-        priceNum: 1800,
+      price: "$1,500",
+        priceNum: 1500,
         description: "Great for birthday parties",
         features: [
           "3 hours of DJ service",
@@ -259,8 +259,8 @@ const packageData: Record<string, { title: string; description: string; packages
       },
       {
         name: "Celebration",
-        price: "$1,500",
-        priceNum: 1500,
+        price: "$1,800",
+        priceNum: 1800,
         description: "Milestone celebrations",
         features: [
           "4 hours of DJ service",
