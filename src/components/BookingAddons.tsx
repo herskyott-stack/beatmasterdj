@@ -160,6 +160,7 @@ const BookingAddons = () => {
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-display text-xl font-bold text-primary">
                     {addon.priceDisplay}
+                    <span className="ml-1 text-[10px] text-muted-foreground font-normal">+ 13% tax</span>
                   </span>
                   <div className="flex items-center gap-2">
                     <Button variant="ghost" size="sm" asChild>
