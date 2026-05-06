@@ -20,8 +20,8 @@ const packageData: Record<string, Package[]> = {
   weddings: [
     {
       name: "Essential",
-      price: "$1,500",
-      priceNum: 1500,
+      price: "$1,800",
+      priceNum: 1800,
       description: "Perfect for intimate ceremonies",
       features: [
         "4 hours of DJ service",
@@ -101,8 +101,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Professional",
-      price: "$2,500",
-      priceNum: 2500,
+      price: "$2,800",
+      priceNum: 2800,
       description: "Perfect for corporate celebrations",
       features: [
         "6 hours of DJ service",
@@ -151,8 +151,8 @@ const packageData: Record<string, Package[]> = {
   schools: [
     {
       name: "Basic",
-      price: "$1,800",
-      priceNum: 1800,
+      price: "$1,200",
+      priceNum: 1200,
       description: "School dances & events",
       features: [
         "3 hours of DJ service",
@@ -164,8 +164,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Standard",
-      price: "$1,200",
-      priceNum: 1200,
+      price: "$1,600",
+      priceNum: 1600,
       description: "Enhanced school events",
       features: [
         "4 hours of DJ service",
@@ -212,8 +212,8 @@ const packageData: Record<string, Package[]> = {
   private: [
     {
       name: "Party Starter",
-      price: "$1,800",
-      priceNum: 1800,
+      price: "$1,500",
+      priceNum: 1500,
       description: "Great for birthday parties",
       features: [
         "3 hours of DJ service",
@@ -225,8 +225,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Celebration",
-      price: "$1,500",
-      priceNum: 1500,
+      price: "$1,800",
+      priceNum: 1800,
       description: "Milestone celebrations",
       features: [
         "4 hours of DJ service",
