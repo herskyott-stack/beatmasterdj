@@ -103,6 +103,7 @@ const AddonDetailPage = () => {
               </h1>
               <p className="font-display text-2xl md:text-3xl font-bold text-primary">
                 {addon.priceDisplay}
+                <span className="ml-2 text-sm text-muted-foreground font-normal">+ 13% tax</span>
               </p>
             </div>
           </div>
