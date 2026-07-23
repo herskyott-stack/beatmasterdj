@@ -67,84 +67,49 @@ const CheckoutPage = () => {
     setStep("payment");
   };
 
-  const handleFinalSubmit = async () => {
-    // Submit booking details via FormSubmit
-
-    // Create hidden form and submit to FormSubmit.co
-    const form = document.createElement("form");
-    form.action = "https://formsubmit.co/hersky.ott@gmail.com";
-    form.method = "POST";
-    // No target="_blank" - stays on same page flow
-
-    const addField = (name: string, value: string) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = name;
-      input.value = value;
-      form.appendChild(input);
+  // Build the booking payload for FormSubmit. Used AFTER Stripe payment
+  // completes on the /booking-confirmed page (never before).
+  const buildBookingPayload = () => {
+    const payload: Record<string, string> = {
+      _subject: `🎉 NEW BOOKING - ${pkg?.category || "Event"} ${pkg?.name || "Package"} - ${eventDetails.firstName} ${eventDetails.lastName}`,
+      _template: "table",
+      _captcha: "false",
+      "1. First Name": eventDetails.firstName,
+      "2. Last Name": eventDetails.lastName,
+      "3. Email Address": eventDetails.email,
+      "4. Phone Number": eventDetails.phone,
+      "5. Event Date": eventDetails.eventDate,
+      "6. Event Time": eventDetails.eventTime || "TBD",
+      "7. Event Location": eventDetails.eventLocation,
+      "8. Event Type": eventDetails.eventType || (pkg?.category || "Not specified"),
     };
-
-    // Configure FormSubmit - redirect back to site after submission
-    addField("_subject", `🎉 NEW BOOKING - ${pkg?.category || "Event"} ${pkg?.name || "Package"} - ${eventDetails.firstName} ${eventDetails.lastName}`);
-    addField("_template", "table");
-    addField("_captcha", "false");
-    addField("_next", window.location.origin + "/booking-confirmed");
-    
-    // Customer Information
-    addField("1. First Name", eventDetails.firstName);
-    addField("2. Last Name", eventDetails.lastName);
-    addField("3. Email Address", eventDetails.email);
-    addField("4. Phone Number", eventDetails.phone);
-    
-    // Event Details
-    addField("5. Event Date", eventDetails.eventDate);
-    addField("6. Event Time", eventDetails.eventTime || "TBD");
-    addField("7. Event Location", eventDetails.eventLocation);
-    addField("8. Event Type", eventDetails.eventType || (pkg?.category || "Not specified"));
-    
-    // Package Information
     if (pkg) {
-      addField("9. Package Category", pkg.category || "N/A");
-      addField("10. Package Name", pkg.name);
-      addField("11. Package Price", `$${pkg.price}`);
+      payload["9. Package Category"] = pkg.category || "N/A";
+      payload["10. Package Name"] = pkg.name;
+      payload["11. Package Price"] = `$${pkg.price}`;
       if (pkg.features && pkg.features.length > 0) {
-        addField("12. Package Includes", pkg.features.join(" | "));
+        payload["12. Package Includes"] = pkg.features.join(" | ");
       }
     }
-    
-    // Add-ons
     if (addons.length > 0) {
-      addField("13. Add-ons Selected", addons.map(a => `${a.name} ($${a.price})`).join(" | "));
+      payload["13. Add-ons Selected"] = addons.map(a => `${a.name} ($${a.price})`).join(" | ");
       const addonsTotal = addons.reduce((sum, a) => sum + a.price, 0);
-      addField("14. Add-ons Total", `$${addonsTotal}`);
+      payload["14. Add-ons Total"] = `$${addonsTotal}`;
     } else {
-      addField("13. Add-ons Selected", "None");
+      payload["13. Add-ons Selected"] = "None";
     }
-    
-    // Pricing
-    addField("15. Subtotal", `$${subtotal.toFixed(2)}`);
-    addField("16. HST (13%)", `$${tax.toFixed(2)}`);
-    addField("17. Total Amount", `$${total.toFixed(2)}`);
-    addField("18. Deposit Required (50%)", `$${deposit.toFixed(2)}`);
-    addField("19. Balance Due on Event Day", `$${(total - deposit).toFixed(2)}`);
-    
-    // Contract
-    addField("20. Contract Signed", "Yes");
-    addField("21. Digital Signature", signature);
-    addField("22. Signature Date", new Date().toLocaleDateString());
-    
-    // Notes
-    addField("23. Customer Notes/Messages", eventDetails.notes || "None provided");
-
-    document.body.appendChild(form);
-    form.submit();
-    document.body.removeChild(form);
-
-    toast({
-      title: "Booking Confirmed!",
-      description: "Your booking has been submitted.",
-    });
+    payload["15. Subtotal"] = `$${subtotal.toFixed(2)}`;
+    payload["16. HST (13%)"] = `$${tax.toFixed(2)}`;
+    payload["17. Total Amount"] = `$${total.toFixed(2)}`;
+    payload["18. Deposit Required (50%)"] = `$${deposit.toFixed(2)}`;
+    payload["19. Balance Due on Event Day"] = `$${(total - deposit).toFixed(2)}`;
+    payload["20. Contract Signed"] = "Yes";
+    payload["21. Digital Signature"] = signature;
+    payload["22. Signature Date"] = new Date().toLocaleDateString();
+    payload["23. Customer Notes/Messages"] = eventDetails.notes || "None provided";
+    return payload;
   };
+
 
   if (items.length === 0) {
     return (
