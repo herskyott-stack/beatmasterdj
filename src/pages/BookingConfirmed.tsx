@@ -1,11 +1,99 @@
-import { CheckCircle, Calendar, Mail, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { CheckCircle, Calendar, Mail, ArrowRight, Loader2, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useCart } from "@/contexts/CartContext";
 
 const BookingConfirmed = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const sessionId = searchParams.get("session_id");
+  const { clearCart } = useCart();
+  const [status, setStatus] = useState<"verifying" | "ok" | "missing">(
+    sessionId ? "verifying" : "missing"
+  );
+
+  useEffect(() => {
+    if (!sessionId) return;
+
+    // Only email the booking details AFTER Stripe returns a session_id.
+    const key = `booking_submitted_${sessionId}`;
+    if (sessionStorage.getItem(key)) {
+      setStatus("ok");
+      return;
+    }
+
+    const raw = sessionStorage.getItem("pending_booking");
+    const payload: Record<string, string> = raw ? JSON.parse(raw) : {};
+    payload["24. Stripe Session ID"] = sessionId;
+    payload["25. Payment Status"] = "Deposit paid via Stripe";
+
+    fetch("https://formsubmit.co/ajax/hersky.ott@gmail.com", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      body: JSON.stringify(payload),
+    })
+      .catch((err) => console.error("Booking email failed", err))
+      .finally(() => {
+        sessionStorage.setItem(key, "1");
+        sessionStorage.removeItem("pending_booking");
+        clearCart();
+        setStatus("ok");
+      });
+  }, [sessionId, clearCart]);
+
+  if (status === "missing") {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pt-32 pb-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-xl mx-auto text-center">
+              <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-destructive/20 mb-6">
+                <AlertTriangle className="w-10 h-10 text-destructive" />
+              </div>
+              <h1 className="font-display text-3xl md:text-4xl font-bold mb-4">
+                Payment Not Detected
+              </h1>
+              <p className="text-muted-foreground mb-8">
+                We couldn't confirm your Stripe payment. If you closed the payment
+                tab or cancelled, your booking has not been submitted yet. Please
+                return to checkout and try again.
+              </p>
+              <div className="flex gap-3 justify-center">
+                <Button variant="hero" onClick={() => navigate("/checkout")}>
+                  Return to Checkout
+                </Button>
+                <Button variant="outline" asChild>
+                  <Link to="/">Back to Home</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (status === "verifying") {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navbar />
+        <main className="pt-32 pb-16">
+          <div className="container mx-auto px-4 text-center">
+            <Loader2 className="w-10 h-10 text-primary animate-spin mx-auto mb-4" />
+            <p className="text-muted-foreground">Confirming your payment…</p>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -20,29 +108,31 @@ const BookingConfirmed = () => {
             </div>
 
             {/* Title */}
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
+            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading">
               <span className="text-foreground">BOOKING </span>
               <span className="gradient-text">CONFIRMED!</span>
             </h1>
 
             <p className="text-lg text-muted-foreground mb-8">
-              Thank you for choosing Hersky DJ & AV! Your booking request has been submitted successfully.
+              Thank you for choosing Hersky DJ & AV! Your deposit has been received
+              and your booking request has been submitted successfully.
             </p>
 
             {/* Next Steps Card */}
             <Card variant="glass" className="text-left mb-8">
               <CardContent className="p-8 space-y-6">
                 <h2 className="font-display text-xl font-bold text-primary">What Happens Next?</h2>
-                
+
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
                     <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
                       <span className="font-display font-bold text-primary">1</span>
                     </div>
                     <div>
-                      <p className="font-medium">Send Your Deposit</p>
+                      <p className="font-medium">Deposit Received</p>
                       <p className="text-sm text-muted-foreground">
-                        Send your 50% deposit via e-Transfer to <span className="text-primary font-mono">jacob.herscovitch@gmail.com</span> to secure your date.
+                        Your 50% deposit has been securely processed by Stripe. A Stripe
+                        receipt has been emailed to you.
                       </p>
                     </div>
                   </div>
@@ -54,7 +144,7 @@ const BookingConfirmed = () => {
                     <div>
                       <p className="font-medium">Confirmation Email</p>
                       <p className="text-sm text-muted-foreground">
-                        You'll receive a confirmation email within 24 hours once we receive your deposit.
+                        You'll receive a confirmation email from Hersky DJ & AV within 24 hours.
                       </p>
                     </div>
                   </div>
