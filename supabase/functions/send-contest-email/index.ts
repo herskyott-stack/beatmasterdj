@@ -43,7 +43,7 @@ const templates: Record<string, (c: Ctx) => { subject: string; html: string }> =
   confirmation: (c) => ({
     subject: "You're In! Good Luck 🎉",
     html: `<p>Hi ${esc(c.name)},</p>
-      <p>Thanks for entering the Summer Tech &amp; DJ Giveaway! Your entry is confirmed.</p>
+      <p>Thanks for entering the Summer DJ Giveaway! Your entry is confirmed.</p>
       ${packageLine(c)}
       <p>Good luck — we'll announce the winner soon.</p>
       <p>— Jake</p>`,
@@ -51,11 +51,11 @@ const templates: Record<string, (c: Ctx) => { subject: string; html: string }> =
   followup_24h: (c) => ({
     subject: "Here's What You Can Explore While You Wait",
     html: `<p>Hi ${esc(c.name)},</p>
-      <p>While we prepare the contest results, here are some things you might enjoy:</p>
+      <p>While we prepare the contest results, here are some DJ services you might enjoy:</p>
       <ul>
-        <li>Tech support services for any device</li>
-        <li>Digital learning for beginners &amp; seniors</li>
-        <li>DJ mixes and event bookings</li>
+        <li>Wedding, corporate, school, and private event DJ packages</li>
+        <li>Custom playlists and MC services</li>
+        <li>Lighting, photo booths, and special effects add-ons</li>
       </ul>
       ${packageLine(c)}
       <p>Thanks again for entering — good luck!</p>
@@ -69,12 +69,12 @@ const templates: Record<string, (c: Ctx) => { subject: string; html: string }> =
       <p>— Jake</p>`,
   }),
   package_followup: (c) => ({
-    subject: `A special offer on our ${esc(c.packageName ?? "featured")} package`,
+    subject: `A special offer on our ${esc(c.packageName ?? "featured")} DJ package`,
     html: `<p>Hi ${esc(c.name)},</p>
       <p>Thanks again for entering the contest! Since you mentioned interest in our
-        <strong>${esc(c.packageName ?? "featured")}</strong> package${c.category ? ` (${esc(c.category)})` : ""}, I wanted to reach out personally.</p>
+        <strong>${esc(c.packageName ?? "featured")}</strong> DJ package${c.category ? ` (${esc(c.category)})` : ""}, I wanted to reach out personally.</p>
       <p>Whether you win or not, I'd love to help make your event unforgettable. Reply to this email
-        and I'll put together a custom quote for you.</p>
+        and I'll put together a custom DJ quote for you.</p>
       <p>— Jake</p>`,
   }),
   closing: (c) => ({
@@ -85,10 +85,10 @@ const templates: Record<string, (c: Ctx) => { subject: string; html: string }> =
       <p>— Jake</p>`,
   }),
   winner: (c) => ({
-    subject: "🏆 You Won! — Summer Tech & DJ Giveaway",
+    subject: "🏆 You Won! — Summer DJ Giveaway",
     html: `<p>Hi ${esc(c.name)},</p>
       <p><strong>Congratulations — you're the winner!</strong> 🎉</p>
-      <p>You've won: <strong>${esc(c.prize ?? "a free session with Jake")}</strong>.</p>
+      <p>You've won: <strong>${esc(c.prize ?? "a free DJ add-on with Jake")}</strong>.</p>
       <p>Reply to this email within 5 business days to claim your prize and we'll schedule a time
         that works for you.</p>
       <p>Thanks for entering — and see you soon!</p>
@@ -97,10 +97,10 @@ const templates: Record<string, (c: Ctx) => { subject: string; html: string }> =
   loser: (c) => ({
     subject: "Contest Results — Thanks for Entering",
     html: `<p>Hi ${esc(c.name)},</p>
-      <p>The winner of the Summer Tech &amp; DJ Giveaway has been selected. Unfortunately your name
+      <p>The winner of the Summer DJ Giveaway has been selected. Unfortunately your name
         wasn't drawn this time — but thank you for entering!</p>
       ${packageLine(c)}
-      <p>As a thank-you, reply to this email and I'll share a special rate on your next event booking.</p>
+      <p>As a thank-you, reply to this email and I'll share a special rate on your next DJ booking.</p>
       <p>— Jake</p>`,
   }),
 };
