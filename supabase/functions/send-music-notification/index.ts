@@ -39,6 +39,8 @@ interface MusicNotificationRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  const corsHeaders = buildCorsHeaders(req.headers.get("origin"));
+
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -83,13 +85,20 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sending music notification for:", clientName);
 
-    // Format song lists
+    // Format song lists (all user input escaped to prevent HTML injection)
     const formatSongList = (songs: { song_title: string; artist: string | null; notes?: string | null }[]) => {
       if (songs.length === 0) return "<p style='color: #666;'>None submitted</p>";
-      return songs.map((s, i) => 
-        `<li>${s.song_title}${s.artist ? ` <span style="color: #666;">by ${s.artist}</span>` : ""}${s.notes ? ` <em style="color: #8b5cf6;">(${s.notes})</em>` : ""}</li>`
+      return songs.map((s) =>
+        `<li>${escapeHtml(s.song_title)}${s.artist ? ` <span style="color: #666;">by ${escapeHtml(s.artist)}</span>` : ""}${s.notes ? ` <em style="color: #8b5cf6;">(${escapeHtml(s.notes)})</em>` : ""}</li>`
       ).join("");
     };
+
+    const safeClientName = escapeHtml(clientName);
+    const safeClientEmail = escapeHtml(clientEmail);
+    const safeEventLocation = escapeHtml(eventLocation || "Not provided");
+    const safeEventDate = eventDate
+      ? escapeHtml(new Date(eventDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }))
+      : "Not provided";
 
     const emailHtml = `
       <!DOCTYPE html>
@@ -124,19 +133,19 @@ const handler = async (req: Request): Promise<Response> => {
               <div class="info-grid">
                 <div class="info-item">
                   <span class="info-label">Name:</span>
-                  <span class="info-value">${clientName}</span>
+                  <span class="info-value">${safeClientName}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Email:</span>
-                  <span class="info-value">${clientEmail}</span>
+                  <span class="info-value">${safeClientEmail}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Event Date:</span>
-                  <span class="info-value">${eventDate ? new Date(eventDate).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : 'Not provided'}</span>
+                  <span class="info-value">${safeEventDate}</span>
                 </div>
                 <div class="info-item">
                   <span class="info-label">Location:</span>
-                  <span class="info-value">${eventLocation || 'Not provided'}</span>
+                  <span class="info-value">${safeEventLocation}</span>
                 </div>
               </div>
             </div>
@@ -167,7 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
     const { error } = await resend.emails.send({
       from: "Hersky DJ & AV <notifications@hersky.ca>",
       to: ["hersky.ott@gmail.com"],
-      subject: `🎵 Music Playlist Submitted - ${clientName}`,
+      subject: `🎵 Music Playlist Submitted - ${safeClientName}`,
       html: emailHtml,
     });
 
