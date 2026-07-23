@@ -201,10 +201,10 @@ const ContestPage = () => {
 
                   <div>
                     <Label className="mb-2 block">
-                      Which package interests you most? *
+                      Which DJ package interests you most? *
                     </Label>
                     <p className="text-xs text-muted-foreground mb-3">
-                      Pick the package you'd actually book — we'll tailor your win / follow-up around it.
+                      Pick the DJ package you'd actually book — we'll tailor your win / follow-up around it.
                     </p>
                     <div className="space-y-4">
                       {Object.entries(groups).map(([label, pkgs]) => (
