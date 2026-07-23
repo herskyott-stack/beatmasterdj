@@ -23,10 +23,16 @@ export type Database = {
           followup_48h_sent_at: string | null
           full_name: string
           id: string
+          interested_package_category: string | null
+          interested_package_name: string | null
+          interested_package_price: number | null
+          ip_hash: string | null
+          is_winner: boolean
           phone: string | null
           source_page: string
           status: string
           updated_at: string
+          winner_announced_at: string | null
         }
         Insert: {
           contest_id?: string
@@ -36,10 +42,16 @@ export type Database = {
           followup_48h_sent_at?: string | null
           full_name: string
           id?: string
+          interested_package_category?: string | null
+          interested_package_name?: string | null
+          interested_package_price?: number | null
+          ip_hash?: string | null
+          is_winner?: boolean
           phone?: string | null
           source_page?: string
           status?: string
           updated_at?: string
+          winner_announced_at?: string | null
         }
         Update: {
           contest_id?: string
@@ -49,10 +61,16 @@ export type Database = {
           followup_48h_sent_at?: string | null
           full_name?: string
           id?: string
+          interested_package_category?: string | null
+          interested_package_name?: string | null
+          interested_package_price?: number | null
+          ip_hash?: string | null
+          is_winner?: boolean
           phone?: string | null
           source_page?: string
           status?: string
           updated_at?: string
+          winner_announced_at?: string | null
         }
         Relationships: []
       }

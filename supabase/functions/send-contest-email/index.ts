@@ -26,38 +26,81 @@ const esc = (s: unknown) =>
 const CONTEST_END = new Date("2026-09-01T23:59:59-04:00");
 const FROM = "Jake <hello@hersky.ca>";
 
-const templates: Record<string, (name: string) => { subject: string; html: string }> = {
-  confirmation: (name) => ({
+type Ctx = {
+  name: string;
+  category?: string | null;
+  packageName?: string | null;
+  packagePrice?: number | null;
+  prize?: string | null;
+};
+
+const packageLine = (c: Ctx) =>
+  c.packageName && c.category
+    ? `<p style="color:#666;font-size:14px">You told us you're interested in our <strong>${esc(c.packageName)}</strong> package (${esc(c.category)}).</p>`
+    : "";
+
+const templates: Record<string, (c: Ctx) => { subject: string; html: string }> = {
+  confirmation: (c) => ({
     subject: "You're In! Good Luck 🎉",
-    html: `<p>Hi ${esc(name)},</p>
+    html: `<p>Hi ${esc(c.name)},</p>
       <p>Thanks for entering the Summer Tech &amp; DJ Giveaway! Your entry is confirmed.</p>
+      ${packageLine(c)}
       <p>Good luck — we'll announce the winner soon.</p>
       <p>— Jake</p>`,
   }),
-  followup_24h: (name) => ({
+  followup_24h: (c) => ({
     subject: "Here's What You Can Explore While You Wait",
-    html: `<p>Hi ${esc(name)},</p>
+    html: `<p>Hi ${esc(c.name)},</p>
       <p>While we prepare the contest results, here are some things you might enjoy:</p>
       <ul>
         <li>Tech support services for any device</li>
         <li>Digital learning for beginners &amp; seniors</li>
         <li>DJ mixes and event bookings</li>
       </ul>
+      ${packageLine(c)}
       <p>Thanks again for entering — good luck!</p>
       <p>— Jake</p>`,
   }),
-  followup_48h: (name) => ({
+  followup_48h: (c) => ({
     subject: "Stay Tuned — Winner Announcement Coming Soon",
-    html: `<p>Hi ${esc(name)},</p>
+    html: `<p>Hi ${esc(c.name)},</p>
       <p>Just a quick update — the contest is still active and we're excited to reveal the winner soon.</p>
       <p>Thanks for being part of the community! Good luck!</p>
       <p>— Jake</p>`,
   }),
-  closing: (name) => ({
+  package_followup: (c) => ({
+    subject: `A special offer on our ${esc(c.packageName ?? "featured")} package`,
+    html: `<p>Hi ${esc(c.name)},</p>
+      <p>Thanks again for entering the contest! Since you mentioned interest in our
+        <strong>${esc(c.packageName ?? "featured")}</strong> package${c.category ? ` (${esc(c.category)})` : ""}, I wanted to reach out personally.</p>
+      <p>Whether you win or not, I'd love to help make your event unforgettable. Reply to this email
+        and I'll put together a custom quote for you.</p>
+      <p>— Jake</p>`,
+  }),
+  closing: (c) => ({
     subject: "Contest Closed — Winner Announcement Soon",
-    html: `<p>Hi ${esc(name)},</p>
+    html: `<p>Hi ${esc(c.name)},</p>
       <p>The contest has officially ended. We're reviewing all entries and will announce the winner shortly.</p>
       <p>Thanks for participating — and good luck!</p>
+      <p>— Jake</p>`,
+  }),
+  winner: (c) => ({
+    subject: "🏆 You Won! — Summer Tech & DJ Giveaway",
+    html: `<p>Hi ${esc(c.name)},</p>
+      <p><strong>Congratulations — you're the winner!</strong> 🎉</p>
+      <p>You've won: <strong>${esc(c.prize ?? "a free session with Jake")}</strong>.</p>
+      <p>Reply to this email within 5 business days to claim your prize and we'll schedule a time
+        that works for you.</p>
+      <p>Thanks for entering — and see you soon!</p>
+      <p>— Jake</p>`,
+  }),
+  loser: (c) => ({
+    subject: "Contest Results — Thanks for Entering",
+    html: `<p>Hi ${esc(c.name)},</p>
+      <p>The winner of the Summer Tech &amp; DJ Giveaway has been selected. Unfortunately your name
+        wasn't drawn this time — but thank you for entering!</p>
+      ${packageLine(c)}
+      <p>As a thank-you, reply to this email and I'll share a special rate on your next event booking.</p>
       <p>— Jake</p>`,
   }),
 };
@@ -104,13 +147,13 @@ serve(async (req) => {
 
       let sent = 0;
       for (const e of due24 ?? []) {
-        const t = templates.followup_24h(e.full_name);
+        const t = templates.followup_24h({ name: e.full_name });
         await resend.emails.send({ from: FROM, to: [e.email], subject: t.subject, html: t.html });
         await admin.from("contest_entries").update({ followup_24h_sent_at: now.toISOString() }).eq("id", e.id);
         sent++;
       }
       for (const e of due48 ?? []) {
-        const t = templates.followup_48h(e.full_name);
+        const t = templates.followup_48h({ name: e.full_name });
         await resend.emails.send({ from: FROM, to: [e.email], subject: t.subject, html: t.html });
         await admin.from("contest_entries").update({ followup_48h_sent_at: now.toISOString() }).eq("id", e.id);
         sent++;
@@ -121,13 +164,16 @@ serve(async (req) => {
     }
 
     // Single send
-    const { type, email, name } = body as { type: string; email: string; name: string };
+    const { type, email, name, category, packageName, packagePrice, prize } = body as {
+      type: string; email: string; name: string;
+      category?: string; packageName?: string; packagePrice?: number; prize?: string;
+    };
     if (!type || !email || !name) {
       return new Response(JSON.stringify({ error: "Missing fields" }), {
         status: 400, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    if (now > CONTEST_END && type !== "closing") {
+    if (now > CONTEST_END && !["closing", "winner", "loser"].includes(type)) {
       return new Response(JSON.stringify({ ok: true, skipped: "contest_ended" }), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -138,7 +184,7 @@ serve(async (req) => {
         status: 400, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    const { subject, html } = tpl(name);
+    const { subject, html } = tpl({ name, category, packageName, packagePrice, prize });
     const res = await resend.emails.send({ from: FROM, to: [email], subject, html });
     return new Response(JSON.stringify({ ok: true, id: res.data?.id }), {
       headers: { ...cors, "Content-Type": "application/json" },

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CONTEST, isContestActive } from "@/lib/contest";
+import ContestCountdown from "./ContestCountdown";
 
 const ContestBanner = () => {
   if (!isContestActive()) return null;
@@ -24,12 +25,13 @@ const ContestBanner = () => {
               <p className="text-xs uppercase tracking-wider text-primary font-display mb-1">
                 Limited-Time Contest
               </p>
-              <h3 className="font-display text-xl md:text-2xl font-bold mb-1">
+              <h3 className="font-display text-xl md:text-2xl font-bold mb-2">
                 🎉 Win {CONTEST.prize}
               </h3>
-              <p className="text-muted-foreground text-sm">
+              <p className="text-muted-foreground text-sm mb-3">
                 Enter now for your chance to win. Promotion ends {endsLabel}.
               </p>
+              <ContestCountdown />
             </div>
             <Button variant="hero" size="lg" asChild className="shrink-0">
               <Link to="/contest">
