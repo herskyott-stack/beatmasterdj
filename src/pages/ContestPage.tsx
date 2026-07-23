@@ -130,6 +130,9 @@ const ContestPage = () => {
             <p className="text-muted-foreground mb-4">
               Fill out the form to enter our {CONTEST.name}. Winners will be contacted directly by email.
             </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/15 border border-secondary/30 text-xs font-medium text-secondary mb-4">
+              DJs only — this contest is for DJ service packages only
+            </div>
             <div className="flex justify-center">
               <ContestCountdown />
             </div>
