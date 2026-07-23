@@ -147,13 +147,13 @@ serve(async (req) => {
 
       let sent = 0;
       for (const e of due24 ?? []) {
-        const t = templates.followup_24h(e.full_name);
+        const t = templates.followup_24h({ name: e.full_name });
         await resend.emails.send({ from: FROM, to: [e.email], subject: t.subject, html: t.html });
         await admin.from("contest_entries").update({ followup_24h_sent_at: now.toISOString() }).eq("id", e.id);
         sent++;
       }
       for (const e of due48 ?? []) {
-        const t = templates.followup_48h(e.full_name);
+        const t = templates.followup_48h({ name: e.full_name });
         await resend.emails.send({ from: FROM, to: [e.email], subject: t.subject, html: t.html });
         await admin.from("contest_entries").update({ followup_48h_sent_at: now.toISOString() }).eq("id", e.id);
         sent++;
@@ -164,13 +164,16 @@ serve(async (req) => {
     }
 
     // Single send
-    const { type, email, name } = body as { type: string; email: string; name: string };
+    const { type, email, name, category, packageName, packagePrice, prize } = body as {
+      type: string; email: string; name: string;
+      category?: string; packageName?: string; packagePrice?: number; prize?: string;
+    };
     if (!type || !email || !name) {
       return new Response(JSON.stringify({ error: "Missing fields" }), {
         status: 400, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    if (now > CONTEST_END && type !== "closing") {
+    if (now > CONTEST_END && !["closing", "winner", "loser"].includes(type)) {
       return new Response(JSON.stringify({ ok: true, skipped: "contest_ended" }), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
@@ -181,7 +184,7 @@ serve(async (req) => {
         status: 400, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
-    const { subject, html } = tpl(name);
+    const { subject, html } = tpl({ name, category, packageName, packagePrice, prize });
     const res = await resend.emails.send({ from: FROM, to: [email], subject, html });
     return new Response(JSON.stringify({ ok: true, id: res.data?.id }), {
       headers: { ...cors, "Content-Type": "application/json" },
