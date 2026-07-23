@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-// Only this email can access admin dashboard
-const ADMIN_EMAIL = "hersky.ott@gmail.com";
-
 export const useAdminCheck = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -12,24 +9,17 @@ export const useAdminCheck = () => {
   useEffect(() => {
     const checkAdminStatus = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      
+
       if (!session?.user) {
         setIsAdmin(false);
+        setUserId(null);
         setLoading(false);
         return;
       }
 
       setUserId(session.user.id);
 
-      // Check if user email matches admin email
-      const userEmail = session.user.email?.toLowerCase();
-      if (userEmail !== ADMIN_EMAIL.toLowerCase()) {
-        setIsAdmin(false);
-        setLoading(false);
-        return;
-      }
-
-      // Also verify user has admin role in database
+      // Database is the single source of truth for admin role
       const { data: roleData, error } = await supabase
         .from("user_roles")
         .select("role")
@@ -43,7 +33,7 @@ export const useAdminCheck = () => {
       } else {
         setIsAdmin(!!roleData);
       }
-      
+
       setLoading(false);
     };
 
