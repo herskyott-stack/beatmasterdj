@@ -433,12 +433,21 @@ const CheckoutPage = () => {
                             
                             if (error) throw error;
                             if (data?.url) {
-                              // Also submit the booking info via form before redirecting
-                              handleFinalSubmit();
-                              window.open(data.url, '_blank');
+                              // Persist the booking payload so the confirmation page
+                              // can email it ONLY after Stripe payment succeeds.
+                              try {
+                                sessionStorage.setItem(
+                                  "pending_booking",
+                                  JSON.stringify(buildBookingPayload())
+                                );
+                              } catch (_e) { /* storage may be unavailable */ }
+                              // Redirect the current tab so popup blockers can't
+                              // strand the user on a "confirmed" screen without paying.
+                              window.location.href = data.url;
                             } else {
                               throw new Error('No checkout URL returned');
                             }
+
                           } catch (error: any) {
                             console.error('Payment error:', error);
                             toast({
