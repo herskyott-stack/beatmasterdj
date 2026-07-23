@@ -7,6 +7,7 @@ import PackagesSection from "@/components/PackagesSection";
 import AddonsSection from "@/components/AddonsSection";
 import FeaturedGallery from "@/components/home/FeaturedGallery";
 import GallerySection from "@/components/GallerySection";
+import ContestBanner from "@/components/contest/ContestBanner";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
@@ -18,6 +19,7 @@ const Index = () => {
       <Navbar />
       <main>
         <HeroSection />
+        <ContestBanner />
         <ServicesSection />
         <FeaturedGallery />
         <PackagesSection />
