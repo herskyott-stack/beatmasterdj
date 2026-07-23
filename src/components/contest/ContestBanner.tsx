@@ -29,7 +29,7 @@ const ContestBanner = () => {
                 🎉 Win {CONTEST.prize}
               </h3>
               <p className="text-muted-foreground text-sm mb-3">
-                Enter now for your chance to win. Promotion ends {endsLabel}.
+                Enter now for your chance to win. DJ packages only. Promotion ends {endsLabel}.
               </p>
               <ContestCountdown />
             </div>
