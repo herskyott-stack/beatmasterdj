@@ -13,80 +13,83 @@ const logStep = (step: string, details?: any) => {
 };
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
-
   try {
     logStep("Function started");
 
-    // Authenticate the caller
+    // Guest checkout allowed. If an auth token is present, try to attach the user
+    // for record-keeping, but never block payment on it.
     const authHeader = req.headers.get("Authorization");
-    if (!authHeader?.startsWith("Bearer ")) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    let userId: string | null = null;
+    let userEmail: string | null = null;
+    if (authHeader?.startsWith("Bearer ")) {
+      try {
+        const userClient = createClient(
+          Deno.env.get("SUPABASE_URL") ?? "",
+          Deno.env.get("SUPABASE_ANON_KEY") ?? "",
+          { global: { headers: { Authorization: authHeader } } }
+        );
+        const { data: { user } } = await userClient.auth.getUser();
+        if (user) {
+          userId = user.id;
+          userEmail = user.email ?? null;
+          logStep("Authenticated user attached", { userId });
+        }
+      } catch (_e) {
+        // ignore — proceed as guest
+      }
     }
-
-    const userClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-      { global: { headers: { Authorization: authHeader } } }
-    );
-
-    const { data: { user }, error: authError } = await userClient.auth.getUser();
-    if (authError || !user) {
-      logStep("Auth failed", { error: authError?.message });
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
-    logStep("User authenticated", { userId: user.id });
 
     const { amount, customerEmail, customerName, eventDetails, packageName } = await req.json();
     logStep("Request parsed", { amount, customerEmail, packageName });
 
-    if (!amount || !customerEmail) {
-      throw new Error("Missing required fields: amount and customerEmail");
+    if (!amount || typeof amount !== "number" || amount <= 0) {
+      return new Response(JSON.stringify({ error: "Invalid amount" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const email = (customerEmail || userEmail || "").trim();
+    if (!email) {
+      return new Response(JSON.stringify({ error: "Missing customer email" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
-    // Initialize Stripe
     const stripeKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeKey) throw new Error("STRIPE_SECRET_KEY is not set");
-    
+
     const stripe = new Stripe(stripeKey, {
       apiVersion: "2025-08-27.basil",
     });
     logStep("Stripe initialized");
 
-    // Check if customer exists
-    const customers = await stripe.customers.list({ email: customerEmail, limit: 1 });
-    let customerId;
+    // Reuse existing customer if any (avoid duplicates)
+    const customers = await stripe.customers.list({ email, limit: 1 });
+    let customerId: string;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
       logStep("Existing customer found", { customerId });
     } else {
-      // Create new customer
       const newCustomer = await stripe.customers.create({
-        email: customerEmail,
+        email,
         name: customerName || undefined,
         metadata: {
           package: packageName || '',
           event_details: eventDetails || '',
+          user_id: userId || '',
         },
       });
       customerId = newCustomer.id;
       logStep("New customer created", { customerId });
     }
 
-    // Get origin for redirect URLs
     const origin = req.headers.get("origin") || "https://beatmasterdj.lovable.app";
 
-    // Create checkout session with dynamic amount
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       line_items: [
@@ -97,7 +100,7 @@ serve(async (req) => {
               name: `DJ Booking Deposit - ${packageName || 'Event'}`,
               description: `50% deposit for ${packageName || 'DJ'} services`,
             },
-            unit_amount: Math.round(amount * 100), // Convert to cents
+            unit_amount: Math.round(amount * 100),
           },
           quantity: 1,
         },
@@ -109,10 +112,11 @@ serve(async (req) => {
         package_name: packageName || '',
         event_details: eventDetails || '',
         customer_name: customerName || '',
+        user_id: userId || '',
       },
     });
 
-    logStep("Checkout session created", { sessionId: session.id, url: session.url });
+    logStep("Checkout session created", { sessionId: session.id });
 
     return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
