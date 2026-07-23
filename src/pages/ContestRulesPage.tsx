@@ -30,7 +30,8 @@ const ContestRulesPage = () => {
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">1. Eligibility</h2>
               <p>Open to legal residents of Canada aged 18+ (or age of majority in their province). Void where prohibited.
-                Employees and immediate family members of Hersky DJ &amp; AV are not eligible.</p>
+                Employees and immediate family members of Hersky DJ &amp; AV are not eligible.
+                <strong> This contest is only open to entries for DJ service packages;</strong> AV-only, tech support, or other non-DJ services are not eligible.</p>
             </section>
 
             <section>
