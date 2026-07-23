@@ -25,6 +25,8 @@ import InstallPage from "./pages/InstallPage";
 import ContactPage from "./pages/ContactPage";
 import AddonDetailPage from "./pages/AddonDetailPage";
 import MentorshipPage from "./pages/MentorshipPage";
+import ContestPage from "./pages/ContestPage";
+import ContestSignups from "./pages/admin/ContestSignups";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -65,6 +67,8 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/addons/:addonId" element={<AddonDetailPage />} />
               <Route path="/mentorship" element={<MentorshipPage />} />
+              <Route path="/contest" element={<ContestPage />} />
+              <Route path="/admin/contest" element={<ContestSignups />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
               </Routes>

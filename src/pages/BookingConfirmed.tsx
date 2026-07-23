@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { CheckCircle, Calendar, Mail, ArrowRight, Loader2, AlertTriangle } from "lucide-react";
+import { CheckCircle, Calendar, Mail, ArrowRight, Loader2, AlertTriangle, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/contexts/CartContext";
+import { isContestActive } from "@/lib/contest";
 
 const BookingConfirmed = () => {
   const [searchParams] = useSearchParams();
@@ -180,6 +181,18 @@ const BookingConfirmed = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {isContestActive() && (
+              <Card variant="glass" className="mb-8 border-primary/30">
+                <CardContent className="p-5 flex items-center gap-3 justify-center text-sm">
+                  <Sparkles className="w-5 h-5 text-primary shrink-0" />
+                  <p>
+                    Thanks for your enquiry! If you entered our contest,{" "}
+                    <span className="text-primary font-medium">good luck</span> — we're rooting for you!
+                  </p>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Back to Home Button */}
             <Button variant="hero" size="lg" asChild>

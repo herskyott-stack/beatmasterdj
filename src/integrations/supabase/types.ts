@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      contest_entries: {
+        Row: {
+          contest_id: string
+          created_at: string
+          email: string
+          followup_24h_sent_at: string | null
+          followup_48h_sent_at: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          source_page: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          contest_id?: string
+          created_at?: string
+          email: string
+          followup_24h_sent_at?: string | null
+          followup_48h_sent_at?: string | null
+          full_name: string
+          id?: string
+          phone?: string | null
+          source_page?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          contest_id?: string
+          created_at?: string
+          email?: string
+          followup_24h_sent_at?: string | null
+          followup_48h_sent_at?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          source_page?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       home_media: {
         Row: {
           caption: string | null
