@@ -80,7 +80,9 @@ const AddonsSection = () => {
                     <div className="flex flex-col gap-3 mt-auto">
                       <span className="font-display text-xl font-bold text-primary">
                         {addon.priceDisplay}
-                        <span className="ml-2 text-xs text-muted-foreground font-normal">+ 13% tax</span>
+                        {!addon.customQuoteOnly && (
+                          <span className="ml-2 text-xs text-muted-foreground font-normal">+ 13% tax</span>
+                        )}
                       </span>
                       <Button
                         variant="outline"
