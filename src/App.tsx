@@ -76,6 +76,7 @@ function App() {
               <Route path="/contest-rules" element={<GiveawayRulesPage />} />
               <Route path="/admin/contest" element={<ContestSignups />} />
               <Route path="/admin/contest/settings" element={<ContestSettings />} />
+              <Route path="/unsubscribe" element={<UnsubscribePage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
               </Routes>
