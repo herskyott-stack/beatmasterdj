@@ -268,20 +268,39 @@ const GiveawayPage = () => {
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}/>
                   </div>
 
-                  <label className="flex items-start gap-3 text-sm cursor-pointer">
-                    <Checkbox checked={form.agree}
-                      onCheckedChange={(v) => setForm({ ...form, agree: v === true })}/>
-                    <span className="text-muted-foreground">
+                  <label
+                    htmlFor="agree"
+                    className="flex items-start gap-3 text-sm cursor-pointer rounded-lg border border-primary/40 bg-primary/5 p-4"
+                  >
+                    <Checkbox
+                      id="agree"
+                      checked={form.agree}
+                      onCheckedChange={(v) => setForm({ ...form, agree: v === true })}
+                      className="mt-0.5 h-5 w-5 border-primary data-[state=checked]:bg-primary"
+                    />
+                    <span className="text-foreground leading-snug">
                       I agree to the{" "}
                       <Link to="/giveaway/rules" target="_blank" className="text-primary underline">
                         contest rules
-                      </Link>.
+                      </Link>
+                      . <span className="text-muted-foreground">(required to enter)</span>
                     </span>
                   </label>
 
-                  <Button type="submit" variant="hero" size="lg" className="w-full">
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    size="lg"
+                    className="w-full"
+                    disabled={!form.agree}
+                  >
                     Continue <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
+                  {!form.agree && (
+                    <p className="text-xs text-center text-muted-foreground">
+                      Check the box above to continue
+                    </p>
+                  )}
                 </form>
               )}
 
