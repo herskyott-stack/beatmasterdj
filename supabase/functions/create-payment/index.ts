@@ -23,6 +23,80 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-PAYMENT] ${step}${detailsStr}`);
 };
 
+const esc = (s: unknown) =>
+  String(s ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+// Server-side DJ notification. Runs BEFORE the Stripe redirect so the DJ
+// always receives the booking details, even if the customer's browser never
+// returns to /booking-confirmed. A "PENDING PAYMENT" tag is used; a follow-up
+// email from verify-booking-payment confirms once Stripe reports paid.
+async function sendDjNotification(
+  status: "pending" | "paid",
+  payload: Record<string, string>,
+  sessionId?: string,
+) {
+  const apiKey = Deno.env.get("RESEND_API_KEY");
+  if (!apiKey) {
+    console.error("[CREATE-PAYMENT] RESEND_API_KEY missing — cannot email DJ");
+    return { ok: false, error: "email_service_unavailable" };
+  }
+  const label = status === "paid" ? "✅ PAID" : "⏳ PENDING PAYMENT";
+  const subject = `${label} — Booking: ${payload["9. Package Category"] || ""} ${payload["10. Package Name"] || ""} · ${payload["1. First Name"] || ""} ${payload["2. Last Name"] || ""}`.trim();
+
+  const rows = Object.keys(payload)
+    .filter((k) => !k.startsWith("_"))
+    .sort((a, b) => {
+      const na = parseInt(a.split(".")[0], 10);
+      const nb = parseInt(b.split(".")[0], 10);
+      if (isNaN(na) || isNaN(nb)) return a.localeCompare(b);
+      return na - nb;
+    })
+    .map(
+      (k) =>
+        `<tr><td style="padding:6px 10px;border:1px solid #eee;background:#faf7f0;font-weight:600;white-space:nowrap">${esc(
+          k,
+        )}</td><td style="padding:6px 10px;border:1px solid #eee">${esc(payload[k])}</td></tr>`,
+    )
+    .join("");
+
+  const html = `
+    <div style="font-family:Arial,sans-serif;color:#111">
+      <h2 style="margin:0 0 8px">${esc(label)} — New Booking</h2>
+      ${sessionId ? `<p style="margin:0 0 12px;color:#555">Stripe session: <code>${esc(sessionId)}</code></p>` : ""}
+      <table style="border-collapse:collapse;border:1px solid #eee">${rows}</table>
+    </div>`;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Hersky DJ & AV <notifications@hersky.ca>",
+        to: ["hersky.ott@gmail.com"],
+        reply_to: payload["3. Email Address"] || undefined,
+        subject,
+        html,
+      }),
+    });
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("[CREATE-PAYMENT] Resend error", res.status, text);
+      return { ok: false, error: `resend_${res.status}` };
+    }
+    return { ok: true };
+  } catch (e) {
+    console.error("[CREATE-PAYMENT] Resend threw", e);
+    return { ok: false, error: String(e) };
+  }
+}
+
 serve(async (req) => {
   const corsHeaders = buildCorsHeaders(req.headers.get("origin"));
   if (req.method === "OPTIONS") {
@@ -55,8 +129,8 @@ serve(async (req) => {
       }
     }
 
-    const { amount, customerEmail, customerName, eventDetails, packageName } = await req.json();
-    logStep("Request parsed", { amount, customerEmail, packageName });
+    const { amount, customerEmail, customerName, eventDetails, packageName, bookingPayload } = await req.json();
+    logStep("Request parsed", { amount, customerEmail, packageName, hasPayload: !!bookingPayload });
 
     if (!amount || typeof amount !== "number" || amount <= 0) {
       return new Response(JSON.stringify({ error: "Invalid amount" }), {
@@ -129,6 +203,19 @@ serve(async (req) => {
     });
 
     logStep("Checkout session created", { sessionId: session.id });
+
+    // Fire the DJ notification SERVER-SIDE, before the customer is redirected
+    // to Stripe. This guarantees the DJ receives the booking details even if
+    // the browser never returns to /booking-confirmed.
+    if (bookingPayload && typeof bookingPayload === "object") {
+      const enriched: Record<string, string> = { ...bookingPayload };
+      enriched["24. Stripe Session ID"] = session.id;
+      enriched["25. Payment Status"] = "Pending — customer redirected to Stripe";
+      const notif = await sendDjNotification("pending", enriched, session.id);
+      logStep("DJ notification (pending) sent", notif);
+    } else {
+      logStep("WARNING: no bookingPayload received; DJ notification skipped");
+    }
 
     return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
