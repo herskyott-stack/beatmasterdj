@@ -421,6 +421,7 @@ const CheckoutPage = () => {
                         onClick={async () => {
                           setIsProcessingPayment(true);
                           try {
+                            const bookingPayload = buildBookingPayload();
                             const { data, error } = await supabase.functions.invoke('create-payment', {
                               body: {
                                 amount: deposit,
@@ -428,17 +429,23 @@ const CheckoutPage = () => {
                                 customerName: `${eventDetails.firstName} ${eventDetails.lastName}`,
                                 eventDetails: `${eventDetails.eventDate} at ${eventDetails.eventLocation}`,
                                 packageName: `${pkg?.category} - ${pkg?.name}`,
+                                // Server-side DJ notification is fired from the
+                                // edge function with this payload BEFORE the
+                                // Stripe redirect, so the DJ always receives
+                                // booking details even if the browser never
+                                // returns to /booking-confirmed.
+                                bookingPayload,
                               },
                             });
                             
                             if (error) throw error;
                             if (data?.url) {
-                              // Persist the booking payload so the confirmation page
-                              // can email it ONLY after Stripe payment succeeds.
+                              // Keep the payload so the confirmation page can
+                              // include it in the "payment confirmed" follow-up.
                               try {
                                 sessionStorage.setItem(
                                   "pending_booking",
-                                  JSON.stringify(buildBookingPayload())
+                                  JSON.stringify(bookingPayload)
                                 );
                               } catch (_e) { /* storage may be unavailable */ }
                               // Redirect the current tab so popup blockers can't

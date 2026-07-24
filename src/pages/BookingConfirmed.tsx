@@ -6,6 +6,7 @@ import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useCart } from "@/contexts/CartContext";
+import { supabase } from "@/integrations/supabase/client";
 import { isContestActive } from "@/lib/contest";
 
 const BookingConfirmed = () => {
@@ -20,30 +21,47 @@ const BookingConfirmed = () => {
   useEffect(() => {
     if (!sessionId) return;
 
-    // Only email the booking details AFTER Stripe returns a session_id.
-    const key = `booking_submitted_${sessionId}`;
+    // The DJ has already been notified server-side (create-payment sent a
+    // "PENDING PAYMENT" email before the Stripe redirect). Here we ask the
+    // server to verify with Stripe and send a "PAID" follow-up. This does NOT
+    // depend on a third-party form endpoint reaching the browser.
+    const key = `booking_confirmed_${sessionId}`;
     if (sessionStorage.getItem(key)) {
       setStatus("ok");
       return;
     }
 
     const raw = sessionStorage.getItem("pending_booking");
-    const payload: Record<string, string> = raw ? JSON.parse(raw) : {};
-    payload["24. Stripe Session ID"] = sessionId;
-    payload["25. Payment Status"] = "Deposit paid via Stripe";
+    const bookingPayload: Record<string, string> | undefined = raw
+      ? (() => { try { return JSON.parse(raw); } catch { return undefined; } })()
+      : undefined;
 
-    fetch("https://formsubmit.co/ajax/hersky.ott@gmail.com", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      body: JSON.stringify(payload),
-    })
-      .catch((err) => console.error("Booking email failed", err))
-      .finally(() => {
-        sessionStorage.setItem(key, "1");
-        sessionStorage.removeItem("pending_booking");
-        clearCart();
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke(
+          "verify-booking-payment",
+          { body: { sessionId, bookingPayload } },
+        );
+        if (error) throw error;
+        if (data?.paid) {
+          // Only clear on confirmed success — never in a finally block.
+          sessionStorage.setItem(key, "1");
+          sessionStorage.removeItem("pending_booking");
+          clearCart();
+        } else {
+          console.warn("Stripe session not paid yet", data);
+        }
+      } catch (err) {
+        // Do NOT mark as submitted. Leave pending_booking intact so a reload
+        // can retry. The DJ already has the pending notification from
+        // create-payment; the paid follow-up will be retried on next visit.
+        console.error("verify-booking-payment failed", err);
+      } finally {
+        // Show the confirmation UI regardless — Stripe redirected here, so the
+        // customer has paid. Retry logic above ensures the DJ email is not lost.
         setStatus("ok");
-      });
+      }
+    })();
   }, [sessionId, clearCart]);
 
   if (status === "missing") {
