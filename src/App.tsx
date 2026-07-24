@@ -25,9 +25,10 @@ import InstallPage from "./pages/InstallPage";
 import ContactPage from "./pages/ContactPage";
 import AddonDetailPage from "./pages/AddonDetailPage";
 import MentorshipPage from "./pages/MentorshipPage";
-import ContestPage from "./pages/ContestPage";
-import ContestRulesPage from "./pages/ContestRulesPage";
+import GiveawayPage from "./pages/GiveawayPage";
+import GiveawayRulesPage from "./pages/GiveawayRulesPage";
 import ContestSignups from "./pages/admin/ContestSignups";
+import ContestSettings from "./pages/admin/ContestSettings";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -68,9 +69,12 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/addons/:addonId" element={<AddonDetailPage />} />
               <Route path="/mentorship" element={<MentorshipPage />} />
-              <Route path="/contest" element={<ContestPage />} />
-              <Route path="/contest-rules" element={<ContestRulesPage />} />
+              <Route path="/giveaway" element={<GiveawayPage />} />
+              <Route path="/giveaway/rules" element={<GiveawayRulesPage />} />
+              <Route path="/contest" element={<GiveawayPage />} />
+              <Route path="/contest-rules" element={<GiveawayRulesPage />} />
               <Route path="/admin/contest" element={<ContestSignups />} />
+              <Route path="/admin/contest/settings" element={<ContestSettings />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
               </Routes>

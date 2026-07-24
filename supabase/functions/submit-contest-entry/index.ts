@@ -18,8 +18,6 @@ const buildCors = (origin: string | null) => ({
     "authorization, x-client-info, apikey, content-type",
 });
 
-const CONTEST_END = new Date("2026-09-01T23:59:59-04:00");
-
 async function sha256(input: string) {
   const data = new TextEncoder().encode(input);
   const hash = await crypto.subtle.digest("SHA-256", data);
@@ -33,63 +31,78 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: cors });
 
   try {
-    if (new Date() > CONTEST_END) {
-      return new Response(JSON.stringify({ error: "Contest has ended" }), {
-        status: 410, headers: { ...cors, "Content-Type": "application/json" },
-      });
+    const admin = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    // Check contest window from settings (source of truth)
+    const { data: settings } = await admin
+      .from("contest_settings")
+      .select("*")
+      .order("created_at", { ascending: true })
+      .limit(1)
+      .maybeSingle();
+
+    if (settings) {
+      const now = Date.now();
+      const start = new Date(settings.start_date).getTime();
+      const end = new Date(settings.end_date).getTime();
+      const active = settings.auto_stop_enabled
+        ? now >= start && now <= end
+        : now >= start;
+      if (!active) {
+        return new Response(JSON.stringify({ error: "Contest has ended" }), {
+          status: 410, headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
     }
 
     const body = await req.json();
     const {
       full_name, email, phone,
-      contest_id, source_page,
-      interested_package_category,
-      interested_package_name,
-      interested_package_price,
-      website, // honeypot
+      source_page, website, agreed_to_rules,
+      inquiry,
     } = body ?? {};
 
-    // Honeypot: bots fill hidden fields
+    // Honeypot
     if (typeof website === "string" && website.trim() !== "") {
       return new Response(JSON.stringify({ ok: true }), {
         headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
-    // Basic validation
     const nameOk = typeof full_name === "string" && full_name.trim().length > 0 && full_name.length <= 120;
     const emailOk = typeof email === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && email.length <= 255;
-    const pkgOk = typeof interested_package_category === "string"
-      && typeof interested_package_name === "string";
-    if (!nameOk || !emailOk || !pkgOk) {
+    if (!nameOk || !emailOk || agreed_to_rules !== true) {
       return new Response(JSON.stringify({ error: "Invalid submission" }), {
         status: 400, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
-    const admin = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
-
-    // Rate limiting
     const ip = (req.headers.get("x-forwarded-for") ?? "").split(",")[0].trim()
       || req.headers.get("cf-connecting-ip") || "unknown";
     const ip_hash = await sha256(`${ip}:contest`);
     const oneHourAgo = new Date(Date.now() - 3600_000).toISOString();
 
-    // Duplicate email → block
-    const { count: emailCount } = await admin
+    // Duplicate email → friendly return with existing entry id
+    const { data: existing } = await admin
       .from("contest_entries")
-      .select("id", { count: "exact", head: true })
-      .ilike("email", email);
-    if ((emailCount ?? 0) > 0) {
-      return new Response(JSON.stringify({ error: "This email has already been entered." }), {
-        status: 409, headers: { ...cors, "Content-Type": "application/json" },
+      .select("id")
+      .ilike("email", email)
+      .maybeSingle();
+    if (existing?.id) {
+      return new Response(JSON.stringify({
+        ok: false,
+        code: "duplicate_email",
+        entry_id: existing.id,
+        error: "Looks like you're already entered — good luck!",
+      }), {
+        status: 200, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
-    // IP → max 3 per hour
+    // IP throttle: 3/hr
     const { count: ipCount } = await admin
       .from("contest_entries")
       .select("id", { count: "exact", head: true })
@@ -101,25 +114,62 @@ serve(async (req) => {
       });
     }
 
-    const { error: insertErr } = await admin.from("contest_entries").insert({
-      full_name: String(full_name).trim(),
-      email: String(email).trim(),
-      phone: phone ? String(phone).trim() : null,
-      contest_id: contest_id || "summer-tech-dj-2026",
-      source_page: source_page || "contest_page",
-      interested_package_category,
-      interested_package_name,
-      interested_package_price: interested_package_price ?? null,
-      ip_hash,
-    });
-    if (insertErr) {
-      console.error("insert error", insertErr);
+    const { data: inserted, error: insertErr } = await admin
+      .from("contest_entries")
+      .insert({
+        full_name: String(full_name).trim(),
+        email: String(email).trim(),
+        phone: phone ? String(phone).trim() : null,
+        contest_id: "beatmasterdj-summer-giveaway",
+        source_page: source_page || "giveaway_page",
+        agreed_to_rules: true,
+        interested_package_category: inquiry?.interested_package_category ?? null,
+        interested_package_name: inquiry?.interested_package_name ?? null,
+        interested_package_price: inquiry?.interested_package_price ?? null,
+        ip_hash,
+      })
+      .select("id")
+      .single();
+
+    if (insertErr || !inserted) {
+      console.error("insert entry", insertErr);
       return new Response(JSON.stringify({ error: "Could not save entry" }), {
         status: 500, headers: { ...cors, "Content-Type": "application/json" },
       });
     }
 
-    return new Response(JSON.stringify({ ok: true }), {
+    let inquiryId: string | null = null;
+    if (inquiry && typeof inquiry === "object") {
+      const { data: iRow, error: iErr } = await admin
+        .from("contest_event_inquiries")
+        .insert({
+          entry_id: inserted.id,
+          event_type: inquiry.event_type ?? null,
+          event_date: inquiry.event_date ?? null,
+          venue_location: inquiry.venue_location ?? null,
+          guest_count: inquiry.guest_count ?? null,
+          special_requests: inquiry.special_requests ?? null,
+          interested_package_id: inquiry.interested_package_id ?? null,
+          interested_package_name: inquiry.interested_package_name ?? null,
+          interested_package_category: inquiry.interested_package_category ?? null,
+          interested_package_price: inquiry.interested_package_price ?? null,
+        })
+        .select("id")
+        .single();
+      if (iErr) console.error("insert inquiry", iErr);
+      inquiryId = iRow?.id ?? null;
+      if (inquiryId) {
+        await admin.from("contest_entries")
+          .update({ event_inquiry_id: inquiryId })
+          .eq("id", inserted.id);
+      }
+    }
+
+    return new Response(JSON.stringify({
+      ok: true,
+      entry_id: inserted.id,
+      inquiry_id: inquiryId,
+    }), {
       headers: { ...cors, "Content-Type": "application/json" },
     });
   } catch (err) {
