@@ -78,7 +78,7 @@ async function sendDjNotification(
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Hersky DJ Bookings <bookings@hersky.ca>",
+        from: "Hersky DJ & AV <notifications@hersky.ca>",
         to: ["hersky.ott@gmail.com"],
         reply_to: payload["3. Email Address"] || undefined,
         subject,
