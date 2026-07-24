@@ -29,6 +29,7 @@ import GiveawayPage from "./pages/GiveawayPage";
 import GiveawayRulesPage from "./pages/GiveawayRulesPage";
 import ContestSignups from "./pages/admin/ContestSignups";
 import ContestSettings from "./pages/admin/ContestSettings";
+import UnsubscribePage from "./pages/UnsubscribePage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
