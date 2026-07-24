@@ -23,7 +23,15 @@ export type Database = {
           bonus_verified: boolean
           contest_id: string
           created_at: string
+          discount_email_sent_at: string | null
           email: string
+          email_day1_sent_at: string | null
+          email_day14_sent_at: string | null
+          email_day21_sent_at: string | null
+          email_day3_sent_at: string | null
+          email_day30_sent_at: string | null
+          email_day45_sent_at: string | null
+          email_day7_sent_at: string | null
           event_inquiry_id: string | null
           followup_24h_sent_at: string | null
           followup_48h_sent_at: string | null
@@ -35,11 +43,15 @@ export type Database = {
           interested_package_price: number | null
           ip_hash: string | null
           is_winner: boolean
+          loser_email_sent_at: string | null
           phone: string | null
           source_page: string
           status: string
+          unsubscribe_token: string | null
+          unsubscribed_at: string | null
           updated_at: string
           winner_announced_at: string | null
+          winner_email_sent_at: string | null
         }
         Insert: {
           agreed_to_rules?: boolean
@@ -49,7 +61,15 @@ export type Database = {
           bonus_verified?: boolean
           contest_id?: string
           created_at?: string
+          discount_email_sent_at?: string | null
           email: string
+          email_day1_sent_at?: string | null
+          email_day14_sent_at?: string | null
+          email_day21_sent_at?: string | null
+          email_day3_sent_at?: string | null
+          email_day30_sent_at?: string | null
+          email_day45_sent_at?: string | null
+          email_day7_sent_at?: string | null
           event_inquiry_id?: string | null
           followup_24h_sent_at?: string | null
           followup_48h_sent_at?: string | null
@@ -61,11 +81,15 @@ export type Database = {
           interested_package_price?: number | null
           ip_hash?: string | null
           is_winner?: boolean
+          loser_email_sent_at?: string | null
           phone?: string | null
           source_page?: string
           status?: string
+          unsubscribe_token?: string | null
+          unsubscribed_at?: string | null
           updated_at?: string
           winner_announced_at?: string | null
+          winner_email_sent_at?: string | null
         }
         Update: {
           agreed_to_rules?: boolean
@@ -75,7 +99,15 @@ export type Database = {
           bonus_verified?: boolean
           contest_id?: string
           created_at?: string
+          discount_email_sent_at?: string | null
           email?: string
+          email_day1_sent_at?: string | null
+          email_day14_sent_at?: string | null
+          email_day21_sent_at?: string | null
+          email_day3_sent_at?: string | null
+          email_day30_sent_at?: string | null
+          email_day45_sent_at?: string | null
+          email_day7_sent_at?: string | null
           event_inquiry_id?: string | null
           followup_24h_sent_at?: string | null
           followup_48h_sent_at?: string | null
@@ -87,11 +119,15 @@ export type Database = {
           interested_package_price?: number | null
           ip_hash?: string | null
           is_winner?: boolean
+          loser_email_sent_at?: string | null
           phone?: string | null
           source_page?: string
           status?: string
+          unsubscribe_token?: string | null
+          unsubscribed_at?: string | null
           updated_at?: string
           winner_announced_at?: string | null
+          winner_email_sent_at?: string | null
         }
         Relationships: []
       }
