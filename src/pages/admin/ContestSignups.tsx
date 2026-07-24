@@ -198,17 +198,18 @@ const ContestSignups = () => {
         .update({ winner_entry_id: drawResult.id, announcement_date: now })
         .eq("id", settings.id);
     }
-    supabase.functions.invoke("send-contest-email", {
+    const t = toast.loading("Sending announcement to all entrants…");
+    const { data, error: fnErr } = await supabase.functions.invoke("send-contest-email", {
       body: {
-        type: "winner",
-        email: drawResult.email,
-        name: drawResult.full_name,
-        prize: "a FREE DJ Package for your event",
-        category: drawResult.interested_package_category,
-        packageName: drawResult.interested_package_name,
+        type: "announce_all",
+        contestId: drawResult.contest_id,
+        winnerId: drawResult.id,
+        includeDiscount: true,
       },
-    }).catch(() => {});
-    toast.success("Winner saved and announcement email queued");
+    });
+    toast.dismiss(t);
+    if (fnErr) toast.error("Winner saved but email blast failed — check logs");
+    else toast.success(`Winner saved. Emailed ${(data as any)?.sent ?? 0} entrants.`);
     setDrawOpen(false);
     setDrawResult(null);
     load();

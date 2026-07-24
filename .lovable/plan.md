@@ -1,49 +1,84 @@
-## Contest System — full rebuild (additive)
 
-Rebuilds the contest as a proper two-step flow at `/giveaway` with DB-driven settings, admin controls, and auto-stop. Nothing else on the site changes except the banner already on the homepage (repointed to `/giveaway`).
+## Goal
 
-### 1. Database (migration)
+1. When you click **Pick Winner → Confirm** in the admin panel, automatically email **every entrant**:
+   - Winner gets email **#9** (winner announcement, with their name).
+   - All non-winners get email **#9** (announcing the winner's first name) immediately followed by email **#10** (the "$200 off" conversion offer).
+2. Replace the current 3-template drip (confirmation / 24h / 48h) with your full **10-email sequence** on the exact cadence you specified (0m, 24h, 3d, 7d, 14d, 21d, 30d, 45d, +winner blast).
+3. Harden deliverability so the emails don't land in spam.
 
-New tables + columns, all with RLS:
+---
 
-- `contest_settings` (single row seeded): `contest_name`, `start_date`, `end_date` (default 2026-09-01 23:59 America/Toronto), `auto_stop_enabled`, `winner_entry_id`, `announcement_date`. Public SELECT, admin-only UPDATE. Status derived in code from dates + auto-stop.
-- `contest_event_inquiries`: `entry_id`, `event_type`, `event_date`, `venue_location`, `guest_count`, `special_requests`, `interested_package_id`, `interested_package_name`, `interested_package_price`. Anon INSERT, admin SELECT/UPDATE/DELETE.
-- Extend `contest_entries` with: `agreed_to_rules`, `event_inquiry_id`, `bonus_followed_instagram`, `bonus_shared_story`, `bonus_tagged_account`, `bonus_verified`, `instagram_handle`. Add UNIQUE(lower(email)). Add public UPDATE-by-id-only policy scoped to bonus columns so a fresh entrant can submit their bonus form (guarded by row id returned at insert).
+## Part 1 — Winner blast to all entrants
 
-### 2. Public pages
+**Admin UI (`src/pages/admin/ContestSignups.tsx`)**
+- Keep the existing "Pick Winner" weighted draw modal.
+- In `confirmWinner()`, after saving `is_winner=true`, call a new edge action `send-contest-email` with `type: "announce_all"` and `{ winnerName, winnerId, contestId }`. Show a toast: "Winner saved. Announcement queued to N entrants."
+- Add a confirmation checkbox in the modal: "Also email all non-winners the $200-off follow-up" (default on).
 
-- `/giveaway` (new route; keep `/contest` alias redirecting here):
-  - Live countdown pulled from `contest_settings.end_date`.
-  - Step 1: name, email, phone, rules checkbox. Duplicate email → friendly "Looks like you're already entered — good luck!".
-  - Step 2 (same page, no reload): event type, event date (must be future), venue, guest count, special requests, **package selection with ALL packages from the site catalog** (weddings, corporate, schools, private — full list from `PackagesPage`).
-  - Confirmation: gold checkmark + "Your entry has been received — good luck!" + bonus entries section (3 IG checkboxes + IG handle input), saves to entry.
-  - Autosave form state to `localStorage` on every change; restore on mount.
-  - When status is closed → tasteful "This contest has ended" screen.
-- `/giveaway/rules` (new route; keep `/contest-rules` alias): rules rewritten plain-language, dates pulled live from settings, includes bonus-verification note.
-- Homepage banner: keep existing component, repoint CTA to `/giveaway`, and hide when settings say closed (already driven by dates).
+**Edge function (`supabase/functions/send-contest-email/index.ts`)**
+- New branch `type === "announce_all"`:
+  1. Load all entries for the contest.
+  2. For the winner → send email **#9** (`winner` template) with the full prize line.
+  3. For every non-winner → send email **#9** (loser variant naming the winner's first name) and email **#10** (`$200 off, book by Sept 30`) as two separate messages ~30 seconds apart to avoid burst throttling.
+  4. Batch through Resend with small concurrency (5 at a time) and record `winner_email_sent_at` / `loser_email_sent_at` per entry so re-clicks don't double-send.
 
-### 3. Admin
+---
 
-- `/admin/contest` dashboard:
-  - Status pill (Active/Closed + days remaining).
-  - Stat cards: total entries, bonus claimed, bonus verified, total tickets in draw (1 base + 3 if all 3 IG boxes AND `bonus_verified`).
-  - Entries table with search/sort, row click opens full detail incl. linked inquiry.
-  - Per-row "Verify bonus" toggle.
-  - CSV export (all fields incl. inquiry).
-  - "Pick Winner" random weighted draw (tickets 1 or 4), confirm before save, redraw option, sets `is_winner` + `winner_entry_id`, triggers existing `send-contest-email` with `type: "winner"`.
-- `/admin/contest/settings` new page: edit name/start/end/announcement, auto-stop toggle, "Close contest now" button.
+## Part 2 — Full 10-email drip sequence
 
-### 4. Auto-stop
+Replace the existing `templates` map with the 10 templates in your brief, keyed:
 
-All UI reads `contest_settings` at runtime via a small hook (`useContestSettings`) — no hardcoded date in components. `isActive = auto_stop_enabled ? (now in [start,end]) : true` combined with a manual override (setting `end_date` to past = closed).
+| # | Key | Trigger |
+|---|---|---|
+| 1 | `confirmation` | Instant on submit (already wired in `submit-contest-entry` flow) |
+| 2 | `day_1` | +24h via cron |
+| 3 | `day_3` | +3 days via cron |
+| 4 | `day_7` | +7 days via cron |
+| 5 | `day_14` | +14 days via cron |
+| 6 | `day_21` | +21 days via cron |
+| 7 | `day_30` | +30 days via cron |
+| 8 | `day_45` | +45 days via cron |
+| 9 | `winner` / `loser` | On winner pick (Part 1) |
+| 10 | `discount_offer` | On winner pick (Part 1, non-winners only) |
 
-### 5. Edge function
+**Schema (migration)** — add nullable timestamps on `contest_entries`:
+`email_day1_sent_at, email_day3_sent_at, email_day7_sent_at, email_day14_sent_at, email_day21_sent_at, email_day30_sent_at, email_day45_sent_at, winner_email_sent_at, loser_email_sent_at`. (Keeps the two legacy `followup_24h_sent_at/48h` columns untouched.)
 
-Extend `submit-contest-entry` to accept optional inquiry payload + package, insert the inquiry row, link `event_inquiry_id`, and return the new entry id so the client can PATCH bonus fields. Keep honeypot + rate-limit.
+**Cron worker** — rewrite the `run_followups` branch of `send-contest-email` to loop over each of the 7 timed emails: select entries where `created_at <= now - Xd AND email_dayX_sent_at IS NULL AND is_winner = false`, send, stamp the column. Cap at 100 sends per run. Auto-stop stays: if `now > CONTEST_END`, skip all timed sends (winner/loser blast still allowed).
 
-### Technical notes
-- Backend = Lovable Cloud (Supabase). Tables include GRANT + RLS per project rules.
-- Bonus update RLS: allow anon UPDATE on `contest_entries` **only** for columns `bonus_*` and `instagram_handle`, matched by row id (using column list grant + trigger that reverts protected fields).
-- Timezone: store UTC, display via `Intl.DateTimeFormat('en-CA', { timeZone: 'America/Toronto' })`.
-- Mobile: sticky bottom CTA on `/giveaway` forms at ≤640px.
-- No changes to unrelated pages, nav, or styling.
+**Schedule** — one `pg_cron` job hitting `/functions/v1/send-contest-email` with `{ "type":"run_followups" }` every 15 minutes (created via `supabase--insert`, not migration, per rules).
+
+**Content** — email bodies use your exact copy, wrapped in a single branded HTML shell (Hersky DJ gold/rose palette, Playfair display header, plain-text alternative auto-generated by Resend). Signed "Jake — BeatMaster DJ".
+
+---
+
+## Part 3 — Anti-spam / deliverability
+
+- **From address**: switch `FROM` from `Jake <hersky.ott@gmail.com>` (unverifiable, near-guaranteed spam) to a verified domain sender such as `Jake <jake@hersky.ca>` (domain already used elsewhere in project). Reply-To stays `hersky.ott@gmail.com` so replies still land in your Gmail. You'll need to confirm `hersky.ca` is verified in Resend (SPF + DKIM); if not, I'll flag the exact DNS records to add.
+- **Headers on every send**:
+  - `List-Unsubscribe: <mailto:unsubscribe@hersky.ca?subject=unsubscribe>, <https://beatmasterdj.ca/unsubscribe?e={token}>`
+  - `List-Unsubscribe-Post: List-Unsubscribe=One-Click` (Gmail/Yahoo bulk-sender requirement)
+  - `Reply-To: hersky.ott@gmail.com`
+- **Unsubscribe page**: add `/unsubscribe` route + `unsubscribed_at` column on `contest_entries`; cron/blast skips unsubscribed rows.
+- **Footer** on every template: physical/business contact line + one-click unsubscribe link (CASL + CAN-SPAM compliant).
+- **Content hygiene**: avoid all-caps subjects, no "FREE!!!" repetition, keep image/text ratio balanced, single CTA per email, plain-text version generated automatically.
+- **Throttling**: max 5 concurrent Resend calls, 200 ms spacing, so a large blast doesn't trip rate limits or spam heuristics.
+
+---
+
+## Technical details
+
+**Files**
+- `supabase/functions/send-contest-email/index.ts` — rewrite template map (10 templates + shared HTML shell), new `announce_all` branch, updated `run_followups` loop, add `List-Unsubscribe` headers, honor `unsubscribed_at`.
+- `src/pages/admin/ContestSignups.tsx` — modal copy + call `announce_all` instead of single `winner`.
+- `src/pages/UnsubscribePage.tsx` (new) — token-based one-click unsubscribe.
+- `src/App.tsx` — register `/unsubscribe` route.
+- Migration: add drip/blast timestamp columns + `unsubscribed_at` + `unsubscribe_token` to `contest_entries`.
+- `supabase--insert` (not migration): schedule pg_cron job.
+
+**Idempotency**: every send checks the corresponding `*_sent_at IS NULL` before dispatching and stamps the column on success.
+
+**User action required after build**
+- Confirm `hersky.ca` is verified in Resend (or tell me which verified domain to send from).
+- Approve the migration when prompted.
