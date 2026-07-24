@@ -1,21 +1,27 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
-const ALLOWED_ORIGINS = [
+const STATIC_ORIGINS = new Set([
   "https://beatmasterdj.lovable.app",
   "https://beatmasterdj.ca",
   "https://www.beatmasterdj.ca",
   "http://localhost:5173",
   "http://localhost:3000",
   "http://localhost:8080",
-];
+]);
+
+const isAllowedOrigin = (o: string) =>
+  STATIC_ORIGINS.has(o) ||
+  /^https:\/\/([a-z0-9-]+\.)*lovableproject\.com$/.test(o) ||
+  /^https:\/\/([a-z0-9-]+\.)*lovable\.app$/.test(o);
 
 const buildCors = (origin: string | null) => ({
   "Access-Control-Allow-Origin":
-    origin && ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0],
+    origin && isAllowedOrigin(origin) ? origin : "https://beatmasterdj.lovable.app",
   "Vary": "Origin",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
 });
 
 async function sha256(input: string) {
