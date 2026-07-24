@@ -208,7 +208,7 @@ const GiveawayPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-24 md:pt-28 pb-32 md:pb-16">
+      <main className="pt-24 md:pt-28 pb-12">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-6 md:mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-xs uppercase tracking-wider text-primary font-display mb-3">
