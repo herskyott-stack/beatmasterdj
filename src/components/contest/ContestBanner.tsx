@@ -1,17 +1,14 @@
 import { Link } from "react-router-dom";
 import { Sparkles, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CONTEST, isContestActive } from "@/lib/contest";
+import { useContestSettings, formatContestDate } from "@/hooks/useContestSettings";
 import ContestCountdown from "./ContestCountdown";
 
 const ContestBanner = () => {
-  if (!isContestActive()) return null;
+  const { settings, isActive } = useContestSettings();
+  if (!isActive || !settings) return null;
 
-  const endsLabel = CONTEST.endDate.toLocaleDateString(undefined, {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+  const endsLabel = formatContestDate(settings.end_date);
 
   return (
     <section className="py-10 md:py-14">
@@ -23,18 +20,18 @@ const ContestBanner = () => {
             </div>
             <div className="flex-1">
               <p className="text-xs uppercase tracking-wider text-primary font-display mb-1">
-                Limited-Time Contest
+                🎉 {settings.contest_name}
               </p>
               <h3 className="font-display text-xl md:text-2xl font-bold mb-2">
-                🎉 Win {CONTEST.prize}
+                Win a FREE DJ Package for your event
               </h3>
               <p className="text-muted-foreground text-sm mb-3">
-                Enter now for your chance to win. DJ packages only. Promotion ends {endsLabel}.
+                Enter now — good luck! Contest ends {endsLabel}.
               </p>
-              <ContestCountdown />
+              <ContestCountdown endDate={new Date(settings.end_date)} />
             </div>
             <Button variant="hero" size="lg" asChild className="shrink-0">
-              <Link to="/contest">
+              <Link to="/giveaway">
                 Enter Contest <ArrowRight className="w-4 h-4 ml-1" />
               </Link>
             </Button>
