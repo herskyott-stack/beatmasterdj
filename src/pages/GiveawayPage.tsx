@@ -279,17 +279,9 @@ const GiveawayPage = () => {
                     </span>
                   </label>
 
-                  <Button type="submit" variant="hero" size="lg"
-                    className="w-full hidden md:flex">
+                  <Button type="submit" variant="hero" size="lg" className="w-full">
                     Continue <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
-
-                  {/* Mobile sticky CTA */}
-                  <div className="fixed inset-x-0 bottom-0 z-40 p-3 bg-background/90 backdrop-blur border-t border-border md:hidden">
-                    <Button type="submit" variant="hero" size="lg" className="w-full">
-                      Continue <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </div>
                 </form>
               )}
 
@@ -383,16 +375,10 @@ const GiveawayPage = () => {
                       onChange={(e) => setForm({ ...form, special_requests: e.target.value })}/>
                   </div>
 
-                  <div className="hidden md:flex gap-3">
+                  <div className="flex gap-3">
                     <Button type="button" variant="outline" onClick={() => setStep(1)}>Back</Button>
                     <Button type="submit" variant="hero" size="lg" className="flex-1" disabled={submitting}>
                       {submitting ? "Submitting…" : "Submit Entry — Good Luck!"}
-                    </Button>
-                  </div>
-                  <div className="fixed inset-x-0 bottom-0 z-40 p-3 bg-background/90 backdrop-blur border-t border-border md:hidden flex gap-2">
-                    <Button type="button" variant="outline" onClick={() => setStep(1)}>Back</Button>
-                    <Button type="submit" variant="hero" size="lg" className="flex-1" disabled={submitting}>
-                      {submitting ? "Submitting…" : "Submit — Good Luck!"}
                     </Button>
                   </div>
                 </form>
