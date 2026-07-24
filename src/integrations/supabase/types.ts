@@ -16,13 +16,20 @@ export type Database = {
     Tables: {
       contest_entries: {
         Row: {
+          agreed_to_rules: boolean
+          bonus_followed_instagram: boolean
+          bonus_shared_story: boolean
+          bonus_tagged_account: boolean
+          bonus_verified: boolean
           contest_id: string
           created_at: string
           email: string
+          event_inquiry_id: string | null
           followup_24h_sent_at: string | null
           followup_48h_sent_at: string | null
           full_name: string
           id: string
+          instagram_handle: string | null
           interested_package_category: string | null
           interested_package_name: string | null
           interested_package_price: number | null
@@ -35,13 +42,20 @@ export type Database = {
           winner_announced_at: string | null
         }
         Insert: {
+          agreed_to_rules?: boolean
+          bonus_followed_instagram?: boolean
+          bonus_shared_story?: boolean
+          bonus_tagged_account?: boolean
+          bonus_verified?: boolean
           contest_id?: string
           created_at?: string
           email: string
+          event_inquiry_id?: string | null
           followup_24h_sent_at?: string | null
           followup_48h_sent_at?: string | null
           full_name: string
           id?: string
+          instagram_handle?: string | null
           interested_package_category?: string | null
           interested_package_name?: string | null
           interested_package_price?: number | null
@@ -54,13 +68,20 @@ export type Database = {
           winner_announced_at?: string | null
         }
         Update: {
+          agreed_to_rules?: boolean
+          bonus_followed_instagram?: boolean
+          bonus_shared_story?: boolean
+          bonus_tagged_account?: boolean
+          bonus_verified?: boolean
           contest_id?: string
           created_at?: string
           email?: string
+          event_inquiry_id?: string | null
           followup_24h_sent_at?: string | null
           followup_48h_sent_at?: string | null
           full_name?: string
           id?: string
+          instagram_handle?: string | null
           interested_package_category?: string | null
           interested_package_name?: string | null
           interested_package_price?: number | null
@@ -71,6 +92,98 @@ export type Database = {
           status?: string
           updated_at?: string
           winner_announced_at?: string | null
+        }
+        Relationships: []
+      }
+      contest_event_inquiries: {
+        Row: {
+          created_at: string
+          entry_id: string | null
+          event_date: string | null
+          event_type: string | null
+          guest_count: number | null
+          id: string
+          interested_package_category: string | null
+          interested_package_id: string | null
+          interested_package_name: string | null
+          interested_package_price: number | null
+          special_requests: string | null
+          updated_at: string
+          venue_location: string | null
+        }
+        Insert: {
+          created_at?: string
+          entry_id?: string | null
+          event_date?: string | null
+          event_type?: string | null
+          guest_count?: number | null
+          id?: string
+          interested_package_category?: string | null
+          interested_package_id?: string | null
+          interested_package_name?: string | null
+          interested_package_price?: number | null
+          special_requests?: string | null
+          updated_at?: string
+          venue_location?: string | null
+        }
+        Update: {
+          created_at?: string
+          entry_id?: string | null
+          event_date?: string | null
+          event_type?: string | null
+          guest_count?: number | null
+          id?: string
+          interested_package_category?: string | null
+          interested_package_id?: string | null
+          interested_package_name?: string | null
+          interested_package_price?: number | null
+          special_requests?: string | null
+          updated_at?: string
+          venue_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contest_event_inquiries_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "contest_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contest_settings: {
+        Row: {
+          announcement_date: string | null
+          auto_stop_enabled: boolean
+          contest_name: string
+          created_at: string
+          end_date: string
+          id: string
+          start_date: string
+          updated_at: string
+          winner_entry_id: string | null
+        }
+        Insert: {
+          announcement_date?: string | null
+          auto_stop_enabled?: boolean
+          contest_name?: string
+          created_at?: string
+          end_date?: string
+          id?: string
+          start_date?: string
+          updated_at?: string
+          winner_entry_id?: string | null
+        }
+        Update: {
+          announcement_date?: string | null
+          auto_stop_enabled?: boolean
+          contest_name?: string
+          created_at?: string
+          end_date?: string
+          id?: string
+          start_date?: string
+          updated_at?: string
+          winner_entry_id?: string | null
         }
         Relationships: []
       }

@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { CONTEST } from "@/lib/contest";
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
-type Props = { compact?: boolean };
+type Props = { endDate: Date; compact?: boolean };
 
-const ContestCountdown = ({ compact = false }: Props) => {
+const ContestCountdown = ({ endDate, compact = false }: Props) => {
   const [now, setNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -13,7 +12,7 @@ const ContestCountdown = ({ compact = false }: Props) => {
     return () => clearInterval(id);
   }, []);
 
-  const diff = Math.max(0, CONTEST.endDate.getTime() - now);
+  const diff = Math.max(0, endDate.getTime() - now);
   const days = Math.floor(diff / 86400000);
   const hours = Math.floor((diff % 86400000) / 3600000);
   const minutes = Math.floor((diff % 3600000) / 60000);

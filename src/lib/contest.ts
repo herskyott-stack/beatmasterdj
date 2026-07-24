@@ -1,9 +1,4 @@
-// Contest configuration — single source of truth
-export const CONTEST = {
-  id: "summer-tech-dj-2026",
-  name: "Summer DJ Giveaway",
-  endDate: new Date("2026-09-01T23:59:59-04:00"),
-  prize: "a free custom DJ add-on for your booked DJ package",
-};
-
-export const isContestActive = () => new Date() < CONTEST.endDate;
+// Legacy shim — real contest state now lives in DB (contest_settings) via useContestSettings.
+// Kept only for BookingConfirmed's "good luck" nudge, which does a fast client-side check.
+const FALLBACK_END = new Date("2026-09-02T03:59:59Z");
+export const isContestActive = () => Date.now() < FALLBACK_END.getTime();
