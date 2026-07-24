@@ -23,7 +23,7 @@ const ContestBanner = () => {
                 🎉 {settings.contest_name}
               </p>
               <h3 className="font-display text-xl md:text-2xl font-bold mb-2">
-                Win a FREE DJ Package for your event
+                Contest: Win a FREE DJ Package!
               </h3>
               <p className="text-muted-foreground text-sm mb-3">
                 Enter now — good luck! Contest ends {endsLabel}.
