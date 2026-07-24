@@ -24,7 +24,7 @@ const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
 const CONTEST_END = new Date("2026-09-01T23:59:59-04:00");
-const FROM = "Jake <hello@hersky.ca>";
+const FROM = "Jake <hersky.ott@gmail.com>";
 
 type Ctx = {
   name: string;
