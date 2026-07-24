@@ -89,7 +89,7 @@ const GiveawayRulesPage = () => {
 
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">9. Contact</h2>
-              <p>Questions? Contact hello@hersky.ca.</p>
+              <p>Questions? Contact hersky.ott@gmail.com.</p>
             </section>
           </div>
         </div>
