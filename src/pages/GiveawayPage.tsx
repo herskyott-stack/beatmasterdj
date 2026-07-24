@@ -208,7 +208,7 @@ const GiveawayPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-24 md:pt-28 pb-32 md:pb-16">
+      <main className="pt-24 md:pt-28 pb-12">
         <div className="container mx-auto px-4 max-w-3xl">
           <div className="text-center mb-6 md:mb-8">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/15 border border-primary/30 text-xs uppercase tracking-wider text-primary font-display mb-3">
@@ -268,20 +268,39 @@ const GiveawayPage = () => {
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}/>
                   </div>
 
-                  <label className="flex items-start gap-3 text-sm cursor-pointer">
-                    <Checkbox checked={form.agree}
-                      onCheckedChange={(v) => setForm({ ...form, agree: v === true })}/>
-                    <span className="text-muted-foreground">
+                  <label
+                    htmlFor="agree"
+                    className="flex items-start gap-3 text-sm cursor-pointer rounded-lg border border-primary/40 bg-primary/5 p-4"
+                  >
+                    <Checkbox
+                      id="agree"
+                      checked={form.agree}
+                      onCheckedChange={(v) => setForm({ ...form, agree: v === true })}
+                      className="mt-0.5 h-5 w-5 border-primary data-[state=checked]:bg-primary"
+                    />
+                    <span className="text-foreground leading-snug">
                       I agree to the{" "}
                       <Link to="/giveaway/rules" target="_blank" className="text-primary underline">
                         contest rules
-                      </Link>.
+                      </Link>
+                      . <span className="text-muted-foreground">(required to enter)</span>
                     </span>
                   </label>
 
-                  <Button type="submit" variant="hero" size="lg" className="w-full">
+                  <Button
+                    type="submit"
+                    variant="hero"
+                    size="lg"
+                    className="w-full"
+                    disabled={!form.agree}
+                  >
                     Continue <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
+                  {!form.agree && (
+                    <p className="text-xs text-center text-muted-foreground">
+                      Check the box above to continue
+                    </p>
+                  )}
                 </form>
               )}
 
