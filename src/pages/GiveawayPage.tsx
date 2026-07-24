@@ -279,17 +279,9 @@ const GiveawayPage = () => {
                     </span>
                   </label>
 
-                  <Button type="submit" variant="hero" size="lg"
-                    className="w-full hidden md:flex">
+                  <Button type="submit" variant="hero" size="lg" className="w-full">
                     Continue <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
-
-                  {/* Mobile sticky CTA */}
-                  <div className="fixed inset-x-0 bottom-0 z-40 p-3 bg-background/90 backdrop-blur border-t border-border md:hidden">
-                    <Button type="submit" variant="hero" size="lg" className="w-full">
-                      Continue <ArrowRight className="w-4 h-4 ml-2" />
-                    </Button>
-                  </div>
                 </form>
               )}
 
