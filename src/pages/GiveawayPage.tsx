@@ -394,12 +394,13 @@ const GiveawayPage = () => {
                       onChange={(e) => setForm({ ...form, special_requests: e.target.value })}/>
                   </div>
 
-                  <div className="flex gap-3">
-                    <Button type="button" variant="outline" onClick={() => setStep(1)}>Back</Button>
-                    <Button type="submit" variant="hero" size="lg" className="flex-1" disabled={submitting}>
-                      {submitting ? "Submitting…" : "Submit Entry — Good Luck!"}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Button type="button" variant="outline" onClick={() => setStep(1)} className="sm:w-auto w-full">Back</Button>
+                    <Button type="submit" variant="hero" size="lg" className="flex-1 w-full whitespace-normal text-sm sm:text-base leading-tight px-4" disabled={submitting}>
+                      {submitting ? "Submitting…" : "Submit Entry"}
                     </Button>
                   </div>
+
                 </form>
               )}
 
