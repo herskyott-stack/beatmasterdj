@@ -171,10 +171,53 @@ serve(async (req) => {
       }
     }
 
+    const emailPayload = {
+      name: String(full_name).trim(),
+      email: String(email).trim(),
+      phone: phone ? String(phone).trim() : undefined,
+      packageName: inquiry?.interested_package_name ?? undefined,
+      packageCategory: inquiry?.interested_package_category ?? undefined,
+      packagePrice: inquiry?.interested_package_price
+        ? `$${Number(inquiry.interested_package_price).toLocaleString("en-CA")} + HST`
+        : undefined,
+      eventType: inquiry?.event_type ?? undefined,
+      eventDate: inquiry?.event_date ?? undefined,
+      venue: inquiry?.venue_location ?? undefined,
+      guestCount: inquiry?.guest_count ? String(inquiry.guest_count) : undefined,
+      notes: inquiry?.special_requests ?? undefined,
+    };
+
+    const [customerEmail, adminEmail] = await Promise.allSettled([
+      admin.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "contest-confirmation",
+          recipientEmail: String(email).trim(),
+          idempotencyKey: `contest-confirmation-${inserted.id}`,
+          templateData: emailPayload,
+        },
+      }),
+      admin.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "contest-admin-notification",
+          recipientEmail: "hersky.ott@gmail.com",
+          idempotencyKey: `contest-admin-notification-${inserted.id}`,
+          templateData: emailPayload,
+        },
+      }),
+    ]);
+
+    const emailQueued = [customerEmail, adminEmail].map((result) =>
+      result.status === "fulfilled" && !result.value.error
+    );
+    if (!emailQueued.every(Boolean)) {
+      console.error("contest email enqueue incomplete", { emailQueued, entryId: inserted.id });
+    }
+
     return new Response(JSON.stringify({
       ok: true,
       entry_id: inserted.id,
       inquiry_id: inquiryId,
+      email_queued: { customer: emailQueued[0], admin: emailQueued[1] },
     }), {
       headers: { ...cors, "Content-Type": "application/json" },
     });
