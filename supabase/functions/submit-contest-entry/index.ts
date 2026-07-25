@@ -108,13 +108,13 @@ serve(async (req) => {
       });
     }
 
-    // IP throttle: 3/hr
+    // IP throttle: 20/hr (relaxed to reduce false positives during testing/shared IPs)
     const { count: ipCount } = await admin
       .from("contest_entries")
       .select("id", { count: "exact", head: true })
       .eq("ip_hash", ip_hash)
       .gte("created_at", oneHourAgo);
-    if ((ipCount ?? 0) >= 3) {
+    if ((ipCount ?? 0) >= 20) {
       return new Response(JSON.stringify({ error: "Too many submissions. Please try again later." }), {
         status: 429, headers: { ...cors, "Content-Type": "application/json" },
       });
