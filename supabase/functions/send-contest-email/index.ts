@@ -30,6 +30,7 @@ const esc = (s: unknown) =>
 const CONTEST_END = new Date("2026-09-01T23:59:59-04:00");
 const FROM = "Jake at BeatMaster DJ <jake@hersky.ca>";
 const REPLY_TO = "hersky.ott@gmail.com";
+const ADMIN_EMAIL = "hersky.ott@gmail.com";
 const SITE = "https://beatmasterdj.ca";
 
 const shell = (bodyHtml: string, unsubUrl: string) => `
@@ -342,22 +343,76 @@ serve(async (req) => {
       return new Response(JSON.stringify({ ok: true, skipped: "contest_ended" }),
         { headers: { ...cors, "Content-Type": "application/json" } });
     }
-    // Look up unsubscribe token if we have this entrant
+    // Look up unsubscribe token + full entry/inquiry for admin notification
     let unsubToken: string | null = null;
+    let entryRow: any = null;
+    let inquiryRow: any = null;
     try {
-      const { data } = await admin()
-        .from("contest_entries").select("unsubscribe_token, unsubscribed_at")
-        .ilike("email", email).limit(1).maybeSingle();
+      const sb = admin();
+      const { data } = await sb
+        .from("contest_entries")
+        .select("id, full_name, email, phone, unsubscribe_token, unsubscribed_at, interested_package_category, interested_package_name, interested_package_price, event_inquiry_id, created_at")
+        .ilike("email", email).order("created_at", { ascending: false }).limit(1).maybeSingle();
       if (data?.unsubscribed_at) {
         return new Response(JSON.stringify({ ok: true, skipped: "unsubscribed" }),
           { headers: { ...cors, "Content-Type": "application/json" } });
       }
+      entryRow = data;
       unsubToken = data?.unsubscribe_token ?? null;
-    } catch { /* ignore */ }
+      if (data?.event_inquiry_id) {
+        const { data: inq } = await sb.from("contest_event_inquiries")
+          .select("*").eq("id", data.event_inquiry_id).maybeSingle();
+        inquiryRow = inq;
+      }
+    } catch (e) { console.error("lookup entry", e); }
 
     const res = await sendOne(email, name, type, { category, packageName }, unsubToken);
-    return new Response(JSON.stringify({ ok: true, id: (res as any).data?.id }),
-      { headers: { ...cors, "Content-Type": "application/json" } });
+    const resendId = (res as any)?.data?.id ?? null;
+    const resendErr = (res as any)?.error ?? null;
+    if (resendErr) console.error("resend error (entrant)", resendErr);
+
+    // Admin notification on confirmation
+    let adminId: string | null = null;
+    let adminErr: any = null;
+    if (type === "confirmation") {
+      const rowsHtml = [
+        ["Name", entryRow?.full_name ?? name],
+        ["Email", email],
+        ["Phone", entryRow?.phone ?? "—"],
+        ["Package", `${esc(category ?? entryRow?.interested_package_category ?? "—")} — ${esc(packageName ?? entryRow?.interested_package_name ?? "—")}`],
+        ["Price", entryRow?.interested_package_price ? `$${entryRow.interested_package_price}` : "—"],
+        ["Event type", inquiryRow?.event_type ?? "—"],
+        ["Event date", inquiryRow?.event_date ?? "—"],
+        ["Venue", inquiryRow?.venue_location ?? "—"],
+        ["Guest count", inquiryRow?.guest_count ?? "—"],
+        ["Notes", inquiryRow?.special_requests ?? "—"],
+        ["Entry ID", entryRow?.id ?? "—"],
+      ].map(([k, v]) => `<tr><td style="padding:6px 10px;border-bottom:1px solid #eee;color:#666;">${esc(k)}</td><td style="padding:6px 10px;border-bottom:1px solid #eee;">${esc(v)}</td></tr>`).join("");
+      const adminHtml = `<h2 style="font-family:'Playfair Display',Georgia,serif;color:#d4a574;">New Contest Entry</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:14px;">${rowsHtml}</table>
+        <p style="margin-top:16px;"><a href="${SITE}/admin/contest-signups" style="color:#d4a574;">View in admin dashboard →</a></p>`;
+      try {
+        const adminRes = await resend.emails.send({
+          from: FROM,
+          to: [ADMIN_EMAIL],
+          reply_to: email,
+          subject: `🎉 New contest entry: ${entryRow?.full_name ?? name} (${category ?? "—"} / ${packageName ?? "—"})`,
+          html: shell(adminHtml, `${SITE}/admin/contest-signups`),
+        });
+        adminId = (adminRes as any)?.data?.id ?? null;
+        adminErr = (adminRes as any)?.error ?? null;
+        if (adminErr) console.error("resend error (admin)", adminErr);
+      } catch (e) {
+        console.error("admin notify failed", e);
+        adminErr = String(e);
+      }
+    }
+
+    return new Response(JSON.stringify({
+      ok: !resendErr,
+      entrant: { id: resendId, error: resendErr },
+      admin: type === "confirmation" ? { id: adminId, error: adminErr } : undefined,
+    }), { headers: { ...cors, "Content-Type": "application/json" } });
   } catch (err) {
     console.error("send-contest-email error", err);
     return new Response(JSON.stringify({ error: String(err) }),
