@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.190.0/http/server.ts'
 import { createClient } from 'npm:@supabase/supabase-js@2.57.2'
-import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors'
+const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS' }
 
 const EXPECTED_TXT_HOST = '_lovable-email.beatmasterdj.ca'
 const EXPECTED_TXT_VALUE = 'lovable_email_verify=2b7b3e1ac0252e9b68a3ddcc0625a11ef8b2c07262f0abcb12c5eb25f9657651'
