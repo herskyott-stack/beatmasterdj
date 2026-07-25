@@ -11,7 +11,6 @@ import LaserSweep from "./LaserSweep";
 import SpectrumStrip from "./SpectrumStrip";
 import PageTransitionFX from "./PageTransitionFX";
 import GlowTrail from "./GlowTrail";
-import MarqueeTicker from "./MarqueeTicker";
 // import WaveformProgress from "./WaveformProgress"; // disabled per user request
 import FloatingGear from "./FloatingGear";
 
@@ -27,7 +26,6 @@ const FXLayer = () => {
       <GlowTrail />
       <HUDCorners />
       {/* <SpectrumStrip /> removed — replaced by vertical tempo fader */}
-      <MarqueeTicker />
       <EqualizerBars />
       <VinylSpinner />
       <BeatDropBurst />
