@@ -1,79 +1,40 @@
 /// <reference types="npm:@types/react@18.3.1" />
 
 import * as React from 'npm:react@18.3.1'
+import { Body, Button, Container, Head, Heading, Html, Link, Preview, Section, Text } from 'npm:@react-email/components@0.0.22'
 
-import {
-  Body,
-  Button,
-  Container,
-  Head,
-  Heading,
-  Html,
-  Link,
-  Preview,
-  Text,
-} from 'npm:@react-email/components@0.0.22'
+interface Props { siteName: string; siteUrl: string; confirmationUrl: string }
 
-interface InviteEmailProps {
-  siteName: string
-  siteUrl: string
-  confirmationUrl: string
-}
-
-export const InviteEmail = ({
-  siteName,
-  siteUrl,
-  confirmationUrl,
-}: InviteEmailProps) => (
+export const InviteEmail = ({ siteName, siteUrl, confirmationUrl }: Props) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>You've been invited to join {siteName}</Preview>
     <Body style={main}>
       <Container style={container}>
-        <Heading style={h1}>You've been invited</Heading>
-        <Text style={text}>
-          You've been invited to join{' '}
-          <Link href={siteUrl} style={link}>
-            <strong>{siteName}</strong>
-          </Link>
-          . Click the button below to accept the invitation and create your
-          account.
-        </Text>
-        <Button style={button} href={confirmationUrl}>
-          Accept Invitation
-        </Button>
-        <Text style={footer}>
-          If you weren't expecting this invitation, you can safely ignore this
-          email.
-        </Text>
+        <Section style={header}>
+          <Text style={brand}>BeatMaster DJ</Text>
+          <Text style={tagline}>Hersky DJ &amp; AV · Ottawa</Text>
+        </Section>
+        <Section style={body}>
+          <Heading style={h1}>You've been invited</Heading>
+          <Text style={text}>You've been invited to join <Link href={siteUrl} style={link}><strong>{siteName}</strong></Link>. Click below to accept and create your account.</Text>
+          <Button style={button} href={confirmationUrl}>Accept Invitation</Button>
+          <Text style={footer}>If you weren't expecting this invitation, you can safely ignore this email.</Text>
+        </Section>
       </Container>
     </Body>
   </Html>
 )
-
 export default InviteEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const link = { color: 'inherit', textDecoration: 'underline' }
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const main = { backgroundColor: '#ffffff', fontFamily: 'Georgia, "Times New Roman", serif', color: '#2b2b2b' }
+const container = { maxWidth: '600px', margin: '0 auto', backgroundColor: '#ffffff', borderRadius: '8px', overflow: 'hidden' as const }
+const header = { backgroundColor: '#1a1a1a', padding: '20px 28px' }
+const brand = { fontFamily: 'Playfair Display, Georgia, serif', color: '#d4a574', fontSize: '22px', letterSpacing: '0.5px', margin: '0' }
+const tagline = { color: '#bbbbbb', fontSize: '12px', margin: '4px 0 0' }
+const body = { padding: '28px' }
+const h1 = { fontFamily: 'Playfair Display, Georgia, serif', fontSize: '24px', color: '#1a1a1a', margin: '0 0 16px' }
+const text = { fontSize: '15px', color: '#2b2b2b', lineHeight: '1.55', margin: '0 0 18px' }
+const link = { color: '#d4a574', textDecoration: 'underline' }
+const button = { backgroundColor: '#d4a574', color: '#1a1a1a', fontSize: '15px', fontWeight: 'bold' as const, borderRadius: '6px', padding: '12px 24px', textDecoration: 'none', display: 'inline-block' }
+const footer = { fontSize: '12px', color: '#888888', margin: '28px 0 0', lineHeight: '1.5' }
