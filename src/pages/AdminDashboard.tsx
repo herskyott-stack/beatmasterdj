@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -139,6 +139,10 @@ const AdminDashboard = () => {
               <Button variant="hero" onClick={() => navigate("/admin/contest")}>
                 <Trophy className="w-4 h-4 mr-2" />
                 Contest Signups
+              </Button>
+              <Button variant="hero" onClick={() => navigate("/admin/email-status")}>
+                <Mail className="w-4 h-4 mr-2" />
+                Email DNS Status
               </Button>
               <Button variant="outline" onClick={() => navigate("/client-portal")}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
