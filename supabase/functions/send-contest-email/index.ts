@@ -30,6 +30,7 @@ const esc = (s: unknown) =>
 const CONTEST_END = new Date("2026-09-01T23:59:59-04:00");
 const FROM = "Jake at BeatMaster DJ <jake@hersky.ca>";
 const REPLY_TO = "hersky.ott@gmail.com";
+const ADMIN_EMAIL = "hersky.ott@gmail.com";
 const SITE = "https://beatmasterdj.ca";
 
 const shell = (bodyHtml: string, unsubUrl: string) => `
