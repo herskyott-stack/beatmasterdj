@@ -1,84 +1,61 @@
-
 ## Goal
 
-1. When you click **Pick Winner → Confirm** in the admin panel, automatically email **every entrant**:
-   - Winner gets email **#9** (winner announcement, with their name).
-   - All non-winners get email **#9** (announcing the winner's first name) immediately followed by email **#10** (the "$200 off" conversion offer).
-2. Replace the current 3-template drip (confirmation / 24h / 48h) with your full **10-email sequence** on the exact cadence you specified (0m, 24h, 3d, 7d, 14d, 21d, 30d, 45d, +winner blast).
-3. Harden deliverability so the emails don't land in spam.
+Give you a live DNS checklist in the admin area for `notify.beatmasterdj.ca`, then verify the full contest email pipeline (immediate customer + admin emails on signup, plus the automated drip) works the moment DNS goes green.
 
----
+## Current state (verified)
 
-## Part 1 — Winner blast to all entrants
+- Sender domain `notify.beatmasterdj.ca` exists but is **pending** — the 3 DNS records (1 TXT `_lovable-email` + 2 NS on `notify`) are not detected yet.
+- `submit-contest-entry` already enqueues both customer (`contest-confirmation`) and admin (`contest-admin-notification`) emails immediately on signup via the free internal queue.
+- pg_cron job `contest-drip-followups` runs every 15 min and calls `send-contest-email` with `run_followups` — day 1/3/7/14/21/30/45 drip is wired.
+- Recent `process-email-queue` logs show sends failing with `403 domain_not_verified` — confirming the ONLY blocker is DNS at the registrar.
 
-**Admin UI (`src/pages/admin/ContestSignups.tsx`)**
-- Keep the existing "Pick Winner" weighted draw modal.
-- In `confirmWinner()`, after saving `is_winner=true`, call a new edge action `send-contest-email` with `type: "announce_all"` and `{ winnerName, winnerId, contestId }`. Show a toast: "Winner saved. Announcement queued to N entrants."
-- Add a confirmation checkbox in the modal: "Also email all non-winners the $200-off follow-up" (default on).
+## Plan
 
-**Edge function (`supabase/functions/send-contest-email/index.ts`)**
-- New branch `type === "announce_all"`:
-  1. Load all entries for the contest.
-  2. For the winner → send email **#9** (`winner` template) with the full prize line.
-  3. For every non-winner → send email **#9** (loser variant naming the winner's first name) and email **#10** (`$200 off, book by Sept 30`) as two separate messages ~30 seconds apart to avoid burst throttling.
-  4. Batch through Resend with small concurrency (5 at a time) and record `winner_email_sent_at` / `loser_email_sent_at` per entry so re-clicks don't double-send.
+### 1. Admin DNS Status page (`/admin/email-status`)
 
----
+New page + edge function that does live DNS-over-HTTPS lookups (Cloudflare `1.1.1.1/dns-query`) so you see real propagation, not cached state:
 
-## Part 2 — Full 10-email drip sequence
+- New edge function `check-dns-status` (admin-only, JWT + `has_role` check):
+  - Queries TXT `_lovable-email.beatmasterdj.ca` → expects `lovable_email_verify=2b7b3e1a…`
+  - Queries NS `notify.beatmasterdj.ca` → expects `ns3.lovable.cloud` and `ns4.lovable.cloud`
+  - Returns `{ txt: {found, value, ok}, ns: {found[], ok}, allGreen }`
+- New page `src/pages/admin/EmailStatus.tsx`:
+  - 3-row checklist with ✅/❌ per record, expected value shown, "Copy" button
+  - "Re-check now" button + auto-refresh every 30s until all green
+  - Once `allGreen`, unlocks a **"Send test emails"** panel with two buttons:
+    - **Send to customer test** → prompts for an email, enqueues `contest-confirmation`
+    - **Send to admin** → enqueues `contest-admin-notification` to `hersky.ott@gmail.com`
+  - Live tail of the last 10 rows from `email_send_log` (deduped by `message_id`) with status badges
+- Add route in `App.tsx` and a "DNS & Email Status" link in `AdminDashboard.tsx`.
 
-Replace the existing `templates` map with the 10 templates in your brief, keyed:
+### 2. Guarantee immediate signup emails
 
-| # | Key | Trigger |
-|---|---|---|
-| 1 | `confirmation` | Instant on submit (already wired in `submit-contest-entry` flow) |
-| 2 | `day_1` | +24h via cron |
-| 3 | `day_3` | +3 days via cron |
-| 4 | `day_7` | +7 days via cron |
-| 5 | `day_14` | +14 days via cron |
-| 6 | `day_21` | +21 days via cron |
-| 7 | `day_30` | +30 days via cron |
-| 8 | `day_45` | +45 days via cron |
-| 9 | `winner` / `loser` | On winner pick (Part 1) |
-| 10 | `discount_offer` | On winner pick (Part 1, non-winners only) |
+`submit-contest-entry` already fires both emails — I'll harden it so you can trust "immediately":
 
-**Schema (migration)** — add nullable timestamps on `contest_entries`:
-`email_day1_sent_at, email_day3_sent_at, email_day7_sent_at, email_day14_sent_at, email_day21_sent_at, email_day30_sent_at, email_day45_sent_at, winner_email_sent_at, loser_email_sent_at`. (Keeps the two legacy `followup_24h_sent_at/48h` columns untouched.)
+- Return the two enqueue results in the response so the client shows a real success/warning toast.
+- On the giveaway success screen, add a one-line note: "A confirmation is on its way to <email>."
+- Log every enqueue to `email_send_log` with `message_id = contest-confirmation-<entry_id>` (idempotency key already in place — verifying it lands as a row).
 
-**Cron worker** — rewrite the `run_followups` branch of `send-contest-email` to loop over each of the 7 timed emails: select entries where `created_at <= now - Xd AND email_dayX_sent_at IS NULL AND is_winner = false`, send, stamp the column. Cap at 100 sends per run. Auto-stop stays: if `now > CONTEST_END`, skip all timed sends (winner/loser blast still allowed).
+### 3. End-to-end verification (once DNS is green)
 
-**Schedule** — one `pg_cron` job hitting `/functions/v1/send-contest-email` with `{ "type":"run_followups" }` every 15 minutes (created via `supabase--insert`, not migration, per rules).
+I'll run this from the admin page + query `email_send_log`:
 
-**Content** — email bodies use your exact copy, wrapped in a single branded HTML shell (Hersky DJ gold/rose palette, Playfair display header, plain-text alternative auto-generated by Resend). Signed "Jake — BeatMaster DJ".
+1. Submit a real entry via the giveaway form using a test email you provide (or `hersky.ott+test@gmail.com`).
+2. Confirm within seconds: customer row `status=sent`, admin row `status=sent`.
+3. Manually invoke `send-contest-email` with `{type:"run_followups"}` to prove the drip path also sends (won't actually send anything for the fresh entry — the day-1 cutoff prevents that — but I'll temporarily backdate the test row's `created_at` to trigger `day_1`, then reset it).
+4. Report back the exact `email_send_log` rows.
 
----
+### 4. What you still need to do (one-time, ~5 min)
 
-## Part 3 — Anti-spam / deliverability
+Only DNS at your registrar for `beatmasterdj.ca`. The admin page tells you exactly which of the 3 records is missing at any moment — no guessing.
 
-- **From address**: switch `FROM` from `Jake <hersky.ott@gmail.com>` (unverifiable, near-guaranteed spam) to a verified domain sender such as `Jake <jake@hersky.ca>` (domain already used elsewhere in project). Reply-To stays `hersky.ott@gmail.com` so replies still land in your Gmail. You'll need to confirm `hersky.ca` is verified in Resend (SPF + DKIM); if not, I'll flag the exact DNS records to add.
-- **Headers on every send**:
-  - `List-Unsubscribe: <mailto:unsubscribe@hersky.ca?subject=unsubscribe>, <https://beatmasterdj.ca/unsubscribe?e={token}>`
-  - `List-Unsubscribe-Post: List-Unsubscribe=One-Click` (Gmail/Yahoo bulk-sender requirement)
-  - `Reply-To: hersky.ott@gmail.com`
-- **Unsubscribe page**: add `/unsubscribe` route + `unsubscribed_at` column on `contest_entries`; cron/blast skips unsubscribed rows.
-- **Footer** on every template: physical/business contact line + one-click unsubscribe link (CASL + CAN-SPAM compliant).
-- **Content hygiene**: avoid all-caps subjects, no "FREE!!!" repetition, keep image/text ratio balanced, single CTA per email, plain-text version generated automatically.
-- **Throttling**: max 5 concurrent Resend calls, 200 ms spacing, so a large blast doesn't trip rate limits or spam heuristics.
+## Technical notes
 
----
+- DNS lookup via `https://cloudflare-dns.com/dns-query` with `Accept: application/dns-json` — no dependencies, works from Deno.
+- Admin gate: `check-dns-status` verifies JWT and calls `has_role(auth.uid(), 'admin')` server-side; page also gated by `useAdminCheck`.
+- Test-send buttons reuse existing `send-transactional-email` — no new sending path.
+- `config.toml` gets `[functions.check-dns-status] verify_jwt = true`.
 
-## Technical details
+## Out of scope
 
-**Files**
-- `supabase/functions/send-contest-email/index.ts` — rewrite template map (10 templates + shared HTML shell), new `announce_all` branch, updated `run_followups` loop, add `List-Unsubscribe` headers, honor `unsubscribed_at`.
-- `src/pages/admin/ContestSignups.tsx` — modal copy + call `announce_all` instead of single `winner`.
-- `src/pages/UnsubscribePage.tsx` (new) — token-based one-click unsubscribe.
-- `src/App.tsx` — register `/unsubscribe` route.
-- Migration: add drip/blast timestamp columns + `unsubscribed_at` + `unsubscribe_token` to `contest_entries`.
-- `supabase--insert` (not migration): schedule pg_cron job.
-
-**Idempotency**: every send checks the corresponding `*_sent_at IS NULL` before dispatching and stamps the column on success.
-
-**User action required after build**
-- Confirm `hersky.ca` is verified in Resend (or tell me which verified domain to send from).
-- Approve the migration when prompted.
+- Cannot bypass DNS verification — the email provider rejects unverified domains at the API. The admin page makes the remaining step self-serve and observable; it can't skip it.
