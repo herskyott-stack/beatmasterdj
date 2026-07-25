@@ -198,18 +198,17 @@ const ContestSignups = () => {
         .update({ winner_entry_id: drawResult.id, announcement_date: now })
         .eq("id", settings.id);
     }
-    const t = toast.loading("Sending announcement to all entrants…");
+    const t = toast.loading("Sending one contest result email to each entrant…");
     const { data, error: fnErr } = await supabase.functions.invoke("send-contest-email", {
       body: {
         type: "announce_all",
         contestId: drawResult.contest_id,
         winnerId: drawResult.id,
-        includeDiscount: true,
       },
     });
     toast.dismiss(t);
     if (fnErr) toast.error("Winner saved but email blast failed — check logs");
-    else toast.success(`Winner saved. Emailed ${(data as any)?.sent ?? 0} entrants.`);
+    else toast.success(`Winner saved. Sent one result email to ${(data as any)?.sent ?? 0} entrants.`);
     setDrawOpen(false);
     setDrawResult(null);
     load();
@@ -429,11 +428,14 @@ const ContestSignups = () => {
               <p className="text-xs text-muted-foreground">
                 Drawn from {stats.tickets} tickets · {stats.total} entries
               </p>
+              <p className="text-sm text-muted-foreground">
+                Confirming will email the winner and all {Math.max(0, stats.total - 1)} non-winners once. No discount email will be sent.
+              </p>
             </div>
           )}
           <DialogFooter>
             <Button variant="outline" onClick={runDraw}>Redraw</Button>
-            <Button variant="hero" onClick={confirmWinner}>Confirm winner &amp; send email</Button>
+            <Button variant="hero" onClick={confirmWinner}>Confirm &amp; email all entrants</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
