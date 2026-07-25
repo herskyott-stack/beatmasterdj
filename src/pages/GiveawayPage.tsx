@@ -139,18 +139,6 @@ const GiveawayPage = () => {
 
     setEntryId(payload?.entry_id ?? null);
 
-    // fire-and-forget confirmation email
-    supabase.functions.invoke("send-contest-email", {
-      body: {
-        type: "confirmation",
-        email: form.email,
-        name: form.full_name,
-        category: getPackageById(form.packageId)?.categoryLabel,
-        packageName: getPackageById(form.packageId)?.name,
-        packagePrice: getPackageById(form.packageId)?.price,
-      },
-    }).catch(() => {});
-
     setStep(3);
     localStorage.removeItem(LS_KEY);
     window.scrollTo({ top: 0, behavior: "smooth" });
