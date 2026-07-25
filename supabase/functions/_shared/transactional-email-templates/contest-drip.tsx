@@ -37,7 +37,6 @@ export const day3: TemplateEntry = {
         'Jake was incredible. Professional, fun, and the music was perfect.',
         'Best DJ in Ottawa. Period.',
       ]}
-      paragraphs2={undefined as never}
       signoff="Talk soon,"
     />
   ),
@@ -118,7 +117,6 @@ export const day30: TemplateEntry = {
         '10:00 — Late-night music',
         '11:30 — Final songs',
       ]}
-      paragraphs2={undefined as never}
       signoff="Talk soon,"
     />
   ),
@@ -190,7 +188,6 @@ export const discountOffer: TemplateEntry = {
         'This discount applies to:',
       ]}
       bullets={['Ceremony', 'Cocktail hour', 'Reception', 'MC services', 'Lighting', 'Custom playlists']}
-      paragraphs2={undefined as never}
       ctaLabel="Book your date"
       ctaHref={SITE}
       signoff="Talk soon,"
