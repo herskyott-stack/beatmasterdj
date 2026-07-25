@@ -11,6 +11,9 @@ export type TemplateEntry = {
 import { template as contestConfirmation } from './contest-confirmation.tsx'
 import { template as contestAdminNotification } from './contest-admin-notification.tsx'
 import { day1, day3, day7, day14, day21, day30, day45, winner, loser, discountOffer } from './contest-drip.tsx'
+import { template as bookingNotification } from './booking-notification.tsx'
+import { template as musicSubmission } from './music-submission.tsx'
+import { template as eventReminder } from './event-reminder.tsx'
 
 export const TEMPLATES: Record<string, TemplateEntry> = {
   'contest-confirmation': contestConfirmation,
@@ -25,4 +28,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   'contest-winner': winner,
   'contest-loser': loser,
   'contest-discount-offer': discountOffer,
+  'booking-notification': bookingNotification,
+  'music-submission': musicSubmission,
+  'event-reminder': eventReminder,
 }

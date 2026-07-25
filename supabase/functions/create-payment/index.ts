@@ -23,13 +23,6 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CREATE-PAYMENT] ${step}${detailsStr}`);
 };
 
-const esc = (s: unknown) =>
-  String(s ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-
 // Server-side DJ notification. Runs BEFORE the Stripe redirect so the DJ
 // always receives the booking details, even if the customer's browser never
 // returns to /booking-confirmed. A "PENDING PAYMENT" tag is used; a follow-up
@@ -39,60 +32,26 @@ async function sendDjNotification(
   payload: Record<string, string>,
   sessionId?: string,
 ) {
-  const apiKey = Deno.env.get("RESEND_API_KEY");
-  if (!apiKey) {
-    console.error("[CREATE-PAYMENT] RESEND_API_KEY missing — cannot email DJ");
-    return { ok: false, error: "email_service_unavailable" };
-  }
-  const label = status === "paid" ? "✅ PAID" : "⏳ PENDING PAYMENT";
-  const subject = `${label} — Booking: ${payload["9. Package Category"] || ""} ${payload["10. Package Name"] || ""} · ${payload["1. First Name"] || ""} ${payload["2. Last Name"] || ""}`.trim();
-
-  const rows = Object.keys(payload)
-    .filter((k) => !k.startsWith("_"))
-    .sort((a, b) => {
-      const na = parseInt(a.split(".")[0], 10);
-      const nb = parseInt(b.split(".")[0], 10);
-      if (isNaN(na) || isNaN(nb)) return a.localeCompare(b);
-      return na - nb;
-    })
-    .map(
-      (k) =>
-        `<tr><td style="padding:6px 10px;border:1px solid #eee;background:#faf7f0;font-weight:600;white-space:nowrap">${esc(
-          k,
-        )}</td><td style="padding:6px 10px;border:1px solid #eee">${esc(payload[k])}</td></tr>`,
-    )
-    .join("");
-
-  const html = `
-    <div style="font-family:Arial,sans-serif;color:#111">
-      <h2 style="margin:0 0 8px">${esc(label)} — New Booking</h2>
-      ${sessionId ? `<p style="margin:0 0 12px;color:#555">Stripe session: <code>${esc(sessionId)}</code></p>` : ""}
-      <table style="border-collapse:collapse;border:1px solid #eee">${rows}</table>
-    </div>`;
-
   try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
+    const emailClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    );
+    const { data, error } = await emailClient.functions.invoke("send-transactional-email", {
+      body: {
+        templateName: "booking-notification",
+        recipientEmail: "hersky.ott@gmail.com",
+        idempotencyKey: `booking-${status}-${sessionId ?? crypto.randomUUID()}`,
+        templateData: { status, sessionId, details: payload },
       },
-      body: JSON.stringify({
-        from: "Hersky DJ & AV <notifications@hersky.ca>",
-        to: ["hersky.ott@gmail.com"],
-        reply_to: payload["3. Email Address"] || undefined,
-        subject,
-        html,
-      }),
     });
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("[CREATE-PAYMENT] Resend error", res.status, text);
-      return { ok: false, error: `resend_${res.status}` };
+    if (error) {
+      console.error("[CREATE-PAYMENT] Email queue error", error);
+      return { ok: false, error: error.message };
     }
-    return { ok: true };
+    return { ok: true, data };
   } catch (e) {
-    console.error("[CREATE-PAYMENT] Resend threw", e);
+    console.error("[CREATE-PAYMENT] Email queue threw", e);
     return { ok: false, error: String(e) };
   }
 }
