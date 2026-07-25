@@ -1,22 +1,19 @@
 project_id = "atxceyzigqadmsasxags"
 
-[functions.create-payment]
-verify_jwt = false
-
-[functions.send-music-notification]
-verify_jwt = false
-
-[functions.send-event-reminder]
-verify_jwt = false
-
-[functions.send-contest-email]
-verify_jwt = false
-
-[functions.submit-contest-entry]
-verify_jwt = false
-
-[functions.verify-booking-payment]
-verify_jwt = false
-
-[functions.process-email-queue]
-verify_jwt = true
+[functions]
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.create-payment]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true
+  [functions.send-contest-email]
+    verify_jwt = false
+  [functions.send-event-reminder]
+    verify_jwt = false
+  [functions.send-music-notification]
+    verify_jwt = false
+  [functions.submit-contest-entry]
+    verify_jwt = false
+  [functions.verify-booking-payment]
+    verify_jwt = false
