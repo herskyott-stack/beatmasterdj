@@ -1,7 +1,7 @@
 // send-contest-email — routes ALL contest emails through the free internal
 // transactional queue (send-transactional-email). No Resend, no billing.
 // Kept the same public API: { type, email, name } for single sends,
-// { type: "announce_all", contestId, winnerId, includeDiscount? } for the blast,
+// { type: "announce_all", contestId, winnerId } for one result email per entrant,
 // { type: "run_followups" } for the pg_cron drip.
 
 import { serve } from 'https://deno.land/std@0.190.0/http/server.ts'
@@ -75,7 +75,6 @@ serve(async (req) => {
     if (body.type === 'announce_all') {
       const contestId: string | undefined = body.contestId
       const winnerId: string | undefined = body.winnerId
-      const includeDiscount: boolean = body.includeDiscount !== false
       if (!contestId || !winnerId) {
         return new Response(JSON.stringify({ error: 'contestId and winnerId required' }), {
           status: 400,
@@ -113,14 +112,6 @@ serve(async (req) => {
         sent++
       })
 
-      if (includeDiscount) {
-        const discountList = list.filter((e) => e.id !== winnerId && !e.unsubscribed_at && !e.discount_email_sent_at)
-        await pool(discountList, 5, async (e) => {
-          await sendOne(sb, e.email, 'contest-discount-offer', { name: e.full_name }, `discount-${e.id}`)
-          await sb.from('contest_entries').update({ discount_email_sent_at: now.toISOString() }).eq('id', e.id)
-          sent++
-        })
-      }
       return new Response(JSON.stringify({ ok: true, sent, skipped, total: list.length }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       })
