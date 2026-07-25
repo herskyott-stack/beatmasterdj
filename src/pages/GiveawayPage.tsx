@@ -147,20 +147,25 @@ const GiveawayPage = () => {
   const saveBonus = async () => {
     if (!entryId) { toast.error("Missing entry reference"); return; }
     setSavingBonus(true);
-    const { error } = await supabase
-      .from("contest_entries")
-      .update({
-        bonus_followed_instagram: bonus.followed,
-        bonus_shared_story: bonus.shared,
-        bonus_tagged_account: bonus.tagged,
-        instagram_handle: bonus.handle.trim() || null,
-      })
-      .eq("id", entryId);
+    const { data, error } = await supabase.functions.invoke("submit-contest-entry", {
+      body: {
+        action: "update_bonus",
+        entry_id: entryId,
+        email: form.email,
+        bonus: {
+          followed: bonus.followed,
+          shared: bonus.shared,
+          tagged: bonus.tagged,
+          handle: bonus.handle,
+        },
+      },
+    });
     setSavingBonus(false);
-    if (error) { toast.error("Could not save bonus info"); return; }
+    if (error || (data as any)?.error) { toast.error("Could not save bonus info"); return; }
     setBonusSaved(true);
     toast.success("Bonus entries recorded — pending verification");
   };
+
 
   if (loading) {
     return (

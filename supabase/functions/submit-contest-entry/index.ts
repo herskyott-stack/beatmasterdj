@@ -65,11 +65,45 @@ serve(async (req) => {
     }
 
     const body = await req.json();
+
+    // Bonus update action: scoped to a specific entry + email match; no RLS needed on client
+    if (body?.action === "update_bonus") {
+      const { entry_id, email: bEmail, bonus } = body ?? {};
+      if (typeof entry_id !== "string" || typeof bEmail !== "string" || !bonus) {
+        return new Response(JSON.stringify({ error: "Invalid bonus payload" }), {
+          status: 400, headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
+      const { data: row } = await admin
+        .from("contest_entries").select("id,email").eq("id", entry_id).maybeSingle();
+      if (!row || String(row.email).toLowerCase() !== String(bEmail).toLowerCase()) {
+        return new Response(JSON.stringify({ error: "Entry not found" }), {
+          status: 404, headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
+      const handle = typeof bonus.handle === "string" ? bonus.handle.trim().slice(0, 60) : null;
+      const { error: uErr } = await admin.from("contest_entries").update({
+        bonus_followed_instagram: !!bonus.followed,
+        bonus_shared_story: !!bonus.shared,
+        bonus_tagged_account: !!bonus.tagged,
+        instagram_handle: handle || null,
+      }).eq("id", entry_id);
+      if (uErr) {
+        return new Response(JSON.stringify({ error: "Could not save bonus info" }), {
+          status: 500, headers: { ...cors, "Content-Type": "application/json" },
+        });
+      }
+      return new Response(JSON.stringify({ ok: true }), {
+        headers: { ...cors, "Content-Type": "application/json" },
+      });
+    }
+
     const {
       full_name, email, phone,
       source_page, website, agreed_to_rules,
       inquiry,
     } = body ?? {};
+
 
     // Honeypot
     if (typeof website === "string" && website.trim() !== "") {
