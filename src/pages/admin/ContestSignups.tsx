@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  ArrowLeft, Download, Trash2, Crown, Mail, Settings as SettingsIcon,
-  ShieldCheck, Ticket, Instagram, Dice5,
+  ArrowLeft, Download, Trash2, Crown, Send, Settings as SettingsIcon,
+  ShieldCheck, Ticket, Instagram, Dice5, Copy, AlertCircle, Eye,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
@@ -14,7 +14,6 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
@@ -41,6 +40,7 @@ type Entry = {
   bonus_verified: boolean;
   instagram_handle: string | null;
   event_inquiry_id: string | null;
+  dedupe_override: boolean;
 };
 
 type Inquiry = {
@@ -56,7 +56,22 @@ type Inquiry = {
   interested_package_price: number | null;
 };
 
-const ticketsFor = (e: Entry) => {
+const FOLLOWUP_STEPS: { key: string; label: string; when: string }[] = [
+  { key: "confirmation", label: "Instant · Entry confirmation", when: "On signup" },
+  { key: "day_1", label: "Day 1 · What you could win", when: "+1 day" },
+  { key: "day_3", label: "Day 3 · Testimonials", when: "+3 days" },
+  { key: "day_7", label: "Day 7 · Sample mix", when: "+7 days" },
+  { key: "day_14", label: "Day 14 · Date check-in", when: "+14 days" },
+  { key: "day_21", label: "Day 21 · FAQ", when: "+21 days" },
+  { key: "day_30", label: "Day 30 · Timeline resource", when: "+30 days" },
+  { key: "day_45", label: "Day 45 · Date holding", when: "+45 days" },
+  { key: "winner", label: "Winner announcement", when: "On draw" },
+  { key: "loser", label: "Non-winner announcement", when: "On draw" },
+  { key: "discount_offer", label: "Consolation $200 off", when: "Manual" },
+];
+
+const ticketsForEffective = (e: Entry, suppressed: boolean) => {
+  if (suppressed) return 0;
   const claimed = e.bonus_followed_instagram && e.bonus_shared_story && e.bonus_tagged_account;
   return 1 + (claimed && e.bonus_verified ? 3 : 0);
 };
@@ -72,6 +87,7 @@ const ContestSignups = () => {
   const [detail, setDetail] = useState<Entry | null>(null);
   const [drawResult, setDrawResult] = useState<Entry | null>(null);
   const [drawOpen, setDrawOpen] = useState(false);
+  const [sendingPreview, setSendingPreview] = useState<string | null>(null);
 
   useEffect(() => {
     if (!adminLoading && !isAdmin) navigate("/auth");
@@ -79,7 +95,7 @@ const ContestSignups = () => {
 
   const load = async () => {
     const [{ data: e }, { data: i }] = await Promise.all([
-      supabase.from("contest_entries").select("*").order("created_at", { ascending: false }),
+      supabase.from("contest_entries").select("*").order("created_at", { ascending: true }),
       supabase.from("contest_event_inquiries").select("*"),
     ]);
     setEntries((e as Entry[]) || []);
@@ -91,25 +107,61 @@ const ContestSignups = () => {
 
   useEffect(() => { if (isAdmin) load(); }, [isAdmin]);
 
+  // ── Duplicate detection ────────────────────────────────────────────
+  // Group by lower(email). Oldest entry in each group is the "primary".
+  // Newer entries in the same group are auto-suppressed unless
+  // dedupe_override=true.
+  const { suppressedIds, duplicateGroups } = useMemo(() => {
+    const groups: Record<string, Entry[]> = {};
+    entries.forEach((e) => {
+      const k = e.email.toLowerCase().trim();
+      (groups[k] ||= []).push(e);
+    });
+    const suppressed = new Set<string>();
+    const dupGroups: Record<string, Entry[]> = {};
+    Object.entries(groups).forEach(([k, list]) => {
+      if (list.length < 2) return;
+      dupGroups[k] = list;
+      // list is asc; primary = list[0]
+      list.slice(1).forEach((e) => {
+        if (!e.dedupe_override) suppressed.add(e.id);
+      });
+    });
+    return { suppressedIds: suppressed, duplicateGroups: dupGroups };
+  }, [entries]);
+
+  const sortedForDisplay = useMemo(
+    () => [...entries].sort((a, b) => +new Date(b.created_at) - +new Date(a.created_at)),
+    [entries],
+  );
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    if (!q) return entries;
-    return entries.filter((e) =>
+    if (!q) return sortedForDisplay;
+    return sortedForDisplay.filter((e) =>
       e.full_name.toLowerCase().includes(q) ||
       e.email.toLowerCase().includes(q) ||
       (e.interested_package_name ?? "").toLowerCase().includes(q) ||
       (e.instagram_handle ?? "").toLowerCase().includes(q)
     );
-  }, [entries, search]);
+  }, [sortedForDisplay, search]);
 
   const stats = useMemo(() => {
-    const claimed = entries.filter((e) =>
+    const counted = entries.filter((e) => !suppressedIds.has(e.id));
+    const claimed = counted.filter((e) =>
       e.bonus_followed_instagram && e.bonus_shared_story && e.bonus_tagged_account).length;
-    const verified = entries.filter((e) =>
+    const verified = counted.filter((e) =>
       e.bonus_verified && e.bonus_followed_instagram && e.bonus_shared_story && e.bonus_tagged_account).length;
-    const tickets = entries.reduce((sum, e) => sum + ticketsFor(e), 0);
-    return { total: entries.length, claimed, verified, tickets };
-  }, [entries]);
+    const tickets = counted.reduce((sum, e) => sum + ticketsForEffective(e, false), 0);
+    return {
+      total: counted.length,
+      raw: entries.length,
+      duplicates: suppressedIds.size,
+      claimed,
+      verified,
+      tickets,
+    };
+  }, [entries, suppressedIds]);
 
   const daysRemaining = settings
     ? Math.max(0, Math.ceil((new Date(settings.end_date).getTime() - Date.now()) / 86400000))
@@ -124,17 +176,31 @@ const ContestSignups = () => {
     setEntries((prev) => prev.map((x) => x.id === e.id ? { ...x, bonus_verified: next } : x));
   };
 
+  const toggleOverride = async (e: Entry) => {
+    const next = !e.dedupe_override;
+    const { error } = await supabase.from("contest_entries")
+      .update({ dedupe_override: next }).eq("id", e.id);
+    if (error) return toast.error("Override failed");
+    setEntries((prev) => prev.map((x) => x.id === e.id ? { ...x, dedupe_override: next } : x));
+    toast.success(next ? "Duplicate now counts" : "Duplicate suppressed");
+  };
+
   const exportCsv = () => {
     const headers = [
-      "Name", "Email", "Phone", "Package Category", "Package", "Package Price",
+      "Name", "Email", "Duplicate?", "Counts?", "Phone", "Package Category", "Package", "Package Price",
       "Event Type", "Event Date", "Venue", "Guests", "Special Requests",
       "IG Handle", "Bonus Followed", "Bonus Shared", "Bonus Tagged", "Bonus Verified",
       "Total Tickets", "Winner", "Winner Announced", "Entered At",
     ];
     const rows = entries.map((e) => {
       const inq = inquiries[e.id];
+      const isDup = !!duplicateGroups[e.email.toLowerCase().trim()];
+      const suppressed = suppressedIds.has(e.id);
       return [
-        e.full_name, e.email, e.phone ?? "",
+        e.full_name, e.email,
+        isDup ? "Y" : "",
+        suppressed ? "" : "Y",
+        e.phone ?? "",
         e.interested_package_category ?? "", e.interested_package_name ?? "",
         e.interested_package_price != null ? String(e.interested_package_price) : "",
         inq?.event_type ?? "", inq?.event_date ?? "", inq?.venue_location ?? "",
@@ -145,7 +211,7 @@ const ContestSignups = () => {
         e.bonus_shared_story ? "Y" : "",
         e.bonus_tagged_account ? "Y" : "",
         e.bonus_verified ? "Y" : "",
-        String(ticketsFor(e)),
+        String(ticketsForEffective(e, suppressed)),
         e.is_winner ? "YES" : "",
         e.winner_announced_at ?? "",
         new Date(e.created_at).toISOString(),
@@ -171,12 +237,11 @@ const ContestSignups = () => {
   };
 
   const runDraw = () => {
-    const eligible = entries.filter((e) => !e.is_winner);
+    const eligible = entries.filter((e) => !e.is_winner && !suppressedIds.has(e.id));
     if (!eligible.length) { toast.error("No eligible entries to draw from"); return; }
-    // Weighted pool
     const pool: Entry[] = [];
     eligible.forEach((e) => {
-      const n = ticketsFor(e);
+      const n = ticketsForEffective(e, false);
       for (let i = 0; i < n; i++) pool.push(e);
     });
     const pick = pool[Math.floor(Math.random() * pool.length)];
@@ -214,6 +279,41 @@ const ContestSignups = () => {
     load();
   };
 
+  const sendPreview = async (type: string) => {
+    setSendingPreview(type);
+    const { error } = await supabase.functions.invoke("send-contest-email", {
+      body: {
+        type,
+        email: "hersky.ott@gmail.com",
+        name: "Jake (preview)",
+        category: "Wedding",
+        packageName: "Wedding Essential",
+      },
+    });
+    setSendingPreview(null);
+    if (error) toast.error(`Preview send failed: ${error.message ?? error}`);
+    else toast.success(`Queued "${type}" preview to hersky.ott@gmail.com`);
+  };
+
+  const sendAllPreviews = async () => {
+    setSendingPreview("__all__");
+    const t = toast.loading("Queueing all follow-up previews…");
+    for (const step of FOLLOWUP_STEPS) {
+      await supabase.functions.invoke("send-contest-email", {
+        body: {
+          type: step.key,
+          email: "hersky.ott@gmail.com",
+          name: "Jake (preview)",
+          category: "Wedding",
+          packageName: "Wedding Essential",
+        },
+      });
+    }
+    toast.dismiss(t);
+    setSendingPreview(null);
+    toast.success(`Queued ${FOLLOWUP_STEPS.length} preview emails`);
+  };
+
   if (adminLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -227,75 +327,87 @@ const ContestSignups = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
+        <div className="container mx-auto px-4 max-w-6xl">
+          {/* Header row */}
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-6 gap-3">
             <div>
-              <h1 className="font-display text-3xl md:text-4xl font-bold mb-1">
+              <h1 className="font-display text-2xl md:text-3xl font-bold leading-tight">
                 <span className="gradient-text">Contest Dashboard</span>
               </h1>
-              <p className="text-muted-foreground text-sm">
-                {settings?.contest_name ?? "Contest"} —{" "}
-                <span className={`inline-block px-2 py-0.5 rounded text-xs font-display uppercase tracking-wider ${
+              <p className="text-muted-foreground text-xs md:text-sm mt-1">
+                {settings?.contest_name ?? "Contest"} ·{" "}
+                <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-display uppercase tracking-wider ${
                   isActive ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"
                 }`}>
                   {isActive ? "Active" : "Closed"}
-                </span>{" "}
-                {isActive && <>· {daysRemaining} days remaining</>}
+                </span>
+                {isActive && <> · {daysRemaining}d remaining</>}
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Button variant="outline" onClick={() => navigate("/admin")}>
-                <ArrowLeft className="w-4 h-4 mr-2" /> Admin
+              <Button size="sm" variant="outline" onClick={() => navigate("/admin")}>
+                <ArrowLeft className="w-4 h-4 mr-1.5" /> Admin
               </Button>
-              <Button variant="outline" onClick={() => navigate("/admin/contest/settings")}>
-                <SettingsIcon className="w-4 h-4 mr-2" /> Settings
+              <Button size="sm" variant="outline" onClick={() => navigate("/admin/contest/settings")}>
+                <SettingsIcon className="w-4 h-4 mr-1.5" /> Settings
               </Button>
-              <Button variant="outline" onClick={exportCsv} disabled={!entries.length}>
-                <Download className="w-4 h-4 mr-2" /> Export CSV
+              <Button size="sm" variant="outline" onClick={exportCsv} disabled={!entries.length}>
+                <Download className="w-4 h-4 mr-1.5" /> CSV
               </Button>
-              <Button variant="hero" onClick={runDraw} disabled={!entries.length}>
-                <Dice5 className="w-4 h-4 mr-2" /> Pick Winner
+              <Button size="sm" variant="hero" onClick={runDraw} disabled={!entries.length}>
+                <Dice5 className="w-4 h-4 mr-1.5" /> Pick Winner
               </Button>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <Card variant="glass"><CardContent className="pt-6">
-              <p className="text-2xl font-bold">{stats.total}</p>
-              <p className="text-sm text-muted-foreground">Total Entries</p>
+          {/* Stats row */}
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-5">
+            <Card variant="glass"><CardContent className="p-4">
+              <p className="text-xl font-bold leading-tight">{stats.total}</p>
+              <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Counted</p>
+              {stats.raw !== stats.total && (
+                <p className="text-[10px] text-muted-foreground/70 mt-0.5">of {stats.raw} raw</p>
+              )}
             </CardContent></Card>
-            <Card variant="glass"><CardContent className="pt-6 flex items-center gap-3">
-              <Instagram className="w-7 h-7 text-primary" />
+            <Card variant="glass"><CardContent className="p-4 flex items-center gap-2">
+              <Copy className="w-5 h-5 text-yellow-500 shrink-0" />
               <div>
-                <p className="text-2xl font-bold">{stats.claimed}</p>
-                <p className="text-sm text-muted-foreground">Bonus Claimed</p>
+                <p className="text-xl font-bold leading-tight">{Object.keys(duplicateGroups).length}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Dup emails</p>
               </div>
             </CardContent></Card>
-            <Card variant="glass"><CardContent className="pt-6 flex items-center gap-3">
-              <ShieldCheck className="w-7 h-7 text-primary" />
+            <Card variant="glass"><CardContent className="p-4 flex items-center gap-2">
+              <Instagram className="w-5 h-5 text-primary shrink-0" />
               <div>
-                <p className="text-2xl font-bold">{stats.verified}</p>
-                <p className="text-sm text-muted-foreground">Bonus Verified</p>
+                <p className="text-xl font-bold leading-tight">{stats.claimed}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Bonus claimed</p>
               </div>
             </CardContent></Card>
-            <Card variant="glass"><CardContent className="pt-6 flex items-center gap-3">
-              <Ticket className="w-7 h-7 text-primary" />
+            <Card variant="glass"><CardContent className="p-4 flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
               <div>
-                <p className="text-2xl font-bold">{stats.tickets}</p>
-                <p className="text-sm text-muted-foreground">Tickets in Draw</p>
+                <p className="text-xl font-bold leading-tight">{stats.verified}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Verified</p>
+              </div>
+            </CardContent></Card>
+            <Card variant="glass"><CardContent className="p-4 flex items-center gap-2">
+              <Ticket className="w-5 h-5 text-primary shrink-0" />
+              <div>
+                <p className="text-xl font-bold leading-tight">{stats.tickets}</p>
+                <p className="text-[11px] text-muted-foreground uppercase tracking-wider">Draw tickets</p>
               </div>
             </CardContent></Card>
           </div>
 
           {winner && (
-            <Card variant="glass" className="mb-6 border-primary/40">
-              <CardContent className="pt-6 flex items-center gap-3">
-                <Crown className="w-8 h-8 text-primary" />
-                <div className="flex-1">
-                  <p className="text-xs uppercase tracking-wider text-primary font-display">Winner</p>
-                  <p className="font-semibold">{winner.full_name} — {winner.email}</p>
+            <Card variant="glass" className="mb-5 border-primary/40">
+              <CardContent className="p-4 flex items-center gap-3">
+                <Crown className="w-6 h-6 text-primary" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-[10px] uppercase tracking-wider text-primary font-display">Winner</p>
+                  <p className="font-semibold text-sm truncate">{winner.full_name} — {winner.email}</p>
                   {winner.winner_announced_at && (
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[10px] text-muted-foreground">
                       Announced {formatContestDateTime(winner.winner_announced_at)}
                     </p>
                   )}
@@ -305,14 +417,33 @@ const ContestSignups = () => {
             </Card>
           )}
 
-          <Card variant="glass">
-            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-              <CardTitle>Participants ({filtered.length})</CardTitle>
+          {/* Duplicate warning banner */}
+          {Object.keys(duplicateGroups).length > 0 && (
+            <Card variant="glass" className="mb-5 border-yellow-500/40">
+              <CardContent className="p-4 flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-yellow-500 shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="font-semibold">
+                    {Object.keys(duplicateGroups).length} duplicate email{Object.keys(duplicateGroups).length > 1 ? "s" : ""} detected
+                  </p>
+                  <p className="text-muted-foreground text-xs mt-0.5">
+                    The oldest entry counts by default; newer entries are auto-crossed out.
+                    Toggle <ShieldCheck className="inline w-3 h-3" /> on any crossed-out row to force it to count.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Participants table */}
+          <Card variant="glass" className="mb-6">
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 py-4">
+              <CardTitle className="text-lg">Participants ({filtered.length})</CardTitle>
               <Input placeholder="Search name, email, package, IG…"
                 value={search} onChange={(e) => setSearch(e.target.value)}
-                className="max-w-xs" />
+                className="max-w-xs h-9" />
             </CardHeader>
-            <CardContent>
+            <CardContent className="pt-0">
               {filtered.length === 0 ? (
                 <p className="text-center text-muted-foreground py-8">No entries.</p>
               ) : (
@@ -330,19 +461,33 @@ const ContestSignups = () => {
                     <TableBody>
                       {filtered.map((e) => {
                         const claimed = e.bonus_followed_instagram && e.bonus_shared_story && e.bonus_tagged_account;
+                        const emailKey = e.email.toLowerCase().trim();
+                        const isDup = !!duplicateGroups[emailKey];
+                        const suppressed = suppressedIds.has(e.id);
                         return (
                           <TableRow key={e.id}
-                            className={`cursor-pointer ${e.is_winner ? "bg-primary/5" : ""}`}
+                            className={`cursor-pointer ${e.is_winner ? "bg-primary/5" : ""} ${suppressed ? "opacity-50" : ""}`}
                             onClick={() => setDetail(e)}>
-                            <TableCell className="font-medium">
+                            <TableCell className={`font-medium ${suppressed ? "line-through" : ""}`}>
                               {e.full_name}
                               {e.is_winner && (
                                 <span className="ml-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider bg-primary/20 text-primary px-1.5 py-0.5 rounded">
                                   <Crown className="w-3 h-3" /> Winner
                                 </span>
                               )}
+                              {isDup && (
+                                <span
+                                  className={`ml-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                                    suppressed ? "bg-yellow-500/20 text-yellow-500" : "bg-emerald-500/20 text-emerald-500"
+                                  }`}
+                                  title={suppressed ? "Auto-suppressed duplicate" : e.dedupe_override ? "Admin override — counts" : "Primary entry"}
+                                >
+                                  <Copy className="w-3 h-3" />
+                                  {suppressed ? "Dup" : e.dedupe_override ? "Dup·on" : "Primary"}
+                                </span>
+                              )}
                             </TableCell>
-                            <TableCell className="text-sm">{e.email}</TableCell>
+                            <TableCell className={`text-sm ${suppressed ? "line-through" : ""}`}>{e.email}</TableCell>
                             <TableCell className="text-xs">
                               {e.interested_package_name
                                 ? <><div className="font-semibold">{e.interested_package_name}</div>
@@ -356,12 +501,26 @@ const ContestSignups = () => {
                                     : <span className="text-muted-foreground">Claimed</span>)
                                 : <span className="text-muted-foreground/60">—</span>}
                             </TableCell>
-                            <TableCell className="tabular-nums font-display text-primary">{ticketsFor(e)}</TableCell>
+                            <TableCell className="tabular-nums font-display text-primary">
+                              {ticketsForEffective(e, suppressed)}
+                            </TableCell>
                             <TableCell className="text-xs">
                               {new Date(e.created_at).toLocaleDateString()}
                             </TableCell>
                             <TableCell className="text-right space-x-1"
                               onClick={(ev) => ev.stopPropagation()}>
+                              {isDup && suppressed && (
+                                <Button size="sm" variant="outline" onClick={() => toggleOverride(e)}
+                                  title="Force this duplicate to count">
+                                  Count
+                                </Button>
+                              )}
+                              {isDup && !suppressed && e.dedupe_override && (
+                                <Button size="sm" variant="ghost" onClick={() => toggleOverride(e)}
+                                  title="Remove override">
+                                  Un-count
+                                </Button>
+                              )}
                               <Button size="sm" variant={e.bonus_verified ? "hero" : "ghost"}
                                 onClick={() => toggleVerify(e)}
                                 title={e.bonus_verified ? "Un-verify bonus" : "Verify bonus"}>
@@ -380,6 +539,43 @@ const ContestSignups = () => {
               )}
             </CardContent>
           </Card>
+
+          {/* Follow-up email previews */}
+          <Card variant="glass">
+            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 py-4">
+              <div>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Eye className="w-4 h-4" /> Follow-up email previews
+                </CardTitle>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Sends each scheduled contest email to <strong>hersky.ott@gmail.com</strong> so you can review the copy.
+                </p>
+              </div>
+              <Button size="sm" variant="hero" onClick={sendAllPreviews}
+                disabled={sendingPreview !== null}>
+                <Send className="w-4 h-4 mr-1.5" />
+                {sendingPreview === "__all__" ? "Sending…" : "Send all previews"}
+              </Button>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {FOLLOWUP_STEPS.map((s) => (
+                  <div key={s.key}
+                    className="flex items-center justify-between gap-3 border border-border/50 rounded-lg px-3 py-2">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium truncate">{s.label}</p>
+                      <p className="text-[11px] text-muted-foreground">{s.when} · <code className="text-[10px]">{s.key}</code></p>
+                    </div>
+                    <Button size="sm" variant="outline"
+                      disabled={sendingPreview !== null}
+                      onClick={() => sendPreview(s.key)}>
+                      {sendingPreview === s.key ? "…" : "Send"}
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </main>
       <Footer />
@@ -394,7 +590,12 @@ const ContestSignups = () => {
               <div><span className="text-muted-foreground">Phone:</span> {detail.phone || "—"}</div>
               <div><span className="text-muted-foreground">IG Handle:</span> {detail.instagram_handle || "—"}</div>
               <div><span className="text-muted-foreground">Entered:</span> {formatContestDateTime(detail.created_at)}</div>
-              <div><span className="text-muted-foreground">Tickets:</span> <span className="font-display text-primary">{ticketsFor(detail)}</span></div>
+              <div><span className="text-muted-foreground">Tickets:</span> <span className="font-display text-primary">{ticketsForEffective(detail, suppressedIds.has(detail.id))}</span></div>
+              {suppressedIds.has(detail.id) && (
+                <div className="text-yellow-500 text-xs">
+                  Auto-suppressed duplicate. Click "Count" in the row to override.
+                </div>
+              )}
               <hr className="border-border" />
               <p className="text-xs uppercase tracking-wider text-primary font-display">Package Interest</p>
               <div>{detail.interested_package_name || "—"} <span className="text-muted-foreground">({detail.interested_package_category || "—"})</span></div>
