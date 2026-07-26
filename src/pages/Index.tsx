@@ -21,6 +21,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <ContestBanner />
+        <BookingPreview />
         <ServicesSection />
         <FeaturedGallery />
         <PackagesSection />
