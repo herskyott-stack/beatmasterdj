@@ -125,22 +125,9 @@ serve(async (req) => {
     const ip_hash = await sha256(`${ip}:contest`);
     const oneHourAgo = new Date(Date.now() - 3600_000).toISOString();
 
-    // Duplicate email → friendly return with existing entry id
-    const { data: existing } = await admin
-      .from("contest_entries")
-      .select("id")
-      .ilike("email", email)
-      .maybeSingle();
-    if (existing?.id) {
-      return new Response(JSON.stringify({
-        ok: false,
-        code: "duplicate_email",
-        entry_id: existing.id,
-        error: "Looks like you're already entered — good luck!",
-      }), {
-        status: 200, headers: { ...cors, "Content-Type": "application/json" },
-      });
-    }
+    // Duplicate emails are ALLOWED — admins see the flag in the dashboard and
+    // can choose which entry counts (default: oldest wins, newer is auto-crossed
+    // out until an admin toggles the override).
 
     // IP throttle: 20/hr (relaxed to reduce false positives during testing/shared IPs)
     const { count: ipCount } = await admin

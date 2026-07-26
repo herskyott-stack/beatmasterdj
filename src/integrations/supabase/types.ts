@@ -23,6 +23,7 @@ export type Database = {
           bonus_verified: boolean
           contest_id: string
           created_at: string
+          dedupe_override: boolean
           discount_email_sent_at: string | null
           email: string
           email_day1_sent_at: string | null
@@ -61,6 +62,7 @@ export type Database = {
           bonus_verified?: boolean
           contest_id?: string
           created_at?: string
+          dedupe_override?: boolean
           discount_email_sent_at?: string | null
           email: string
           email_day1_sent_at?: string | null
@@ -99,6 +101,7 @@ export type Database = {
           bonus_verified?: boolean
           contest_id?: string
           created_at?: string
+          dedupe_override?: boolean
           discount_email_sent_at?: string | null
           email?: string
           email_day1_sent_at?: string | null

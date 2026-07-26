@@ -33,6 +33,7 @@ const ContactSection = () => {
                 <input type="hidden" name="_subject" value="New DJ Booking Inquiry!" />
                 <input type="hidden" name="_captcha" value="false" />
                 <input type="hidden" name="_template" value="table" />
+                <input type="hidden" name="_autoresponse" value="Thanks for reaching out to BeatMaster DJ & AV! I got your inquiry and will get back to you within 24 hours. — Jake" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">First Name</label>
