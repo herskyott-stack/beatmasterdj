@@ -26,7 +26,7 @@ type Package = {
 };
 
 // Category images map
-const categoryImages: Record<string, string> = {
+export const categoryImages: Record<string, string> = {
   weddings: weddingPackageImg,
   corporate: corporatePackageImg,
   schools: schoolPackageImg,
@@ -36,7 +36,8 @@ const categoryImages: Record<string, string> = {
   av: avPackageImg,
 };
 
-const packageData: Record<string, Package[]> = {
+export type { Package };
+export const packageData: Record<string, Package[]> = {
   weddings: [
     {
       name: "Essential",
