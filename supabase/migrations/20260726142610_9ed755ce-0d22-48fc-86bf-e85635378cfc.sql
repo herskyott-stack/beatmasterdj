@@ -1,0 +1,1 @@
+DROP INDEX IF EXISTS public.contest_entries_email_unique;
