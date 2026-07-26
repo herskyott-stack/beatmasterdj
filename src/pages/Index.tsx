@@ -6,6 +6,7 @@ import ServicesSection from "@/components/ServicesSection";
 import PackagesSection from "@/components/PackagesSection";
 import AddonsSection from "@/components/AddonsSection";
 import FeaturedGallery from "@/components/home/FeaturedGallery";
+import BookingPreview from "@/components/home/BookingPreview";
 import GallerySection from "@/components/GallerySection";
 import ContestBanner from "@/components/contest/ContestBanner";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -20,6 +21,7 @@ const Index = () => {
       <main>
         <HeroSection />
         <ContestBanner />
+        <BookingPreview />
         <ServicesSection />
         <FeaturedGallery />
         <PackagesSection />
