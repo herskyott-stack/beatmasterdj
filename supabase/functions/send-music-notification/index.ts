@@ -78,27 +78,30 @@ const handler = async (req: Request): Promise<Response> => {
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
-    const { error } = await emailClient.functions.invoke("send-transactional-email", {
-      body: {
-        templateName: "music-submission",
-        recipientEmail: "hersky.ott@gmail.com",
-        idempotencyKey: `music-submission-${user.id}-${Date.now()}`,
-        templateData: {
-          clientName,
-          clientEmail,
-          eventDate: eventDate ? new Date(eventDate).toLocaleDateString("en-CA") : undefined,
-          eventLocation,
-          prioritySongs,
-          additionalSongs,
-          doNotPlaySongs,
+    const templateData = {
+      clientName,
+      clientEmail,
+      eventDate: eventDate ? new Date(eventDate).toLocaleDateString("en-CA") : undefined,
+      eventLocation,
+      prioritySongs,
+      additionalSongs,
+      doNotPlaySongs,
+    };
+    const sendMusic = (recipient: string, keySuffix: string) =>
+      emailClient.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "music-submission",
+          recipientEmail: recipient,
+          idempotencyKey: `music-submission-${user.id}-${keySuffix}-${Date.now()}`,
+          templateData,
         },
-      },
-    });
-
-    if (error) {
-      console.error("Email queue error:", error);
-      throw error;
-    }
+      });
+    const [{ error: adminErr }, customerRes] = await Promise.all([
+      sendMusic("hersky.ott@gmail.com", "admin"),
+      clientEmail ? sendMusic(clientEmail, "customer") : Promise.resolve({ error: null } as any),
+    ]);
+    if (adminErr) { console.error("Admin music email error:", adminErr); throw adminErr; }
+    if ((customerRes as any)?.error) console.error("Customer music email error:", (customerRes as any).error);
 
     console.log("Music notification email queued successfully");
 

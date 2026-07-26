@@ -68,17 +68,22 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
-    const { error: emailError } = await emailClient.functions.invoke("send-transactional-email", {
-      body: {
-        templateName: "booking-notification",
-        recipientEmail: "hersky.ott@gmail.com",
-        idempotencyKey: `booking-paid-${session.id}`,
-        templateData: { status: "paid", sessionId: session.id, details: payload },
-      },
-    });
-    if (emailError) {
-      console.error("[VERIFY-BOOKING] Email queue error", emailError);
-    }
+    const customerEmail = String(session.customer_details?.email ?? md.customer_email ?? "").trim();
+    const sendBooking = (recipient: string, keySuffix: string) =>
+      emailClient.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "booking-notification",
+          recipientEmail: recipient,
+          idempotencyKey: `booking-paid-${session.id}-${keySuffix}`,
+          templateData: { status: "paid", sessionId: session.id, details: payload },
+        },
+      });
+    const [{ error: adminErr }, customerRes] = await Promise.all([
+      sendBooking("hersky.ott@gmail.com", "admin"),
+      customerEmail ? sendBooking(customerEmail, "customer") : Promise.resolve({ error: null } as any),
+    ]);
+    if (adminErr) console.error("[VERIFY-BOOKING] admin email queue error", adminErr);
+    if ((customerRes as any)?.error) console.error("[VERIFY-BOOKING] customer email queue error", (customerRes as any).error);
 
     return new Response(
       JSON.stringify({
