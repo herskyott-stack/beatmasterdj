@@ -18,7 +18,7 @@ import { CONTEST_PACKAGES, getPackageById } from "@/lib/contestPackages";
 import ContestCountdown from "@/components/contest/ContestCountdown";
 
 const LS_KEY = "beatmasterdj_giveaway_form_v1";
-const IG_HANDLE = "beatmasterdj";
+const IG_HANDLE = "beatmasterdj.ca";
 const IG_URL = `https://instagram.com/${IG_HANDLE}`;
 
 const entrySchema = z.object({
@@ -435,12 +435,12 @@ const GiveawayPage = () => {
                       <label className="flex items-start gap-3 text-sm cursor-pointer">
                         <Checkbox checked={bonus.shared}
                           onCheckedChange={(v) => setBonus({ ...bonus, shared: v === true })}/>
-                        <span>Share the contest post to your story</span>
+                        <span>Share the contest post to your Instagram <strong>story</strong></span>
                       </label>
                       <label className="flex items-start gap-3 text-sm cursor-pointer">
                         <Checkbox checked={bonus.tagged}
                           onCheckedChange={(v) => setBonus({ ...bonus, tagged: v === true })}/>
-                        <span>Tag @{IG_HANDLE} in the story</span>
+                        <span>Tag <strong>3 friends</strong> in the post's comments — anyone getting married, planning a party, or booking an event soon</span>
                       </label>
                     </div>
 
