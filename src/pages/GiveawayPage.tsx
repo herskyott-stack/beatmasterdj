@@ -39,14 +39,14 @@ const inquirySchema = z.object({
 });
 
 type FormState = {
-  full_name: string; email: string; phone: string; agree: boolean;
+  full_name: string; email: string; phone: string; agree: boolean; sms_opt_in: boolean;
   event_type: string; event_date: string; venue_location: string;
   guest_count: string; packageId: string; special_requests: string;
   website: string;
 };
 
 const empty: FormState = {
-  full_name: "", email: "", phone: "", agree: false,
+  full_name: "", email: "", phone: "", agree: false, sms_opt_in: false,
   event_type: "", event_date: "", venue_location: "",
   guest_count: "", packageId: "", special_requests: "",
   website: "",
