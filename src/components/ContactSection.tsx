@@ -76,7 +76,7 @@ const ContactSection = () => {
                     <option value="">Select event type or package</option>
                     <optgroup label="Wedding">
                       <option value="Wedding - General Inquiry">Wedding — General Inquiry</option>
-                      <option value="Wedding - Essential Package">Wedding — Essential ($1,750)</option>
+                      <option value="Wedding - Essential Package">Wedding — Essential ($1,800)</option>
                       <option value="Wedding - Premium Package">Wedding — Premium ($2,800)</option>
                       <option value="Wedding - Luxury Package">Wedding — Luxury ($4,200)</option>
                     </optgroup>
