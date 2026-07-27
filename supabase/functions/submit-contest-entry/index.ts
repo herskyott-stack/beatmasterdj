@@ -148,6 +148,7 @@ serve(async (req) => {
         full_name: String(full_name).trim(),
         email: String(email).trim(),
         phone: phone ? String(phone).trim() : null,
+        sms_opt_in: sms_opt_in === true && !!phone,
         contest_id: "beatmasterdj-summer-giveaway",
         source_page: source_page || "giveaway_page",
         agreed_to_rules: true,
