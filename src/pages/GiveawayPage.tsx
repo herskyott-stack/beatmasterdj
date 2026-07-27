@@ -106,6 +106,7 @@ const GiveawayPage = () => {
         full_name: form.full_name,
         email: form.email,
         phone: form.phone || null,
+        sms_opt_in: form.sms_opt_in && !!(form.phone && form.phone.trim()),
         agreed_to_rules: form.agree,
         source_page: "giveaway_page",
         website: form.website,
