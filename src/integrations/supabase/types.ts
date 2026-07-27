@@ -46,6 +46,11 @@ export type Database = {
           is_winner: boolean
           loser_email_sent_at: string | null
           phone: string | null
+          sms_day7_sent_at: string | null
+          sms_entry_sent_at: string | null
+          sms_final_sent_at: string | null
+          sms_opt_in: boolean
+          sms_winner_sent_at: string | null
           source_page: string
           status: string
           unsubscribe_token: string | null
@@ -85,6 +90,11 @@ export type Database = {
           is_winner?: boolean
           loser_email_sent_at?: string | null
           phone?: string | null
+          sms_day7_sent_at?: string | null
+          sms_entry_sent_at?: string | null
+          sms_final_sent_at?: string | null
+          sms_opt_in?: boolean
+          sms_winner_sent_at?: string | null
           source_page?: string
           status?: string
           unsubscribe_token?: string | null
@@ -124,6 +134,11 @@ export type Database = {
           is_winner?: boolean
           loser_email_sent_at?: string | null
           phone?: string | null
+          sms_day7_sent_at?: string | null
+          sms_entry_sent_at?: string | null
+          sms_final_sent_at?: string | null
+          sms_opt_in?: boolean
+          sms_winner_sent_at?: string | null
           source_page?: string
           status?: string
           unsubscribe_token?: string | null
