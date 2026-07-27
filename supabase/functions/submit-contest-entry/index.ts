@@ -236,6 +236,13 @@ serve(async (req) => {
       console.error("contest email enqueue incomplete", { emailQueued, entryId: inserted.id });
     }
 
+    // Fire SMS #1 (instant thanks) — non-blocking, no-op if not opted in
+    if (sms_opt_in === true && phone) {
+      admin.functions.invoke("send-contest-sms", {
+        body: { type: "entry", entryId: inserted.id },
+      }).catch((e) => console.error("sms entry send failed", e));
+    }
+
     return new Response(JSON.stringify({
       ok: true,
       entry_id: inserted.id,
