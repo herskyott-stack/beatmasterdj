@@ -101,6 +101,7 @@ serve(async (req) => {
     const {
       full_name, email, phone,
       source_page, website, agreed_to_rules,
+      sms_opt_in,
       inquiry,
     } = body ?? {};
 
