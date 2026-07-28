@@ -16,13 +16,13 @@ const corsHeaders = {
 }
 
 const GATEWAY_URL = 'https://connector-gateway.lovable.dev/twilio'
-const CONTEST_END = new Date('2026-09-01T23:59:59-04:00')
+const CONTEST_END = new Date('2026-09-30T23:59:59-04:00')
 
 const MESSAGES = {
-  entry: 'Thanks for entering the BeatMaster DJ wedding giveaway! Winner announced Sept 1st. — beatmasterdj.ca (reply STOP to opt out)',
+  entry: 'Thanks for entering the BeatMaster DJ wedding giveaway! Winner announced Oct 1st. — beatmasterdj.ca (reply STOP to opt out)',
   day7: 'Want me to hold your wedding date while the contest runs? No commitment — just reply with your date. — BeatMaster DJ (STOP to opt out)',
-  winner: "You did it! You won the BeatMaster DJ wedding giveaway 🎉 Check your email — I'll be in touch to lock in your date.",
-  final_push: "48h left — your free wedding DJ giveaway entry closes soon. Want me to secure your date with the $200 discount? Reply YES. (STOP to opt out)",
+  winner: 'Winner announced! Check your email — and I have something special for you. — BeatMaster DJ',
+  final_push: 'Your free dry ice + $200 discount expires Oct 7th. Want me to secure your date? Reply YES. (STOP to opt out)',
 } as const
 
 const admin = () =>
