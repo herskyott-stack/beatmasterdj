@@ -184,7 +184,7 @@ export const discountOffer: TemplateEntry = {
       preview="Something for you"
       heading="You didn't win… but I have something for you"
       paragraphs={[
-        "You didn't win the free wedding — but here's $200 off any wedding package if you book by September 30th.",
+        "You didn't win the free wedding — but here's $200 off any wedding package if you book by October 7th, 2026.",
         'This discount applies to:',
       ]}
       bullets={['Ceremony', 'Cocktail hour', 'Reception', 'MC services', 'Lighting', 'Custom playlists']}
