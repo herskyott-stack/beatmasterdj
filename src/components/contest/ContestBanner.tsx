@@ -11,7 +11,7 @@ const ContestBanner = () => {
   const endsLabel = formatContestDate(settings.end_date);
 
   return (
-    <section className="py-10 md:py-14">
+    <section className="py-12 md:py-16">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary/15 via-card/60 to-secondary/15 backdrop-blur-xl border border-primary/30 rounded-2xl p-6 md:p-8 shadow-[0_0_40px_hsl(38,85%,55%,0.15)]">
           <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
