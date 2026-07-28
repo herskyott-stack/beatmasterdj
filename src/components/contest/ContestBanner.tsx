@@ -11,30 +11,31 @@ const ContestBanner = () => {
   const endsLabel = formatContestDate(settings.end_date);
 
   return (
-    <section className="py-12 md:py-16">
+    <section className="pt-20 md:pt-24 pb-4 md:pb-6">
       <div className="container mx-auto px-4">
-        <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary/15 via-card/60 to-secondary/15 backdrop-blur-xl border border-primary/30 rounded-2xl p-6 md:p-8 shadow-[0_0_40px_hsl(38,85%,55%,0.15)]">
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-5">
-            <div className="w-12 h-12 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
-              <Sparkles className="w-6 h-6 text-primary" />
+        <div className="max-w-5xl mx-auto bg-gradient-to-r from-primary/20 via-card/60 to-secondary/20 backdrop-blur-xl border border-primary/40 rounded-xl p-4 md:p-5 shadow-[0_0_30px_hsl(38,85%,55%,0.2)]">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div className="flex items-center gap-3 flex-1">
+              <div className="w-10 h-10 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
+                <Sparkles className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="text-xs uppercase tracking-wider text-primary font-display">
+                  🎉 {settings.contest_name}
+                </p>
+                <h3 className="font-display text-base md:text-lg font-bold leading-tight">
+                  Win a FREE DJ Package — ends {endsLabel}
+                </h3>
+              </div>
             </div>
-            <div className="flex-1">
-              <p className="text-xs uppercase tracking-wider text-primary font-display mb-1">
-                🎉 {settings.contest_name}
-              </p>
-              <h3 className="font-display text-xl md:text-2xl font-bold mb-2">
-                Contest: Win a FREE DJ Package!
-              </h3>
-              <p className="text-muted-foreground text-sm mb-3">
-                Enter now — good luck! Contest ends {endsLabel}.
-              </p>
+            <div className="flex items-center gap-3 sm:shrink-0">
               <ContestCountdown endDate={new Date(settings.end_date)} />
+              <Button variant="hero" size="sm" asChild className="shrink-0">
+                <Link to="/giveaway">
+                  Enter Now <ArrowRight className="w-4 h-4 ml-1" />
+                </Link>
+              </Button>
             </div>
-            <Button variant="hero" size="lg" asChild className="shrink-0">
-              <Link to="/giveaway">
-                Enter Contest <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
-            </Button>
           </div>
         </div>
       </div>
