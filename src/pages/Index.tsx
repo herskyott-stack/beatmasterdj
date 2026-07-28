@@ -3,7 +3,7 @@ import { GraduationCap, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ServicesSection from "@/components/ServicesSection";
-import PackagesSection from "@/components/PackagesSection";
+
 import AddonsSection from "@/components/AddonsSection";
 import FeaturedGallery from "@/components/home/FeaturedGallery";
 import BookingPreview from "@/components/home/BookingPreview";
@@ -24,7 +24,7 @@ const Index = () => {
         <BookingPreview />
         <ServicesSection />
         <FeaturedGallery />
-        <PackagesSection />
+        
 
         {/* Mentorship teaser */}
         <section className="py-16 md:py-20">
