@@ -6,7 +6,7 @@ import MagneticButton from "@/components/fx/MagneticButton";
 
 const HeroSection = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 md:pt-32">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-28 md:pt-32 pb-16 md:pb-24">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
@@ -50,17 +50,17 @@ const HeroSection = () => {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <div className="grid grid-cols-3 gap-3 sm:gap-6 md:gap-8 mt-12 md:mt-16 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
             {[
               { value: "500+", label: "Events Performed" },
               { value: "15+", label: "Years Experience" },
               { value: "97%", label: "Satisfaction Rate" },
             ].map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="font-display text-3xl md:text-4xl font-bold gradient-text">
+              <div key={stat.label} className="text-center min-w-0">
+                <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">
                   {stat.value}
                 </div>
-                <div className="text-sm text-muted-foreground mt-1">
+                <div className="text-xs sm:text-sm text-muted-foreground mt-1 leading-tight">
                   {stat.label}
                 </div>
               </div>
