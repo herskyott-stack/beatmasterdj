@@ -29,7 +29,7 @@ const ContestConfirmation = ({ name, packageName, eventDate }: Props) => {
         3. Tag <strong>3 friends</strong> in the post’s comments who are getting married, planning a party, or booking an event soon.
       </Text>
 
-      <Text style={styles.text}>The winner will be announced September 1, 2026. We’ll contact the winner directly using this email address.</Text>
+      <Text style={styles.text}>The winner will be announced October 1, 2026. We’ll contact the winner directly using this email address.</Text>
       <Text style={styles.text}>Good luck,<br />Jake · BeatMaster DJ</Text>
     </EmailShell>
   )
