@@ -9,7 +9,7 @@ const Navbar = () => {
   const navLinks = [
     { href: "/", label: "Home", isRoute: true },
     { href: "#services", label: "Services" },
-    { href: "#packages", label: "Packages" },
+    { href: "/book", label: "Packages", isRoute: true },
     { href: "#addons", label: "Add-Ons" },
     { href: "/mentorship", label: "Mentorship", isRoute: true },
     { href: "/giveaway", label: "Giveaway", isRoute: true },
