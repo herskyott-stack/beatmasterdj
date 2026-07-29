@@ -13,7 +13,7 @@ const ContestBanner = () => {
   return (
     <section className="pt-20 md:pt-24 pb-4 md:pb-6">
       <div className="container mx-auto px-4">
-        <div className="max-w-5xl mx-auto bg-gradient-to-r from-primary/20 via-card/60 to-secondary/20 backdrop-blur-xl border border-primary/40 rounded-xl p-4 md:p-5 shadow-[0_0_30px_hsl(38,85%,55%,0.2)]">
+        <div className="max-w-5xl mx-auto bg-gradient-to-r from-primary/20 via-card/60 to-secondary/20 backdrop-blur-xl border border-primary/40 rounded-xl p-4 md:p-5 shadow-[0_0_30px_hsl(var(--primary) / ,0.2)]">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <div className="flex items-center gap-3 flex-1">
               <div className="w-10 h-10 rounded-lg bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">

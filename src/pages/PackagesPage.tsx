@@ -565,7 +565,7 @@ const PackagesPage = () => {
 
         {/* Hero Image Header */}
         <div className="container mx-auto px-4 mb-16">
-          <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden mb-8">
+          <div className="relative h-64 md:h-80 rounded-md overflow-hidden mb-8">
             <img
               src={category ? categoryHeroImages[category] : weddingHero}
               alt={categoryData.title}

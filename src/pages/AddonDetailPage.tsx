@@ -76,7 +76,7 @@ const AddonDetailPage = () => {
 
         {/* Hero */}
         <div className="container mx-auto px-4 mb-12">
-          <div className="relative h-72 md:h-96 rounded-2xl overflow-hidden">
+          <div className="relative h-72 md:h-96 rounded-md overflow-hidden">
             {addon.image ? (
               <img
                 src={addon.image}

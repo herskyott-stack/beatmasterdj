@@ -64,7 +64,7 @@ const Navbar = () => {
           <div className="md:hidden flex items-center gap-3">
             <Link
               to="/"
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(38,85%,55%,0.25)] transition-all duration-300"
+              className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(var(--primary) / ,0.25)] transition-all duration-300"
             >
               <Home className="w-4 h-4 text-primary" />
             </Link>
