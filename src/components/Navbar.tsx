@@ -35,13 +35,13 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden xl:flex items-center gap-5">
             {navLinks.map((link) => (
               link.isRoute ? (
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="font-display text-sm uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors duration-300"
+                  className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out"
                 >
                   {link.label}
                 </Link>
@@ -49,7 +49,7 @@ const Navbar = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="font-display text-sm uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors duration-300"
+                  className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out"
                 >
                   {link.label}
                 </a>
@@ -61,7 +61,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Buttons */}
-          <div className="md:hidden flex items-center gap-3">
+          <div className="xl:hidden flex items-center gap-3">
             <Link
               to="/"
               className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(var(--primary)_/_0.25)] transition-all duration-300"
@@ -86,7 +86,7 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="font-display text-sm uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors duration-300 py-2"
+                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-2"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -95,7 +95,7 @@ const Navbar = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="font-display text-sm uppercase tracking-wider text-muted-foreground hover:text-primary transition-colors duration-300 py-2"
+                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-2"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
