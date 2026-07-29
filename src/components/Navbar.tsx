@@ -35,7 +35,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden xl:flex items-center gap-5">
+          <div className="hidden 2xl:flex items-center gap-5">
             {navLinks.map((link) => (
               link.isRoute ? (
                 <Link
@@ -61,7 +61,7 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Buttons */}
-          <div className="xl:hidden flex items-center gap-3">
+          <div className="2xl:hidden flex items-center gap-3">
             <Link
               to="/"
               className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(var(--primary)_/_0.25)] transition-all duration-300"
@@ -79,7 +79,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="xl:hidden py-4 border-t border-white/10 animate-fade-in">
+          <div className="2xl:hidden py-4 border-t border-white/10 animate-fade-in">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
                 link.isRoute ? (
