@@ -27,9 +27,9 @@ const Index = () => {
         
 
         {/* Mentorship teaser */}
-        <section className="py-16 md:py-20">
+        <section className="py-24 md:py-32">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary/15 via-card/60 to-secondary/15 backdrop-blur-xl border border-primary/30 rounded-2xl p-6 md:p-10 shadow-[0_0_40px_hsl(38,85%,55%,0.15)]">
+            <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary/15 via-card/60 to-secondary/15 backdrop-blur-xl border border-primary/30 rounded-md p-6 md:p-10 shadow-[0_0_40px_hsl(var(--primary)_/_0.15)]">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
                 <div className="w-14 h-14 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
                   <GraduationCap className="w-7 h-7 text-primary" />

@@ -373,7 +373,7 @@ const GiveawayPage = () => {
                                   onClick={() => setForm({ ...form, packageId: p.id })}
                                   className={`text-left rounded-lg border p-3 transition-all ${
                                     selected
-                                      ? "border-primary bg-primary/10 shadow-[0_0_20px_hsl(38,85%,55%,0.25)]"
+                                      ? "border-primary bg-primary/10 shadow-[0_0_20px_hsl(var(--primary)_/_0.25)]"
                                       : "border-border bg-card/40 hover:border-primary/40"
                                   }`}>
                                   <div className="flex items-start justify-between gap-2">

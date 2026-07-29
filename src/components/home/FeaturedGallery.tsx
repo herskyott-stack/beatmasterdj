@@ -31,7 +31,7 @@ const FeaturedGallery = () => {
     supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 
   return (
-    <section className="py-16 md:py-24 relative">
+    <section className="py-24 md:py-32 relative">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10 md:mb-14">
           <p className="text-xs uppercase tracking-[0.3em] text-primary font-display mb-3">
@@ -50,7 +50,7 @@ const FeaturedGallery = () => {
             <button
               key={it.id}
               onClick={() => setOpen(it)}
-              className="group relative overflow-hidden rounded-xl border border-primary/20 bg-card/40 backdrop-blur-md shadow-[0_0_30px_hsl(38,85%,55%,0.08)] hover:shadow-[0_0_40px_hsl(38,85%,55%,0.25)] hover:border-primary/50 transition-all duration-500"
+              className="group relative overflow-hidden rounded-xl border border-primary/20 bg-card/40 backdrop-blur-md shadow-[0_0_30px_hsl(var(--primary)_/_0.08)] hover:shadow-[0_0_40px_hsl(var(--primary)_/_0.25)] hover:border-primary/50 transition-all duration-500"
             >
               <div className="aspect-[4/3] w-full overflow-hidden bg-black/40">
                 {it.type === "image" ? (

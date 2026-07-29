@@ -131,7 +131,7 @@ const ServicesSection = () => {
                   
                   {/* Icon Badge */}
                   <div className="absolute bottom-4 left-4">
-                    <div className={`relative w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-lg`}>
+                    <div className={`relative w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-none`}>
                       <service.icon className={`w-6 h-6 ${service.color}`} />
                     </div>
                   </div>

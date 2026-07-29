@@ -25,7 +25,7 @@ const BookingPreview = () => {
   };
 
   return (
-    <section id="book" className="py-16 md:py-24">
+    <section id="book" className="py-24 md:py-32">
       <div className="container mx-auto px-4">
         <div className="text-center mb-10 md:mb-12">
           <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 dj-heading">

@@ -14,8 +14,8 @@ const HeroSection = () => {
           alt="Beautiful wedding celebration with DJ"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/70 to-black" />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 mix-blend-screen" />
       </div>
 
       {/* Animated Glow Effects */}
@@ -26,14 +26,14 @@ const HeroSection = () => {
       <div className="relative z-10 container mx-auto px-4 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Main Heading */}
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            <span className="text-foreground">ELEVATE YOUR</span>
+          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[0.95] animate-fade-in" style={{ animationDelay: "0.1s" }}>
+            <span className="text-white">ELEVATE YOUR</span>
             <br />
             <span className="gradient-text">EVENT EXPERIENCE</span>
           </h1>
 
           {/* Subheading */}
-          <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <p className="text-base md:text-lg text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s" }}>
             Professional DJ services for weddings, corporate events, school functions, private parties, and electrifying EDM experiences. Creating unforgettable moments through music.
           </p>
 
@@ -60,7 +60,7 @@ const HeroSection = () => {
                 <div className="font-display text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">
                   {stat.value}
                 </div>
-                <div className="text-xs sm:text-sm text-muted-foreground mt-1 leading-tight">
+                <div className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-zinc-500 mt-2 leading-tight">
                   {stat.label}
                 </div>
               </div>

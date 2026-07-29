@@ -26,7 +26,7 @@ const InstallPage = () => {
           {/* Hero Section */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-3 mb-6">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+              <div className="w-16 h-16 rounded-md bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                 <Music className="w-8 h-8 text-white" />
               </div>
             </div>
