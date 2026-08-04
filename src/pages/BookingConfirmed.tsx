@@ -82,11 +82,11 @@ const BookingConfirmed = () => {
                 tab or cancelled, your booking has not been submitted yet. Please
                 return to checkout and try again.
               </p>
-              <div className="flex gap-3 justify-center">
-                <Button variant="hero" onClick={() => navigate("/checkout")}>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button variant="hero" className="w-full sm:w-auto" onClick={() => navigate("/checkout")}>
                   Return to Checkout
                 </Button>
-                <Button variant="outline" asChild>
+                <Button variant="outline" className="w-full sm:w-auto" asChild>
                   <Link to="/">Back to Home</Link>
                 </Button>
               </div>
