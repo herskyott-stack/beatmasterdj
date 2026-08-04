@@ -26,7 +26,7 @@ const GallerySection = () => {
   const ref = useRevealOnScroll<HTMLElement>();
 
   return (
-    <section ref={ref} id="gallery" className="py-24 relative overflow-hidden bass-drop">
+    <section ref={ref} id="gallery" className="py-24 md:py-32 relative overflow-hidden bass-drop">
       {/* Background Effects */}
       <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
