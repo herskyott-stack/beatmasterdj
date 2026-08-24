@@ -27,6 +27,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
 import PipelineBoard from "@/components/admin/PipelineBoard";
+import PlannerImportPanel from "@/components/admin/PlannerImportPanel";
+import AddClientDialog from "@/components/admin/AddClientDialog";
 import type { PipelineStage } from "@/lib/pipeline";
 
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
