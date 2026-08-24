@@ -170,9 +170,12 @@ const AdminDashboard = () => {
     );
   }
 
-  if (!isAdmin) {
+  if (!canViewPayments) {
     return null;
   }
+
+  const roleLabel =
+    role === "admin" ? "Owner" : role === "finance_manager" ? "Finance Manager" : "Assistant";
 
   return (
     <div className="min-h-screen bg-background">
