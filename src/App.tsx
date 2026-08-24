@@ -30,6 +30,7 @@ import GiveawayRulesPage from "./pages/GiveawayRulesPage";
 import ContestSignups from "./pages/admin/ContestSignups";
 import ContestSettings from "./pages/admin/ContestSettings";
 import EmailStatus from "./pages/admin/EmailStatus";
+import PaymentsOverview from "./pages/admin/PaymentsOverview";
 import UnsubscribePage from "./pages/UnsubscribePage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
