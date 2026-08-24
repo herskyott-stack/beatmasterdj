@@ -101,7 +101,6 @@ serve(async (req) => {
     const {
       full_name, email, phone,
       source_page, website, agreed_to_rules,
-      sms_opt_in,
       inquiry,
     } = body ?? {};
 
@@ -148,7 +147,6 @@ serve(async (req) => {
         full_name: String(full_name).trim(),
         email: String(email).trim(),
         phone: phone ? String(phone).trim() : null,
-        sms_opt_in: sms_opt_in === true && !!phone,
         contest_id: "beatmasterdj-summer-giveaway",
         source_page: source_page || "giveaway_page",
         agreed_to_rules: true,
@@ -237,7 +235,6 @@ serve(async (req) => {
     }
 
     // Fire SMS #1 (instant thanks) — non-blocking, no-op if not opted in
-    if (sms_opt_in === true && phone) {
       admin.functions.invoke("send-contest-sms", {
         body: { type: "entry", entryId: inserted.id },
       }).catch((e) => console.error("sms entry send failed", e));

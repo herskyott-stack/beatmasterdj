@@ -103,9 +103,6 @@ serve(async (req) => {
         await sendOne(sb, winnerRow.email, 'contest-winner', { name: winnerRow.full_name }, `winner-${winnerRow.id}`)
         await sb.from('contest_entries').update({ winner_email_sent_at: now.toISOString() }).eq('id', winnerRow.id)
         sent++
-        // Fire winner SMS (non-blocking, no-op if not opted in)
-        sb.functions.invoke('send-contest-sms', { body: { type: 'winner', entryId: winnerRow.id } })
-          .catch((e) => console.error('winner sms failed', e))
       } else skipped++
 
       const losers = list.filter((e) => e.id !== winnerId && !e.unsubscribed_at && !e.loser_email_sent_at)
