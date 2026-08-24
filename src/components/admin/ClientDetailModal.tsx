@@ -382,6 +382,17 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
 
           <Separator className="bg-white/10" />
 
+          {/* Synced Planner Data (cross-site) */}
+          <div>
+            <h3 className="font-display text-lg font-semibold flex items-center gap-2 mb-4">
+              <Music className="w-5 h-5 text-primary" />
+              Synced Planner Data
+            </h3>
+            <SyncedClientPanel profileId={client.id} email={client.email} />
+          </div>
+
+          <Separator className="bg-white/10" />
+
           {/* Music Selections */}
           <div>
             <div className="flex items-center justify-between mb-4">
