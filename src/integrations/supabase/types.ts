@@ -794,6 +794,8 @@ export type Database = {
           payment_timestamp: string | null
           payment_verified: boolean
           phone: string | null
+          pipeline_stage: string
+          pipeline_stage_updated_at: string
           updated_at: string
           user_id: string
         }
@@ -817,6 +819,8 @@ export type Database = {
           payment_timestamp?: string | null
           payment_verified?: boolean
           phone?: string | null
+          pipeline_stage?: string
+          pipeline_stage_updated_at?: string
           updated_at?: string
           user_id: string
         }
@@ -840,6 +844,8 @@ export type Database = {
           payment_timestamp?: string | null
           payment_verified?: boolean
           phone?: string | null
+          pipeline_stage?: string
+          pipeline_stage_updated_at?: string
           updated_at?: string
           user_id?: string
         }
@@ -924,6 +930,7 @@ export type Database = {
         }
         Returns: number
       }
+      pipeline_stage_rank: { Args: { _stage: string }; Returns: number }
       read_email_batch: {
         Args: { batch_size: number; queue_name: string; vt: number }
         Returns: {
