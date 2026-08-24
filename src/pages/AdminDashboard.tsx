@@ -90,7 +90,27 @@ const AdminDashboard = () => {
     }
   }, [canViewPayments]);
 
+  const updatePipelineStage = async (profileId: string, stage: PipelineStage) => {
+    const previous = profiles;
+    setProfiles((prev) =>
+      prev.map((p) => (p.id === profileId ? { ...p, pipeline_stage: stage } : p))
+    );
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ pipeline_stage: stage })
+      .eq("id", profileId);
+
+    if (error) {
+      setProfiles(previous);
+      toast({ title: "Could not move client", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: `Moved to ${stage}` });
+    }
+  };
+
   const updatePaymentField = async (
+
     profileId: string,
     field: "payment_status" | "payment_method",
     value: string
