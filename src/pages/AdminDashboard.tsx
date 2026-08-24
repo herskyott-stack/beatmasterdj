@@ -60,6 +60,8 @@ type ProfileWithRequests = {
   payment_timestamp: string | null;
   payment_notes: string | null;
   payment_verified: boolean;
+  pipeline_stage: string;
+
 };
 
 const AdminDashboard = () => {
