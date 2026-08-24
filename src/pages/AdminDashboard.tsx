@@ -302,17 +302,25 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="clients" className="w-full">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 flex flex-wrap h-auto">
               <TabsTrigger value="clients">
                 <Users className="w-4 h-4 mr-2" /> Clients & Events
               </TabsTrigger>
               <TabsTrigger value="pipeline">
                 <KanbanSquare className="w-4 h-4 mr-2" /> Pipeline
               </TabsTrigger>
+              <TabsTrigger value="planner">
+                <CloudDownload className="w-4 h-4 mr-2" /> Vibe Planner Import
+              </TabsTrigger>
               <TabsTrigger value="home-media">
                 <ImagePlus className="w-4 h-4 mr-2" /> Home Media
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="planner">
+              <PlannerImportPanel onProfilesChanged={fetchAllProfiles} />
+            </TabsContent>
+
 
             <TabsContent value="pipeline">
               <div className="mb-6">
