@@ -278,10 +278,36 @@ const AdminDashboard = () => {
               <TabsTrigger value="clients">
                 <Users className="w-4 h-4 mr-2" /> Clients & Events
               </TabsTrigger>
+              <TabsTrigger value="pipeline">
+                <KanbanSquare className="w-4 h-4 mr-2" /> Pipeline
+              </TabsTrigger>
               <TabsTrigger value="home-media">
                 <ImagePlus className="w-4 h-4 mr-2" /> Home Media
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="pipeline">
+              <div className="mb-6">
+                <div className="relative max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, email, location..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 bg-card/50 border-white/10"
+                  />
+                </div>
+              </div>
+              <PipelineBoard
+                clients={filteredProfiles}
+                canEdit={canEditPayments}
+                onStageChange={updatePipelineStage}
+                onOpenClient={(id) =>
+                  setSelectedClient(profiles.find((p) => p.id === id) ?? null)
+                }
+              />
+            </TabsContent>
+
 
             <TabsContent value="clients">
               {/* Search */}
