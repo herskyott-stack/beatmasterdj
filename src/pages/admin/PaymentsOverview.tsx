@@ -23,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import TeamRolesCard from "@/components/admin/TeamRolesCard";
 import { ArrowLeft, Banknote, Download, Wallet, AlertTriangle, CircleDollarSign } from "lucide-react";
 import {
   PAYMENT_METHODS,
@@ -52,7 +53,7 @@ type Row = {
 
 const PaymentsOverview = () => {
   const navigate = useNavigate();
-  const { canViewPayments, loading: accessLoading } = usePaymentAccess();
+  const { canViewPayments, isOwner, loading: accessLoading } = usePaymentAccess();
   const [rows, setRows] = useState<Row[]>([]);
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("all");
@@ -229,6 +230,8 @@ const PaymentsOverview = () => {
             <MiniList title={`Upcoming unpaid events (${stats.upcomingUnpaid.length})`} rows={stats.upcomingUnpaid} />
             <MiniList title={`Overdue payments (${stats.overdue.length})`} rows={stats.overdue} />
           </div>
+
+          {isOwner && <TeamRolesCard />}
 
           <Card variant="neon">
             <CardHeader>
