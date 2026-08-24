@@ -257,27 +257,12 @@ const GiveawayPage = () => {
                       onChange={(e) => setForm({ ...form, email: e.target.value })}/>
                   </div>
                   <div>
-                    <Label htmlFor="phone">Phone (optional — for SMS updates)</Label>
+                    <Label htmlFor="phone">Phone (optional)</Label>
                     <Input id="phone" type="tel" value={form.phone} maxLength={40}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}/>
                   </div>
 
-                  {form.phone.trim().length >= 7 && (
-                    <label
-                      htmlFor="sms_opt_in"
-                      className="flex items-start gap-3 text-sm cursor-pointer rounded-lg border border-border bg-card/40 p-3"
-                    >
-                      <Checkbox
-                        id="sms_opt_in"
-                        checked={form.sms_opt_in}
-                        onCheckedChange={(v) => setForm({ ...form, sms_opt_in: v === true })}
-                        className="mt-0.5 h-5 w-5"
-                      />
-                      <span className="text-muted-foreground leading-snug">
-                        Text me contest updates (max 4 msgs, reply STOP to opt out).
-                      </span>
-                    </label>
-                  )}
+
 
                   <label
                     htmlFor="agree"
