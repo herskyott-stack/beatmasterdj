@@ -30,6 +30,7 @@ import GiveawayRulesPage from "./pages/GiveawayRulesPage";
 import ContestSignups from "./pages/admin/ContestSignups";
 import ContestSettings from "./pages/admin/ContestSettings";
 import EmailStatus from "./pages/admin/EmailStatus";
+import PaymentsOverview from "./pages/admin/PaymentsOverview";
 import UnsubscribePage from "./pages/UnsubscribePage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
@@ -78,6 +79,7 @@ function App() {
               <Route path="/admin/contest" element={<ContestSignups />} />
               <Route path="/admin/contest/settings" element={<ContestSettings />} />
               <Route path="/admin/email-status" element={<EmailStatus />} />
+              <Route path="/admin/payments" element={<PaymentsOverview />} />
               <Route path="/unsubscribe" element={<UnsubscribePage />} />
               <Route path="/email-unsubscribe" element={<UnsubscribePage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

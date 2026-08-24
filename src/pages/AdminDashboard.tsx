@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,12 +12,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
+import { usePaymentAccess } from "@/hooks/usePaymentAccess";
+import {
+  PAYMENT_METHODS,
+  PAYMENT_STATUSES,
+  methodBadgeClass,
+  statusBadgeClass,
+} from "@/lib/payments";
 
 type ProfileWithRequests = {
   id: string;
@@ -34,27 +49,68 @@ type ProfileWithRequests = {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  payment_status: string;
+  payment_method: string;
+  deposit_amount: number;
+  full_amount: number;
+  amount_paid: number;
+  payment_timestamp: string | null;
+  payment_notes: string | null;
+  payment_verified: boolean;
 };
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { isAdmin, loading: adminLoading } = useAdminCheck();
+  const {
+    canViewPayments,
+    canEditPayments,
+    isOwner,
+    role,
+    loading: adminLoading,
+  } = usePaymentAccess();
   const [profiles, setProfiles] = useState<ProfileWithRequests[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedClient, setSelectedClient] = useState<ProfileWithRequests | null>(null);
 
   useEffect(() => {
-    if (!adminLoading && !isAdmin) {
+    if (!adminLoading && !canViewPayments) {
       navigate("/auth");
     }
-  }, [adminLoading, isAdmin, navigate]);
+  }, [adminLoading, canViewPayments, navigate]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (canViewPayments) {
       fetchAllProfiles();
     }
-  }, [isAdmin]);
+  }, [canViewPayments]);
+
+  const updatePaymentField = async (
+    profileId: string,
+    field: "payment_status" | "payment_method",
+    value: string
+  ) => {
+    const previous = profiles;
+    setProfiles((prev) =>
+      prev.map((p) => (p.id === profileId ? { ...p, [field]: value } : p))
+    );
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ [field]: value })
+      .eq("id", profileId);
+
+    if (error) {
+      setProfiles(previous);
+      toast({
+        title: "Could not save",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({ title: "Payment updated" });
+    }
+  };
 
   const fetchAllProfiles = async () => {
     setLoading(true);
@@ -112,9 +168,12 @@ const AdminDashboard = () => {
     );
   }
 
-  if (!isAdmin) {
+  if (!canViewPayments) {
     return null;
   }
+
+  const roleLabel =
+    role === "admin" ? "Owner" : role === "finance_manager" ? "Finance Manager" : "Assistant";
 
   return (
     <div className="min-h-screen bg-background">
@@ -128,22 +187,33 @@ const AdminDashboard = () => {
                 <span className="gradient-text">Admin Dashboard</span>
               </h1>
               <p className="text-muted-foreground">
-                View and manage all client events and music selections
+                View and manage all client events, payments and music selections
               </p>
+              <Badge variant="outline" className="mt-2 border-primary/40 text-primary">
+                Signed in as {roleLabel}
+              </Badge>
             </div>
             <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-              <Button variant="hero" onClick={() => navigate("/admin/lessons")}>
-                <GraduationCap className="w-4 h-4 mr-2" />
-                DJ Lessons LMS
+              <Button variant="hero" onClick={() => navigate("/admin/payments")}>
+                <CircleDollarSign className="w-4 h-4 mr-2" />
+                Payments
               </Button>
-              <Button variant="hero" onClick={() => navigate("/admin/contest")}>
-                <Trophy className="w-4 h-4 mr-2" />
-                Contest Signups
-              </Button>
-              <Button variant="hero" onClick={() => navigate("/admin/email-status")}>
-                <Mail className="w-4 h-4 mr-2" />
-                Email DNS Status
-              </Button>
+              {isOwner && (
+                <>
+                  <Button variant="hero" onClick={() => navigate("/admin/lessons")}>
+                    <GraduationCap className="w-4 h-4 mr-2" />
+                    DJ Lessons LMS
+                  </Button>
+                  <Button variant="hero" onClick={() => navigate("/admin/contest")}>
+                    <Trophy className="w-4 h-4 mr-2" />
+                    Contest Signups
+                  </Button>
+                  <Button variant="hero" onClick={() => navigate("/admin/email-status")}>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email DNS Status
+                  </Button>
+                </>
+              )}
               <Button variant="outline" onClick={() => navigate("/client-portal")}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Client Portal
@@ -236,7 +306,7 @@ const AdminDashboard = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <EventTable profiles={upcomingEvents} onClientClick={setSelectedClient} />
+                    <EventTable profiles={upcomingEvents} onClientClick={setSelectedClient} canEdit={canEditPayments} onPaymentChange={updatePaymentField} />
                   </CardContent>
                 </Card>
               )}
@@ -250,7 +320,7 @@ const AdminDashboard = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <EventTable profiles={pastEvents} onClientClick={setSelectedClient} />
+                    <EventTable profiles={pastEvents} onClientClick={setSelectedClient} canEdit={canEditPayments} onPaymentChange={updatePaymentField} />
                   </CardContent>
                 </Card>
               )}
@@ -264,7 +334,7 @@ const AdminDashboard = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <EventTable profiles={noDateEvents} onClientClick={setSelectedClient} />
+                    <EventTable profiles={noDateEvents} onClientClick={setSelectedClient} canEdit={canEditPayments} onPaymentChange={updatePaymentField} />
                   </CardContent>
                 </Card>
               )}
@@ -303,9 +373,17 @@ const AdminDashboard = () => {
 const EventTable = ({
   profiles,
   onClientClick,
+  canEdit,
+  onPaymentChange,
 }: {
   profiles: ProfileWithRequests[];
   onClientClick: (profile: ProfileWithRequests) => void;
+  canEdit: boolean;
+  onPaymentChange: (
+    profileId: string,
+    field: "payment_status" | "payment_method",
+    value: string
+  ) => void;
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -315,8 +393,9 @@ const EventTable = ({
             <TableHead>Client Name</TableHead>
             <TableHead>Event Date</TableHead>
             <TableHead>Event Type</TableHead>
-            <TableHead>Location</TableHead>
             <TableHead>Package</TableHead>
+            <TableHead>Payment Status</TableHead>
+            <TableHead>Payment Method</TableHead>
             <TableHead>Contact</TableHead>
           </TableRow>
         </TableHeader>
@@ -331,6 +410,9 @@ const EventTable = ({
                 <span className="text-primary hover:underline">
                   {profile.first_name} {profile.last_name}
                 </span>
+                {profile.event_location && (
+                  <p className="text-xs text-muted-foreground">{profile.event_location}</p>
+                )}
               </TableCell>
               <TableCell>
                 {profile.event_date
@@ -338,8 +420,49 @@ const EventTable = ({
                   : "Not set"}
               </TableCell>
               <TableCell>{profile.event_type || "Not specified"}</TableCell>
-              <TableCell>{profile.event_location || "Not specified"}</TableCell>
               <TableCell>{profile.package_name || "Not selected"}</TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                {canEdit ? (
+                  <Select
+                    value={profile.payment_status}
+                    onValueChange={(v) => onPaymentChange(profile.id, "payment_status", v)}
+                  >
+                    <SelectTrigger className={`h-8 w-[150px] text-xs ${statusBadgeClass(profile.payment_status)}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAYMENT_STATUSES.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Badge variant="outline" className={statusBadgeClass(profile.payment_status)}>
+                    {profile.payment_status}
+                  </Badge>
+                )}
+              </TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                {canEdit ? (
+                  <Select
+                    value={profile.payment_method}
+                    onValueChange={(v) => onPaymentChange(profile.id, "payment_method", v)}
+                  >
+                    <SelectTrigger className={`h-8 w-[130px] text-xs ${methodBadgeClass(profile.payment_method)}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAYMENT_METHODS.map((m) => (
+                        <SelectItem key={m} value={m}>{m}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Badge variant="outline" className={methodBadgeClass(profile.payment_method)}>
+                    {profile.payment_method}
+                  </Badge>
+                )}
+              </TableCell>
               <TableCell>
                 <div className="text-sm">
                   <p>{profile.email}</p>

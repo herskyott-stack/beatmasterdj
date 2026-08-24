@@ -22,6 +22,7 @@ import {
   MapPin,
   FileText,
 } from "lucide-react";
+import ClientPaymentPanel from "@/components/admin/ClientPaymentPanel";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -39,6 +40,14 @@ type Profile = {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  payment_status: string;
+  payment_method: string;
+  deposit_amount: number;
+  full_amount: number;
+  amount_paid: number;
+  payment_timestamp: string | null;
+  payment_notes: string | null;
+  payment_verified: boolean;
 };
 
 type MusicRequest = {
@@ -352,6 +361,23 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
               </CardContent>
             </Card>
           )}
+
+          <Separator className="bg-white/10" />
+
+          {/* Payments */}
+          <ClientPaymentPanel
+            profileId={client.id}
+            initial={{
+              payment_status: client.payment_status ?? "Pending",
+              payment_method: client.payment_method ?? "None",
+              deposit_amount: Number(client.deposit_amount ?? 0),
+              full_amount: Number(client.full_amount ?? 0),
+              amount_paid: Number(client.amount_paid ?? 0),
+              payment_timestamp: client.payment_timestamp ?? null,
+              payment_notes: client.payment_notes ?? null,
+              payment_verified: !!client.payment_verified,
+            }}
+          />
 
           <Separator className="bg-white/10" />
 
