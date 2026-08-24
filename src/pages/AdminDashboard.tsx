@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign, KanbanSquare } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -26,6 +26,9 @@ import { toast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
+import PipelineBoard from "@/components/admin/PipelineBoard";
+import type { PipelineStage } from "@/lib/pipeline";
+
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
 import { usePaymentAccess } from "@/hooks/usePaymentAccess";
 import {
@@ -57,6 +60,8 @@ type ProfileWithRequests = {
   payment_timestamp: string | null;
   payment_notes: string | null;
   payment_verified: boolean;
+  pipeline_stage: string;
+
 };
 
 const AdminDashboard = () => {
@@ -85,7 +90,27 @@ const AdminDashboard = () => {
     }
   }, [canViewPayments]);
 
+  const updatePipelineStage = async (profileId: string, stage: PipelineStage) => {
+    const previous = profiles;
+    setProfiles((prev) =>
+      prev.map((p) => (p.id === profileId ? { ...p, pipeline_stage: stage } : p))
+    );
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ pipeline_stage: stage })
+      .eq("id", profileId);
+
+    if (error) {
+      setProfiles(previous);
+      toast({ title: "Could not move client", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: `Moved to ${stage}` });
+    }
+  };
+
   const updatePaymentField = async (
+
     profileId: string,
     field: "payment_status" | "payment_method",
     value: string
@@ -109,7 +134,10 @@ const AdminDashboard = () => {
       });
     } else {
       toast({ title: "Payment updated" });
+      // payment changes can auto-advance the pipeline stage server-side
+      if (field === "payment_status") fetchAllProfiles();
     }
+
   };
 
   const fetchAllProfiles = async () => {
@@ -278,10 +306,36 @@ const AdminDashboard = () => {
               <TabsTrigger value="clients">
                 <Users className="w-4 h-4 mr-2" /> Clients & Events
               </TabsTrigger>
+              <TabsTrigger value="pipeline">
+                <KanbanSquare className="w-4 h-4 mr-2" /> Pipeline
+              </TabsTrigger>
               <TabsTrigger value="home-media">
                 <ImagePlus className="w-4 h-4 mr-2" /> Home Media
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="pipeline">
+              <div className="mb-6">
+                <div className="relative max-w-md">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, email, location..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 bg-card/50 border-white/10"
+                  />
+                </div>
+              </div>
+              <PipelineBoard
+                clients={filteredProfiles}
+                canEdit={canEditPayments}
+                onStageChange={updatePipelineStage}
+                onOpenClient={(id) =>
+                  setSelectedClient(profiles.find((p) => p.id === id) ?? null)
+                }
+              />
+            </TabsContent>
+
 
             <TabsContent value="clients">
               {/* Search */}
