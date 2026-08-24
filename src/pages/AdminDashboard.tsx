@@ -375,9 +375,17 @@ const AdminDashboard = () => {
 const EventTable = ({
   profiles,
   onClientClick,
+  canEdit,
+  onPaymentChange,
 }: {
   profiles: ProfileWithRequests[];
   onClientClick: (profile: ProfileWithRequests) => void;
+  canEdit: boolean;
+  onPaymentChange: (
+    profileId: string,
+    field: "payment_status" | "payment_method",
+    value: string
+  ) => void;
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -387,8 +395,9 @@ const EventTable = ({
             <TableHead>Client Name</TableHead>
             <TableHead>Event Date</TableHead>
             <TableHead>Event Type</TableHead>
-            <TableHead>Location</TableHead>
             <TableHead>Package</TableHead>
+            <TableHead>Payment Status</TableHead>
+            <TableHead>Payment Method</TableHead>
             <TableHead>Contact</TableHead>
           </TableRow>
         </TableHeader>
@@ -403,6 +412,9 @@ const EventTable = ({
                 <span className="text-primary hover:underline">
                   {profile.first_name} {profile.last_name}
                 </span>
+                {profile.event_location && (
+                  <p className="text-xs text-muted-foreground">{profile.event_location}</p>
+                )}
               </TableCell>
               <TableCell>
                 {profile.event_date
@@ -410,8 +422,49 @@ const EventTable = ({
                   : "Not set"}
               </TableCell>
               <TableCell>{profile.event_type || "Not specified"}</TableCell>
-              <TableCell>{profile.event_location || "Not specified"}</TableCell>
               <TableCell>{profile.package_name || "Not selected"}</TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                {canEdit ? (
+                  <Select
+                    value={profile.payment_status}
+                    onValueChange={(v) => onPaymentChange(profile.id, "payment_status", v)}
+                  >
+                    <SelectTrigger className={`h-8 w-[150px] text-xs ${statusBadgeClass(profile.payment_status)}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAYMENT_STATUSES.map((s) => (
+                        <SelectItem key={s} value={s}>{s}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Badge variant="outline" className={statusBadgeClass(profile.payment_status)}>
+                    {profile.payment_status}
+                  </Badge>
+                )}
+              </TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
+                {canEdit ? (
+                  <Select
+                    value={profile.payment_method}
+                    onValueChange={(v) => onPaymentChange(profile.id, "payment_method", v)}
+                  >
+                    <SelectTrigger className={`h-8 w-[130px] text-xs ${methodBadgeClass(profile.payment_method)}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {PAYMENT_METHODS.map((m) => (
+                        <SelectItem key={m} value={m}>{m}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <Badge variant="outline" className={methodBadgeClass(profile.payment_method)}>
+                    {profile.payment_method}
+                  </Badge>
+                )}
+              </TableCell>
               <TableCell>
                 <div className="text-sm">
                   <p>{profile.email}</p>
