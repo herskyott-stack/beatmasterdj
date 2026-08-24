@@ -194,12 +194,11 @@ const ClientPaymentPanel = ({ profileId, initial, onSaved }: Props) => {
               <Label>Payment date</Label>
               <Input
                 type="datetime-local"
-                value={form.payment_timestamp ? form.payment_timestamp.slice(0, 16) : ""}
+                value={isoToLocalInput(form.payment_timestamp)}
                 disabled={!canEditPayments}
-                onChange={(e) =>
-                  set("payment_timestamp", e.target.value ? new Date(e.target.value).toISOString() : null)
-                }
+                onChange={(e) => set("payment_timestamp", localInputToIso(e.target.value))}
               />
+
             </div>
           </div>
 
