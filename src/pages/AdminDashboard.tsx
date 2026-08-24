@@ -308,7 +308,7 @@ const AdminDashboard = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <EventTable profiles={upcomingEvents} onClientClick={setSelectedClient} />
+                    <EventTable profiles={upcomingEvents} onClientClick={setSelectedClient} canEdit={canEditPayments} onPaymentChange={updatePaymentField} />
                   </CardContent>
                 </Card>
               )}
@@ -322,7 +322,7 @@ const AdminDashboard = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <EventTable profiles={pastEvents} onClientClick={setSelectedClient} />
+                    <EventTable profiles={pastEvents} onClientClick={setSelectedClient} canEdit={canEditPayments} onPaymentChange={updatePaymentField} />
                   </CardContent>
                 </Card>
               )}
@@ -336,7 +336,7 @@ const AdminDashboard = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <EventTable profiles={noDateEvents} onClientClick={setSelectedClient} />
+                    <EventTable profiles={noDateEvents} onClientClick={setSelectedClient} canEdit={canEditPayments} onPaymentChange={updatePaymentField} />
                   </CardContent>
                 </Card>
               )}
