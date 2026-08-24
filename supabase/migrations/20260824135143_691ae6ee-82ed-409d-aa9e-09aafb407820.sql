@@ -1,0 +1,1 @@
+REVOKE ALL ON FUNCTION public.log_payment_changes() FROM PUBLIC, anon, authenticated;
