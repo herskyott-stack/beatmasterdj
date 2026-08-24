@@ -189,22 +189,33 @@ const AdminDashboard = () => {
                 <span className="gradient-text">Admin Dashboard</span>
               </h1>
               <p className="text-muted-foreground">
-                View and manage all client events and music selections
+                View and manage all client events, payments and music selections
               </p>
+              <Badge variant="outline" className="mt-2 border-primary/40 text-primary">
+                Signed in as {roleLabel}
+              </Badge>
             </div>
             <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-              <Button variant="hero" onClick={() => navigate("/admin/lessons")}>
-                <GraduationCap className="w-4 h-4 mr-2" />
-                DJ Lessons LMS
+              <Button variant="hero" onClick={() => navigate("/admin/payments")}>
+                <CircleDollarSign className="w-4 h-4 mr-2" />
+                Payments
               </Button>
-              <Button variant="hero" onClick={() => navigate("/admin/contest")}>
-                <Trophy className="w-4 h-4 mr-2" />
-                Contest Signups
-              </Button>
-              <Button variant="hero" onClick={() => navigate("/admin/email-status")}>
-                <Mail className="w-4 h-4 mr-2" />
-                Email DNS Status
-              </Button>
+              {isOwner && (
+                <>
+                  <Button variant="hero" onClick={() => navigate("/admin/lessons")}>
+                    <GraduationCap className="w-4 h-4 mr-2" />
+                    DJ Lessons LMS
+                  </Button>
+                  <Button variant="hero" onClick={() => navigate("/admin/contest")}>
+                    <Trophy className="w-4 h-4 mr-2" />
+                    Contest Signups
+                  </Button>
+                  <Button variant="hero" onClick={() => navigate("/admin/email-status")}>
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email DNS Status
+                  </Button>
+                </>
+              )}
               <Button variant="outline" onClick={() => navigate("/client-portal")}>
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Client Portal
