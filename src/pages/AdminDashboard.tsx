@@ -13,12 +13,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { toast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
+import { usePaymentAccess } from "@/hooks/usePaymentAccess";
+import {
+  PAYMENT_METHODS,
+  PAYMENT_STATUSES,
+  methodBadgeClass,
+  statusBadgeClass,
+} from "@/lib/payments";
 
 type ProfileWithRequests = {
   id: string;
@@ -34,11 +50,26 @@ type ProfileWithRequests = {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  payment_status: string;
+  payment_method: string;
+  deposit_amount: number;
+  full_amount: number;
+  amount_paid: number;
+  payment_timestamp: string | null;
+  payment_notes: string | null;
+  payment_verified: boolean;
 };
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { isAdmin, loading: adminLoading } = useAdminCheck();
+  const { isAdmin } = useAdminCheck();
+  const {
+    canViewPayments,
+    canEditPayments,
+    isOwner,
+    role,
+    loading: adminLoading,
+  } = usePaymentAccess();
   const [profiles, setProfiles] = useState<ProfileWithRequests[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
