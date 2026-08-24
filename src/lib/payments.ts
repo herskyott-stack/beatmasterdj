@@ -54,3 +54,22 @@ export const outstanding = (fullAmount: number, amountPaid: number) =>
 
 export const money = (n: number) =>
   n.toLocaleString("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 2 });
+
+/** ISO/UTC timestamp -> value for a <input type="datetime-local"> in the viewer's local time. */
+export const isoToLocalInput = (iso: string | null): string => {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(
+    d.getMinutes()
+  )}`;
+};
+
+/** datetime-local input value (local time) -> ISO/UTC timestamp for storage. */
+export const localInputToIso = (value: string): string | null => {
+  if (!value) return null;
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
+};
+
