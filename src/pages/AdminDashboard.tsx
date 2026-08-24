@@ -76,16 +76,43 @@ const AdminDashboard = () => {
   const [selectedClient, setSelectedClient] = useState<ProfileWithRequests | null>(null);
 
   useEffect(() => {
-    if (!adminLoading && !isAdmin) {
+    if (!adminLoading && !canViewPayments) {
       navigate("/auth");
     }
-  }, [adminLoading, isAdmin, navigate]);
+  }, [adminLoading, canViewPayments, navigate]);
 
   useEffect(() => {
-    if (isAdmin) {
+    if (canViewPayments) {
       fetchAllProfiles();
     }
-  }, [isAdmin]);
+  }, [canViewPayments]);
+
+  const updatePaymentField = async (
+    profileId: string,
+    field: "payment_status" | "payment_method",
+    value: string
+  ) => {
+    const previous = profiles;
+    setProfiles((prev) =>
+      prev.map((p) => (p.id === profileId ? { ...p, [field]: value } : p))
+    );
+
+    const { error } = await supabase
+      .from("profiles")
+      .update({ [field]: value })
+      .eq("id", profileId);
+
+    if (error) {
+      setProfiles(previous);
+      toast({
+        title: "Could not save",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({ title: "Payment updated" });
+    }
+  };
 
   const fetchAllProfiles = async () => {
     setLoading(true);
