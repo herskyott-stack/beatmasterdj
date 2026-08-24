@@ -797,7 +797,7 @@ export type Database = {
           pipeline_stage: string
           pipeline_stage_updated_at: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           amount_paid?: number
@@ -822,7 +822,7 @@ export type Database = {
           pipeline_stage?: string
           pipeline_stage_updated_at?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           amount_paid?: number
@@ -847,7 +847,7 @@ export type Database = {
           pipeline_stage?: string
           pipeline_stage_updated_at?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }

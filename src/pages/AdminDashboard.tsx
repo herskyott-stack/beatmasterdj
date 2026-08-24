@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign, KanbanSquare } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign, KanbanSquare, CloudDownload } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -27,6 +27,8 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
 import PipelineBoard from "@/components/admin/PipelineBoard";
+import PlannerImportPanel from "@/components/admin/PlannerImportPanel";
+import AddClientDialog from "@/components/admin/AddClientDialog";
 import type { PipelineStage } from "@/lib/pipeline";
 
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
@@ -222,6 +224,7 @@ const AdminDashboard = () => {
               </Badge>
             </div>
             <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
+              {canEditPayments && <AddClientDialog onCreated={fetchAllProfiles} />}
               <Button variant="hero" onClick={() => navigate("/admin/payments")}>
                 <CircleDollarSign className="w-4 h-4 mr-2" />
                 Payments
@@ -302,17 +305,25 @@ const AdminDashboard = () => {
           </div>
 
           <Tabs defaultValue="clients" className="w-full">
-            <TabsList className="mb-6">
+            <TabsList className="mb-6 flex flex-wrap h-auto">
               <TabsTrigger value="clients">
                 <Users className="w-4 h-4 mr-2" /> Clients & Events
               </TabsTrigger>
               <TabsTrigger value="pipeline">
                 <KanbanSquare className="w-4 h-4 mr-2" /> Pipeline
               </TabsTrigger>
+              <TabsTrigger value="planner">
+                <CloudDownload className="w-4 h-4 mr-2" /> Vibe Planner Import
+              </TabsTrigger>
               <TabsTrigger value="home-media">
                 <ImagePlus className="w-4 h-4 mr-2" /> Home Media
               </TabsTrigger>
             </TabsList>
+
+            <TabsContent value="planner">
+              <PlannerImportPanel onProfilesChanged={fetchAllProfiles} />
+            </TabsContent>
+
 
             <TabsContent value="pipeline">
               <div className="mb-6">
