@@ -732,48 +732,113 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_audit_log: {
+        Row: {
+          changed_by: string | null
+          changed_by_email: string | null
+          created_at: string
+          field_name: string
+          id: string
+          new_value: string | null
+          old_value: string | null
+          profile_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          changed_by_email?: string | null
+          created_at?: string
+          field_name: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          profile_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          changed_by_email?: string | null
+          created_at?: string
+          field_name?: string
+          id?: string
+          new_value?: string | null
+          old_value?: string | null
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_audit_log_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
+          amount_paid: number
           created_at: string
+          deposit_amount: number
           email: string
           event_date: string | null
           event_location: string | null
           event_type: string | null
           first_name: string
+          full_amount: number
           id: string
           last_name: string
           notes: string | null
           package_name: string | null
+          payment_method: string
+          payment_notes: string | null
+          payment_status: string
+          payment_timestamp: string | null
+          payment_verified: boolean
           phone: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          amount_paid?: number
           created_at?: string
+          deposit_amount?: number
           email: string
           event_date?: string | null
           event_location?: string | null
           event_type?: string | null
           first_name: string
+          full_amount?: number
           id?: string
           last_name: string
           notes?: string | null
           package_name?: string | null
+          payment_method?: string
+          payment_notes?: string | null
+          payment_status?: string
+          payment_timestamp?: string | null
+          payment_verified?: boolean
           phone?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          amount_paid?: number
           created_at?: string
+          deposit_amount?: number
           email?: string
           event_date?: string | null
           event_location?: string | null
           event_type?: string | null
           first_name?: string
+          full_amount?: number
           id?: string
           last_name?: string
           notes?: string | null
           package_name?: string | null
+          payment_method?: string
+          payment_notes?: string | null
+          payment_status?: string
+          payment_timestamp?: string | null
+          payment_verified?: boolean
           phone?: string | null
           updated_at?: string
           user_id?: string
@@ -831,6 +896,7 @@ export type Database = {
     }
     Functions: {
       bulk_insert_lesson_quizzes: { Args: { _payload: Json }; Returns: number }
+      can_edit_payments: { Args: { _user_id: string }; Returns: boolean }
       delete_email: {
         Args: { message_id: number; queue_name: string }
         Returns: boolean
@@ -840,6 +906,7 @@ export type Database = {
         Args: { payload: Json; queue_name: string }
         Returns: number
       }
+      has_admin_area_access: { Args: { _user_id: string }; Returns: boolean }
       has_lesson_access: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
         Args: {
@@ -867,7 +934,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "user" | "finance_manager" | "assistant"
       lesson_status: "not_started" | "in_progress" | "completed"
       question_type: "multiple_choice" | "true_false" | "short_answer"
     }
@@ -997,7 +1064,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "user", "finance_manager", "assistant"],
       lesson_status: ["not_started", "in_progress", "completed"],
       question_type: ["multiple_choice", "true_false", "short_answer"],
     },
