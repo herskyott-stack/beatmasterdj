@@ -875,6 +875,305 @@ export type Database = {
         }
         Relationships: []
       }
+      synced_addons: {
+        Row: {
+          created_at: string
+          external_id: string
+          id: string
+          name: string
+          notes: string | null
+          price: number | null
+          quantity: number
+          synced_client_id: string
+        }
+        Insert: {
+          created_at?: string
+          external_id: string
+          id?: string
+          name: string
+          notes?: string | null
+          price?: number | null
+          quantity?: number
+          synced_client_id: string
+        }
+        Update: {
+          created_at?: string
+          external_id?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          price?: number | null
+          quantity?: number
+          synced_client_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_addons_synced_client_id_fkey"
+            columns: ["synced_client_id"]
+            isOneToOne: false
+            referencedRelation: "synced_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      synced_clients: {
+        Row: {
+          created_at: string
+          email: string | null
+          event_date: string | null
+          event_type: string | null
+          external_id: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          profile_id: string | null
+          raw: Json
+          source_app: string
+          updated_at: string
+          venue_location: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          event_date?: string | null
+          event_type?: string | null
+          external_id: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          profile_id?: string | null
+          raw?: Json
+          source_app?: string
+          updated_at?: string
+          venue_location?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          event_date?: string | null
+          event_type?: string | null
+          external_id?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          profile_id?: string | null
+          raw?: Json
+          source_app?: string
+          updated_at?: string
+          venue_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_clients_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      synced_files: {
+        Row: {
+          created_at: string
+          external_id: string
+          file_name: string
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          synced_client_id: string
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          external_id: string
+          file_name: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          synced_client_id: string
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          external_id?: string
+          file_name?: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          synced_client_id?: string
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_files_synced_client_id_fkey"
+            columns: ["synced_client_id"]
+            isOneToOne: false
+            referencedRelation: "synced_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      synced_music: {
+        Row: {
+          artist: string | null
+          created_at: string
+          external_id: string
+          id: string
+          notes: string | null
+          request_type: string
+          song_title: string
+          synced_client_id: string
+        }
+        Insert: {
+          artist?: string | null
+          created_at?: string
+          external_id: string
+          id?: string
+          notes?: string | null
+          request_type?: string
+          song_title: string
+          synced_client_id: string
+        }
+        Update: {
+          artist?: string | null
+          created_at?: string
+          external_id?: string
+          id?: string
+          notes?: string | null
+          request_type?: string
+          song_title?: string
+          synced_client_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_music_synced_client_id_fkey"
+            columns: ["synced_client_id"]
+            isOneToOne: false
+            referencedRelation: "synced_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      synced_notes: {
+        Row: {
+          body: string
+          category: string | null
+          created_at: string
+          external_id: string
+          id: string
+          synced_client_id: string
+          title: string | null
+        }
+        Insert: {
+          body: string
+          category?: string | null
+          created_at?: string
+          external_id: string
+          id?: string
+          synced_client_id: string
+          title?: string | null
+        }
+        Update: {
+          body?: string
+          category?: string | null
+          created_at?: string
+          external_id?: string
+          id?: string
+          synced_client_id?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_notes_synced_client_id_fkey"
+            columns: ["synced_client_id"]
+            isOneToOne: false
+            referencedRelation: "synced_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      synced_playlists: {
+        Row: {
+          created_at: string
+          external_id: string
+          id: string
+          name: string | null
+          provider: string | null
+          synced_client_id: string
+          track_count: number | null
+          url: string | null
+        }
+        Insert: {
+          created_at?: string
+          external_id: string
+          id?: string
+          name?: string | null
+          provider?: string | null
+          synced_client_id: string
+          track_count?: number | null
+          url?: string | null
+        }
+        Update: {
+          created_at?: string
+          external_id?: string
+          id?: string
+          name?: string | null
+          provider?: string | null
+          synced_client_id?: string
+          track_count?: number | null
+          url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_playlists_synced_client_id_fkey"
+            columns: ["synced_client_id"]
+            isOneToOne: false
+            referencedRelation: "synced_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      synced_timeline: {
+        Row: {
+          created_at: string
+          details: string | null
+          external_id: string
+          id: string
+          item_time: string | null
+          sort_order: number
+          synced_client_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          details?: string | null
+          external_id: string
+          id?: string
+          item_time?: string | null
+          sort_order?: number
+          synced_client_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          details?: string | null
+          external_id?: string
+          id?: string
+          item_time?: string | null
+          sort_order?: number
+          synced_client_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "synced_timeline_synced_client_id_fkey"
+            columns: ["synced_client_id"]
+            isOneToOne: false
+            referencedRelation: "synced_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

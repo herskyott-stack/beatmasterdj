@@ -23,6 +23,7 @@ import {
   FileText,
 } from "lucide-react";
 import ClientPaymentPanel from "@/components/admin/ClientPaymentPanel";
+import SyncedClientPanel from "@/components/admin/SyncedClientPanel";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
@@ -378,6 +379,17 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
               payment_verified: !!client.payment_verified,
             }}
           />
+
+          <Separator className="bg-white/10" />
+
+          {/* Synced Planner Data (cross-site) */}
+          <div>
+            <h3 className="font-display text-lg font-semibold flex items-center gap-2 mb-4">
+              <Music className="w-5 h-5 text-primary" />
+              Synced Planner Data
+            </h3>
+            <SyncedClientPanel profileId={client.id} email={client.email} />
+          </div>
 
           <Separator className="bg-white/10" />
 
