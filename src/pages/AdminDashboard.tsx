@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -62,7 +61,6 @@ type ProfileWithRequests = {
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { isAdmin } = useAdminCheck();
   const {
     canViewPayments,
     canEditPayments,
