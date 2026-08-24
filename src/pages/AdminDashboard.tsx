@@ -224,6 +224,7 @@ const AdminDashboard = () => {
               </Badge>
             </div>
             <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
+              {canEditPayments && <AddClientDialog onCreated={fetchAllProfiles} />}
               <Button variant="hero" onClick={() => navigate("/admin/payments")}>
                 <CircleDollarSign className="w-4 h-4 mr-2" />
                 Payments
