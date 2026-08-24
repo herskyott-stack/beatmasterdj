@@ -26,6 +26,9 @@ import { toast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ClientDetailModal from "@/components/admin/ClientDetailModal";
+import PipelineBoard from "@/components/admin/PipelineBoard";
+import type { PipelineStage } from "@/lib/pipeline";
+
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
 import { usePaymentAccess } from "@/hooks/usePaymentAccess";
 import {
