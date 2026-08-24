@@ -134,7 +134,10 @@ const AdminDashboard = () => {
       });
     } else {
       toast({ title: "Payment updated" });
+      // payment changes can auto-advance the pipeline stage server-side
+      if (field === "payment_status") fetchAllProfiles();
     }
+
   };
 
   const fetchAllProfiles = async () => {
