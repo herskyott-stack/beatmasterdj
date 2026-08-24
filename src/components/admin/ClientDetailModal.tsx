@@ -22,6 +22,7 @@ import {
   MapPin,
   FileText,
 } from "lucide-react";
+import ClientPaymentPanel from "@/components/admin/ClientPaymentPanel";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
