@@ -39,6 +39,14 @@ type Profile = {
   notes: string | null;
   created_at: string;
   updated_at: string;
+  payment_status: string;
+  payment_method: string;
+  deposit_amount: number;
+  full_amount: number;
+  amount_paid: number;
+  payment_timestamp: string | null;
+  payment_notes: string | null;
+  payment_verified: boolean;
 };
 
 type MusicRequest = {
