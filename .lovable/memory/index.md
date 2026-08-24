@@ -26,3 +26,4 @@ Security: All Edge Functions require JWT + RBAC (admin: hersky.ott@gmail.com).
 - [Mentorship Program](mem://features/mentorship-program) — Two-track DJ mentorship pathways, pricing, and apply flow at /mentorship
 - [Home Media Gallery](mem://features/home-media-gallery) — Admin-uploaded homepage gallery + direct lesson video uploads + AI module overview quizzes
 - [DJ Lessons LMS](mem://features/dj-lessons-lms) — Internal 24-module video+quiz course with access control and progress tracking
+- [Cross-Site Sync](mem://features/cross-site-sync) — Additive-only Vibe Planner sync endpoint, synced_* tables, and unified admin client view
