@@ -23,6 +23,7 @@ import {
   FileText,
 } from "lucide-react";
 import ClientPaymentPanel from "@/components/admin/ClientPaymentPanel";
+import SyncedClientPanel from "@/components/admin/SyncedClientPanel";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
