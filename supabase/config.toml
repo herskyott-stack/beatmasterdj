@@ -29,6 +29,4 @@ project_id = "atxceyzigqadmsasxags"
     verify_jwt = true
   [functions.retry-failed-emails]
     verify_jwt = false
-  [functions.send-contest-sms]
-    verify_jwt = false
 
