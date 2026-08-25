@@ -249,7 +249,7 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
               </Badge>
             </div>
             <div className="flex flex-wrap gap-2 mt-4 md:mt-0">
-              {canEditPayments && <AddClientDialog onCreated={fetchAllProfiles} />}
+              {canEditPayments && <AddClientDialog onCreated={() => fetchAllProfiles(false)} />}
               <Button variant="hero" onClick={() => navigate("/admin/payments")}>
                 <CircleDollarSign className="w-4 h-4 mr-2" />
                 Payments
@@ -346,7 +346,7 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
             </TabsList>
 
             <TabsContent value="planner">
-              <PlannerImportPanel onProfilesChanged={fetchAllProfiles} />
+              <PlannerImportPanel onProfilesChanged={() => fetchAllProfiles(false)} />
             </TabsContent>
 
 
