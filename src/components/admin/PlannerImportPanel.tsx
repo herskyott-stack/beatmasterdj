@@ -79,6 +79,28 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     load();
   }, []);
 
+  // Live updates: re-pull synced planner records as they arrive.
+  useEffect(() => {
+    const channel = supabase
+      .channel("planner-import-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "synced_clients" },
+        () => load()
+      )
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "synced_music" },
+        () => load()
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+
   const linkTo = async (row: SyncedClient, profileId: string) => {
     setBusy(row.id);
     const { error } = await supabase
