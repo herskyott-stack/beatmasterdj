@@ -29,4 +29,6 @@ project_id = "atxceyzigqadmsasxags"
     verify_jwt = true
   [functions.retry-failed-emails]
     verify_jwt = false
+  [functions.push-to-planner]
+    verify_jwt = false
 
