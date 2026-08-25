@@ -133,8 +133,9 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     setBusy(row.id);
 
     // Reuse an existing client with the same email instead of creating a duplicate.
-    const existing = row.email
-      ? profiles.find((p) => p.email.toLowerCase() === row.email!.toLowerCase())
+    const normalizedEmail = row.email?.toLowerCase();
+    const existing = normalizedEmail
+      ? profiles.find((p) => p.email.toLowerCase() === normalizedEmail)
       : undefined;
 
     let profileId = existing?.id ?? null;
