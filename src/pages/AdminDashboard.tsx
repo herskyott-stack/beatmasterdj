@@ -457,7 +457,7 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
       />
     </div>
   );
-};
+});
 
 // Event Table Component
 const EventTable = ({
