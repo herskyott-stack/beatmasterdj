@@ -107,7 +107,9 @@ serve(async (req) => {
   const cid = client.id;
   const counts: Record<string, number> = {};
 
-  // Insert-only with ignoreDuplicates: existing rows are never overwritten or deleted.
+  // Upsert WITHOUT ignoreDuplicates: re-syncing updates existing rows in place so
+  // edits made in Vibe Planner propagate here. Still additive-only: rows are never
+  // deleted, and `profiles` / `music_requests` are never written from this path.
   const push = async (
     table: string,
     rows: Row[] | undefined,
@@ -119,7 +121,6 @@ serve(async (req) => {
       .from(table)
       .upsert(mapped, {
         onConflict: "synced_client_id,external_id",
-        ignoreDuplicates: true,
         count: "exact",
       })
       .select("id");
