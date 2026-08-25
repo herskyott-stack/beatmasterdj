@@ -92,6 +92,27 @@ const AdminDashboard = () => {
     }
   }, [canViewPayments]);
 
+  // Live updates: refresh the client list whenever a profile changes anywhere.
+  useEffect(() => {
+    if (!canViewPayments) return;
+
+    const channel = supabase
+      .channel("admin-profiles-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "profiles" },
+        () => {
+          fetchAllProfiles();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [canViewPayments]);
+
+
   const updatePipelineStage = async (profileId: string, stage: PipelineStage) => {
     const previous = profiles;
     setProfiles((prev) =>
