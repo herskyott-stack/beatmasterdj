@@ -22,10 +22,16 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
-  // Only our own database triggers (using the service role key) may invoke this.
+  // Only our own database triggers may invoke this. They authenticate with a
+  // dedicated shared key (vault: push_trigger_key) sent as x-trigger-key.
+  // The service-role bearer is also accepted as a fallback.
+  const triggerKey = Deno.env.get("PUSH_TRIGGER_KEY") ?? "";
   const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const providedKey = req.headers.get("x-trigger-key") ?? "";
   const auth = req.headers.get("Authorization") ?? "";
-  if (!serviceKey || auth !== `Bearer ${serviceKey}`) {
+  const okTrigger = triggerKey && providedKey === triggerKey;
+  const okService = serviceKey && auth === `Bearer ${serviceKey}`;
+  if (!okTrigger && !okService) {
     return json({ error: "Unauthorized" }, 401);
   }
 
