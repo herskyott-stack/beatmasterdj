@@ -1,20 +1,27 @@
 ---
 name: Cross-Site Sync (Vibe Planner)
-description: Additive-only sync of Vibe Planner client music, notes, playlists, timeline, add-ons and files into the BeatmasterDJ admin
+description: Two-way additive sync between Vibe Planner and BeatmasterDJ clients/music via sync-planner-data (inbound) and push-to-planner (outbound)
 type: feature
 ---
 
-Vibe Planner runs on a **separate** database. It pushes data into BeatmasterDJ via the
-`sync-planner-data` edge function (POST, header `x-sync-secret: PLANNER_SYNC_SECRET`).
+Vibe Planner runs on a **separate** project. Sync is **two-way** and **additive-only**
+(creates + updates propagate; nothing is ever deleted in either direction).
 
-Landing tables (all read-only in the app, service_role writes only):
-`synced_clients` (unique on source_app + external_id, auto-matched to `profiles` by email),
-`synced_music`, `synced_notes`, `synced_playlists`, `synced_timeline`, `synced_addons`, `synced_files`
-(each unique on synced_client_id + external_id).
+**Inbound (Vibe Planner → BeatmasterDJ):** `sync-planner-data` edge function
+(POST, header `x-sync-secret: PLANNER_SYNC_SECRET`). Upserts `synced_clients`
+(source_app + external_id) and child tables — upsert WITHOUT ignoreDuplicates so
+edits in Vibe Planner update rows here. Auto-matches `profiles` by email (read-only).
 
-**Hard rule: sync is additive only.** Never write to `profiles`, `music_requests`, or any
-existing client data from the sync path. Child rows use insert-with-ignoreDuplicates, so
-re-syncing never overwrites or deletes. Admin can only relink `synced_clients.profile_id`.
+**Outbound (BeatmasterDJ → Vibe Planner):** DB triggers `push_client_to_planner`
+(on `profiles`; skips pure payment/pipeline edits) and `push_music_to_planner`
+(on `music_requests`, matched via `profiles.user_id`) call the `push-to-planner`
+edge function via pg_net, which POSTs to `VIBE_PLANNER_SYNC_URL` with the same
+`PLANNER_SYNC_SECRET` plus `x-sync-source: beatmasterdj` so the receiver never
+re-pushes (loop prevention). Both triggers swallow errors — sync failures never
+block a save. Trigger functions have EXECUTE revoked from all API roles.
 
-Admin UI: "Synced Planner Data" section inside `ClientDetailModal`
-(`src/components/admin/SyncedClientPanel.tsx`). No public pages touched.
+**Hard rules:** inbound sync never writes `profiles`/`music_requests`; no deletes
+either way; both directions keyed on stable external_ids.
+
+Admin UI: "Vibe Planner Import" tab on /admin (`PlannerImportPanel.tsx`) and
+"Synced Planner Data" section in `ClientDetailModal` (`SyncedClientPanel.tsx`).
