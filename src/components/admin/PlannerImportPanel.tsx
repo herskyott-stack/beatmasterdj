@@ -58,19 +58,30 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
 
   const load = async () => {
     setLoading(true);
-    const [{ data: synced }, { data: profs }, music] = await Promise.all([
+    const [syncedResult, profilesResult, musicResult] = await Promise.all([
       supabase.from("synced_clients").select("*").order("updated_at", { ascending: false }),
       supabase.from("profiles").select("id, first_name, last_name, email").order("first_name"),
       supabase.from("synced_music").select("synced_client_id"),
     ]);
 
+    const firstError = syncedResult.error || profilesResult.error || musicResult.error;
+    if (firstError) {
+      setLoading(false);
+      toast({
+        title: "Could not load planner data",
+        description: firstError.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     const tally: Record<string, number> = {};
-    (music.data ?? []).forEach((m: any) => {
+    (musicResult.data ?? []).forEach((m) => {
       tally[m.synced_client_id] = (tally[m.synced_client_id] ?? 0) + 1;
     });
 
-    setRows((synced ?? []) as SyncedClient[]);
-    setProfiles((profs ?? []) as ProfileLite[]);
+    setRows((syncedResult.data ?? []) as SyncedClient[]);
+    setProfiles((profilesResult.data ?? []) as ProfileLite[]);
     setCounts(tally);
     setLoading(false);
   };

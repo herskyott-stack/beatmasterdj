@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { forwardRef, useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -42,7 +42,7 @@ import {
 
 type ProfileWithRequests = {
   id: string;
-  user_id: string;
+  user_id: string | null;
   first_name: string;
   last_name: string;
   email: string;
@@ -66,7 +66,7 @@ type ProfileWithRequests = {
 
 };
 
-const AdminDashboard = () => {
+const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
   const navigate = useNavigate();
   const {
     canViewPayments,
@@ -86,11 +86,31 @@ const AdminDashboard = () => {
     }
   }, [adminLoading, canViewPayments, navigate]);
 
-  useEffect(() => {
-    if (canViewPayments) {
-      fetchAllProfiles();
+  const fetchAllProfiles = useCallback(async (showLoader = false) => {
+    if (showLoader) setLoading(true);
+
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("*")
+      .order("event_date", { ascending: true, nullsFirst: false });
+
+    if (error) {
+      console.error("Error fetching profiles:", error);
+      toast({
+        title: "Could not load clients",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      setProfiles(data || []);
     }
-  }, [canViewPayments]);
+
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (canViewPayments) fetchAllProfiles(true);
+  }, [canViewPayments, fetchAllProfiles]);
 
   // Live updates: refresh the client list whenever a profile changes anywhere.
   useEffect(() => {
@@ -102,7 +122,7 @@ const AdminDashboard = () => {
         "postgres_changes",
         { event: "*", schema: "public", table: "profiles" },
         () => {
-          fetchAllProfiles();
+          fetchAllProfiles(false);
         }
       )
       .subscribe();
@@ -110,7 +130,7 @@ const AdminDashboard = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [canViewPayments]);
+  }, [canViewPayments, fetchAllProfiles]);
 
 
   const updatePipelineStage = async (profileId: string, stage: PipelineStage) => {
@@ -163,23 +183,6 @@ const AdminDashboard = () => {
 
   };
 
-  const fetchAllProfiles = async () => {
-    setLoading(true);
-    
-    const { data, error } = await supabase
-      .from("profiles")
-      .select("*")
-      .order("event_date", { ascending: true });
-
-    if (error) {
-      console.error("Error fetching profiles:", error);
-    } else {
-      setProfiles(data || []);
-    }
-    
-    setLoading(false);
-  };
-
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/");
@@ -200,11 +203,12 @@ const AdminDashboard = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
+  const eventDate = (value: string) => new Date(`${value}T00:00:00`);
   const upcomingEvents = filteredProfiles.filter(
-    (p) => p.event_date && new Date(p.event_date) >= today
+    (p) => p.event_date && eventDate(p.event_date) >= today
   );
   const pastEvents = filteredProfiles.filter(
-    (p) => p.event_date && new Date(p.event_date) < today
+    (p) => p.event_date && eventDate(p.event_date) < today
   );
   const noDateEvents = filteredProfiles.filter((p) => !p.event_date);
 
@@ -227,7 +231,7 @@ const AdminDashboard = () => {
     role === "admin" ? "Owner" : role === "finance_manager" ? "Finance Manager" : "Assistant";
 
   return (
-    <div className="min-h-screen bg-background">
+    <div ref={ref} className="min-h-screen bg-background">
       <Navbar />
       <main className="pt-24 pb-16">
         <div className="container mx-auto px-4">
@@ -502,7 +506,7 @@ const EventTable = ({
               </TableCell>
               <TableCell>
                 {profile.event_date
-                  ? new Date(profile.event_date).toLocaleDateString()
+                  ? new Date(`${profile.event_date}T00:00:00`).toLocaleDateString()
                   : "Not set"}
               </TableCell>
               <TableCell>{profile.event_type || "Not specified"}</TableCell>
@@ -564,5 +568,7 @@ const EventTable = ({
     </div>
   );
 };
+
+AdminDashboard.displayName = "AdminDashboard";
 
 export default AdminDashboard;
