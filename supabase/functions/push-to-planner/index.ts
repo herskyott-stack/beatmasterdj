@@ -43,11 +43,21 @@ serve(async (req) => {
   }
 
   const targetUrl = Deno.env.get("VIBE_PLANNER_SYNC_URL");
-  const syncSecret = Deno.env.get("PLANNER_SYNC_SECRET");
-  if (!targetUrl || !syncSecret) {
+  const storedSyncSecret = Deno.env.get("PLANNER_SYNC_SECRET");
+  if (!targetUrl || !storedSyncSecret) {
     // Outbound sync not configured yet — succeed quietly so client saves never fail.
     return json({ skipped: true, reason: "VIBE_PLANNER_SYNC_URL not configured" });
   }
+
+  // Secret forms sometimes preserve whitespace or wrapping quotes from copy/paste.
+  // Normalize those harmless formatting differences before authenticating remotely.
+  const trimmedSecret = storedSyncSecret.trim();
+  const syncSecret =
+    trimmedSecret.length >= 2 &&
+    ((trimmedSecret.startsWith('"') && trimmedSecret.endsWith('"')) ||
+      (trimmedSecret.startsWith("'") && trimmedSecret.endsWith("'")))
+      ? trimmedSecret.slice(1, -1).trim()
+      : trimmedSecret;
 
   // Stamp the origin so the receiver never re-pushes this change back to us
   // (prevents an infinite A<->B sync loop).
@@ -60,6 +70,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
         "x-sync-secret": syncSecret,
         "x-sync-source": "beatmasterdj",
+        Authorization: `Bearer ${syncSecret}`,
       },
       body: JSON.stringify(body),
     });
