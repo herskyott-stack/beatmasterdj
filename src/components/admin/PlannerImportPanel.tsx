@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -55,6 +55,8 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  // Mirrors `profiles` but updates synchronously, so sequential imports dedupe correctly.
+  const profilesRef = useRef<ProfileLite[]>([]);
 
   const load = async () => {
     setLoading(true);
@@ -81,7 +83,8 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     });
 
     setRows((syncedResult.data ?? []) as SyncedClient[]);
-    setProfiles((profilesResult.data ?? []) as ProfileLite[]);
+    profilesRef.current = (profilesResult.data ?? []) as ProfileLite[];
+    setProfiles(profilesRef.current);
     setCounts(tally);
     setLoading(false);
   };
@@ -133,9 +136,11 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     setBusy(row.id);
 
     // Reuse an existing client with the same email instead of creating a duplicate.
+    // Uses the ref (not the closed-over state) so sequential "Import all" runs see
+    // profiles created moments earlier in the same loop.
     const normalizedEmail = row.email?.toLowerCase();
     const existing = normalizedEmail
-      ? profiles.find((p) => p.email.toLowerCase() === normalizedEmail)
+      ? profilesRef.current.find((p) => p.email.toLowerCase() === normalizedEmail)
       : undefined;
 
     let profileId = existing?.id ?? null;
@@ -163,6 +168,7 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
         return;
       }
       profileId = data.id;
+      profilesRef.current = [...profilesRef.current, data as ProfileLite];
       setProfiles((prev) => [...prev, data as ProfileLite]);
     }
 
