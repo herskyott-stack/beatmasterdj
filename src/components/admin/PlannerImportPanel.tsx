@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -55,6 +55,8 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const profilesRef = useRef<ProfileLite[]>([]);
+  profilesRef.current = profiles;
 
   const load = async () => {
     setLoading(true);
@@ -133,9 +135,11 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     setBusy(row.id);
 
     // Reuse an existing client with the same email instead of creating a duplicate.
+    // Uses the ref (not the closed-over state) so sequential "Import all" runs see
+    // profiles created moments earlier in the same loop.
     const normalizedEmail = row.email?.toLowerCase();
     const existing = normalizedEmail
-      ? profiles.find((p) => p.email.toLowerCase() === normalizedEmail)
+      ? profilesRef.current.find((p) => p.email.toLowerCase() === normalizedEmail)
       : undefined;
 
     let profileId = existing?.id ?? null;
