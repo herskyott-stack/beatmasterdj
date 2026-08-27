@@ -83,7 +83,8 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     });
 
     setRows((syncedResult.data ?? []) as SyncedClient[]);
-    setProfiles((profilesResult.data ?? []) as ProfileLite[]);
+    profilesRef.current = (profilesResult.data ?? []) as ProfileLite[];
+    setProfiles(profilesRef.current);
     setCounts(tally);
     setLoading(false);
   };
@@ -167,6 +168,7 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
         return;
       }
       profileId = data.id;
+      profilesRef.current = [...profilesRef.current, data as ProfileLite];
       setProfiles((prev) => [...prev, data as ProfileLite]);
     }
 
