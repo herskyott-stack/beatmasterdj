@@ -55,8 +55,8 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  // Mirrors `profiles` but updates synchronously, so sequential imports dedupe correctly.
   const profilesRef = useRef<ProfileLite[]>([]);
-  profilesRef.current = profiles;
 
   const load = async () => {
     setLoading(true);
