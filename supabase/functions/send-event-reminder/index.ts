@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { sendTemplateEmailLogged } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 const ALLOWED_ORIGINS = [
   "https://beatmasterdj.ca",
@@ -134,16 +135,15 @@ const handler = async (req: Request): Promise<Response> => {
       };
       for (const recipient of [profile.email, "hersky.ott@gmail.com"]) {
         const destination = recipient === profile.email ? "client" : "admin";
-        const { error: emailError } = await supabase.functions.invoke("send-transactional-email", {
-          body: {
-            templateName: "event-reminder",
-            recipientEmail: recipient,
+        try {
+          await sendTemplateEmailLogged("event-reminder", recipient, {
             idempotencyKey: `event-reminder-${destination}-${profile.user_id}-${targetDate}`,
             templateData,
-          },
-        });
-        if (emailError) console.error(`Failed to queue reminder for ${recipient}:`, emailError);
-        else sentCount++;
+          });
+          sentCount++;
+        } catch (emailError) {
+          console.error(`Failed to send reminder for ${recipient}:`, emailError);
+        }
       }
     }
 

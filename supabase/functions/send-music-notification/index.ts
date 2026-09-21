@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { sendTemplateEmailLogged } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 const ALLOWED_ORIGINS = [
   "https://beatmasterdj.ca",
@@ -74,10 +75,6 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Sending music notification for:", clientName);
 
-    const emailClient = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
     const templateData = {
       clientName,
       clientEmail,
@@ -88,22 +85,18 @@ const handler = async (req: Request): Promise<Response> => {
       doNotPlaySongs,
     };
     const sendMusic = (recipient: string, keySuffix: string) =>
-      emailClient.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "music-submission",
-          recipientEmail: recipient,
-          idempotencyKey: `music-submission-${user.id}-${keySuffix}-${Date.now()}`,
-          templateData,
-        },
+      sendTemplateEmailLogged("music-submission", recipient, {
+        idempotencyKey: `music-submission-${user.id}-${keySuffix}-${Date.now()}`,
+        templateData,
       });
-    const [{ error: adminErr }, customerRes] = await Promise.all([
+    const [adminRes, customerRes] = await Promise.allSettled([
       sendMusic("hersky.ott@gmail.com", "admin"),
-      clientEmail ? sendMusic(clientEmail, "customer") : Promise.resolve({ error: null } as any),
+      clientEmail ? sendMusic(clientEmail, "customer") : Promise.resolve({ sent: true } as const),
     ]);
-    if (adminErr) { console.error("Admin music email error:", adminErr); throw adminErr; }
-    if ((customerRes as any)?.error) console.error("Customer music email error:", (customerRes as any).error);
+    if (adminRes.status === "rejected") { console.error("Admin music email error:", adminRes.reason); throw adminRes.reason; }
+    if (customerRes.status === "rejected") console.error("Customer music email error:", customerRes.reason);
 
-    console.log("Music notification email queued successfully");
+    console.log("Music notification email sent successfully");
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { sendTemplateEmailLogged } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 const ALLOWED_ORIGINS = [
   "https://beatmasterdj.lovable.app",
@@ -33,25 +34,17 @@ async function sendDjNotification(
   sessionId?: string,
 ) {
   try {
-    const emailClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    );
-    const { data, error } = await emailClient.functions.invoke("send-transactional-email", {
-      body: {
-        templateName: "booking-notification",
-        recipientEmail: "hersky.ott@gmail.com",
+    const result = await sendTemplateEmailLogged(
+      "booking-notification",
+      "hersky.ott@gmail.com",
+      {
         idempotencyKey: `booking-${status}-${sessionId ?? crypto.randomUUID()}`,
         templateData: { status, sessionId, details: payload },
       },
-    });
-    if (error) {
-      console.error("[CREATE-PAYMENT] Email queue error", error);
-      return { ok: false, error: error.message };
-    }
-    return { ok: true, data };
+    );
+    return { ok: true, data: result };
   } catch (e) {
-    console.error("[CREATE-PAYMENT] Email queue threw", e);
+    console.error("[CREATE-PAYMENT] Email send failed", e);
     return { ok: false, error: String(e) };
   }
 }

@@ -1,15 +1,15 @@
 // Automatic retry for emails that failed due to transient sender-domain
 // verification errors (e.g., "domain_not_verified" returned while
 // notify.beatmasterdj.ca was still provisioning). Once the domain becomes
-// Active, the next scheduled run picks up DLQ rows and re-invokes
-// send-transactional-email with the original templateData snapshot stored
-// in email_send_log.metadata.
+// Active, the next scheduled run picks up DLQ rows and resends them with the
+// original templateData snapshot stored in email_send_log.metadata.
 //
 // Safe to run frequently: rows are only retried once per invocation, and
 // each retry produces its own message_id / pending row, so the DLQ row is
 // marked as "retried" via metadata to prevent infinite loops.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
+import { sendTemplateEmailLogged } from '../_shared/transactional-email-templates/send-and-log.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -85,32 +85,27 @@ Deno.serve(async (req) => {
       })
       .eq('id', row.id)
 
-    const { data, error: invokeError } = await supabase.functions.invoke(
-      'send-transactional-email',
-      {
-        body: {
-          templateName: row.template_name,
-          recipientEmail: meta.original_recipient ?? row.recipient_email,
+    try {
+      const result = await sendTemplateEmailLogged(
+        row.template_name,
+        meta.original_recipient ?? row.recipient_email,
+        {
           idempotencyKey: `retry-${row.message_id}-${attempts}`,
           templateData: meta.template_data,
         },
-      },
-    )
-
-    if (invokeError) {
-      console.error('retry-failed-emails: re-enqueue failed', {
-        message_id: row.message_id,
-        error: invokeError.message,
-      })
-      failed++
-    } else {
-      console.log('retry-failed-emails: re-enqueued', {
+      )
+      console.log('retry-failed-emails: resent', {
         message_id: row.message_id,
         template: row.template_name,
-        recipient: row.recipient_email,
-        response: data,
+        result,
       })
       retried++
+    } catch (sendError) {
+      console.error('retry-failed-emails: resend failed', {
+        message_id: row.message_id,
+        error: sendError instanceof Error ? sendError.message : String(sendError),
+      })
+      failed++
     }
   }
 

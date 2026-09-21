@@ -1,11 +1,12 @@
-// send-contest-email — routes ALL contest emails through the free internal
-// transactional queue (send-transactional-email). No Resend, no billing.
+// send-contest-email — routes ALL contest emails through Lovable's managed
+// email delivery via the shared transactional send helper.
 // Kept the same public API: { type, email, name } for single sends,
 // { type: "announce_all", contestId, winnerId } for one result email per entrant,
 // { type: "run_followups" } for the pg_cron drip.
 
 import { serve } from 'https://deno.land/std@0.190.0/http/server.ts'
 import { createClient } from 'npm:@supabase/supabase-js@2.57.2'
+import { sendTemplateEmailLogged } from '../_shared/transactional-email-templates/send-and-log.ts'
 const corsHeaders = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type', 'Access-Control-Allow-Methods': 'POST, GET, OPTIONS' }
 
 const CONTEST_END = new Date('2026-09-30T23:59:59-04:00')
@@ -38,11 +39,7 @@ async function sendOne(
   templateData: Record<string, unknown>,
   idempotencyKey: string,
 ) {
-  const { data, error } = await supabase.functions.invoke('send-transactional-email', {
-    body: { templateName, recipientEmail: to, idempotencyKey, templateData },
-  })
-  if (error) throw error
-  return data
+  return await sendTemplateEmailLogged(templateName, to, { templateData, idempotencyKey })
 }
 
 async function pool<T>(items: T[], size: number, fn: (t: T) => Promise<void>) {

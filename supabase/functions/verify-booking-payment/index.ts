@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { sendTemplateEmailLogged } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 const ALLOWED_ORIGINS = [
   "https://beatmasterdj.ca",
@@ -64,26 +64,18 @@ serve(async (req) => {
     payload["24. Stripe Session ID"] = session.id;
     payload["25. Payment Status"] = `Paid — ${(session.amount_total ?? 0) / 100} ${session.currency?.toUpperCase() ?? ""}`;
 
-    const emailClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-    );
     const customerEmail = String(session.customer_details?.email ?? md.customer_email ?? "").trim();
     const sendBooking = (recipient: string, keySuffix: string) =>
-      emailClient.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "booking-notification",
-          recipientEmail: recipient,
-          idempotencyKey: `booking-paid-${session.id}-${keySuffix}`,
-          templateData: { status: "paid", sessionId: session.id, details: payload },
-        },
+      sendTemplateEmailLogged("booking-notification", recipient, {
+        idempotencyKey: `booking-paid-${session.id}-${keySuffix}`,
+        templateData: { status: "paid", sessionId: session.id, details: payload },
       });
-    const [{ error: adminErr }, customerRes] = await Promise.all([
+    const [adminRes, customerRes] = await Promise.allSettled([
       sendBooking("hersky.ott@gmail.com", "admin"),
-      customerEmail ? sendBooking(customerEmail, "customer") : Promise.resolve({ error: null } as any),
+      customerEmail ? sendBooking(customerEmail, "customer") : Promise.resolve({ sent: true } as const),
     ]);
-    if (adminErr) console.error("[VERIFY-BOOKING] admin email queue error", adminErr);
-    if ((customerRes as any)?.error) console.error("[VERIFY-BOOKING] customer email queue error", (customerRes as any).error);
+    if (adminRes.status === "rejected") console.error("[VERIFY-BOOKING] admin email send failed", adminRes.reason);
+    if (customerRes.status === "rejected") console.error("[VERIFY-BOOKING] customer email send failed", customerRes.reason);
 
     return new Response(
       JSON.stringify({

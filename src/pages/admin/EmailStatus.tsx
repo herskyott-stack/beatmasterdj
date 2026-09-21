@@ -107,21 +107,11 @@ export default function EmailStatus() {
     }
     setSending(true);
     try {
-      const key = `dns-test-${target}-${Date.now()}`;
-      const { error } = await supabase.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: target === "admin" ? "contest-admin-notification" : "contest-confirmation",
-          recipientEmail: recipient,
-          idempotencyKey: key,
-          templateData: {
-            name: "Test Recipient",
-            email: recipient,
-            packageName: "DNS Verification Test",
-          },
-        },
+      const { error } = await supabase.functions.invoke("send-test-email", {
+        body: { target, recipientEmail: recipient },
       });
       if (error) throw error;
-      toast.success(`Queued to ${recipient}`);
+      toast.success(`Sent to ${recipient}`);
       setTimeout(loadLogs, 1500);
     } catch (e: any) {
       toast.error("Send failed: " + (e?.message ?? String(e)));
