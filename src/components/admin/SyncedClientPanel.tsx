@@ -13,6 +13,7 @@ import {
   RefreshCw,
   CloudOff,
 } from "lucide-react";
+import { requestTypeLabel, sourceAppLabel } from "@/lib/plannerLabels";
 
 type SyncedClient = {
   id: string;
@@ -136,11 +137,15 @@ const SyncedClientPanel = ({ profileId, email }: Props) => {
       <div className="flex flex-wrap items-center gap-2">
         {clients.map((c) => (
           <Badge key={c.id} variant="outline" className="text-xs">
-            {c.source_app} · {c.full_name || c.email || c.external_id}
+            {sourceAppLabel(c.source_app)} · {c.full_name || c.email || c.external_id}
           </Badge>
         ))}
         <span className="text-xs text-muted-foreground">{total} synced items</span>
       </div>
+      <p className="text-xs text-muted-foreground">
+        Read-only — these details come straight from the client's planner app, so
+        edits happen there, not here.
+      </p>
 
       <Tabs defaultValue="music" className="w-full">
         <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 gap-1 h-auto">
@@ -177,7 +182,7 @@ const SyncedClientPanel = ({ profileId, email }: Props) => {
               <>
                 <p className="font-medium">{r.song_title}</p>
                 <p className="text-sm text-muted-foreground">
-                  {r.artist || "Unknown artist"} · {r.request_type}
+                  {r.artist || "Unknown artist"} · {requestTypeLabel(r.request_type)}
                 </p>
                 {r.notes && <p className="text-xs text-primary mt-1">{r.notes}</p>}
               </>

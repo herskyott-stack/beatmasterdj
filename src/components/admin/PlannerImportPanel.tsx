@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { toast } from "@/hooks/use-toast";
 import { CloudDownload, Link2, RefreshCw, Search, UserPlus } from "lucide-react";
+import { formatEventDate, sourceAppLabel } from "@/lib/plannerLabels";
 
 type SyncedClient = {
   id: string;
@@ -46,9 +47,10 @@ const splitName = (full: string | null, fallbackEmail: string | null) => {
 
 interface Props {
   onProfilesChanged?: () => void;
+  onPendingCountChange?: (count: number) => void;
 }
 
-const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
+const PlannerImportPanel = ({ onProfilesChanged, onPendingCountChange }: Props) => {
   const [rows, setRows] = useState<SyncedClient[]>([]);
   const [profiles, setProfiles] = useState<ProfileLite[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
@@ -82,11 +84,13 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
       tally[m.synced_client_id] = (tally[m.synced_client_id] ?? 0) + 1;
     });
 
-    setRows((syncedResult.data ?? []) as SyncedClient[]);
+    const rows = (syncedResult.data ?? []) as SyncedClient[];
+    setRows(rows);
     profilesRef.current = (profilesResult.data ?? []) as ProfileLite[];
     setProfiles(profilesRef.current);
     setCounts(tally);
     setLoading(false);
+    onPendingCountChange?.(rows.filter((r) => !r.profile_id).length);
   };
 
   useEffect(() => {
@@ -179,7 +183,7 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
     setBusy(null);
 
     if (linkErr) {
-      toast({ title: "Linked partially", description: linkErr.message, variant: "destructive" });
+      toast({ title: "Imported, but the link didn't save", description: linkErr.message, variant: "destructive" });
       return;
     }
 
@@ -188,6 +192,9 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
       description: "Planner music, notes and timeline now show on their profile.",
     });
     setRows((prev) => prev.map((r) => (r.id === row.id ? { ...r, profile_id: profileId } : r)));
+    onPendingCountChange?.(
+      rows.filter((r) => !r.profile_id && r.id !== row.id).length
+    );
     onProfilesChanged?.();
   };
 
@@ -210,6 +217,11 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
       r.external_id.toLowerCase().includes(q)
     );
   });
+
+  // Clients still waiting for import float to the top.
+  const sorted = [...filtered].sort(
+    (a, b) => Number(!b.profile_id) - Number(!a.profile_id)
+  );
 
   const pendingCount = rows.filter((r) => !r.profile_id).length;
 
@@ -260,7 +272,7 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
         </Card>
       ) : (
         <div className="space-y-3">
-          {filtered.map((row) => {
+          {sorted.map((row) => {
             const linked = profiles.find((p) => p.id === row.profile_id);
             return (
               <Card key={row.id} variant="glass">
@@ -271,18 +283,33 @@ const PlannerImportPanel = ({ onProfilesChanged }: Props) => {
                         {row.full_name || row.email || row.external_id}
                       </p>
                       <Badge variant="outline" className="text-[10px]">
-                        {row.source_app}
+                        {sourceAppLabel(row.source_app)}
                       </Badge>
+                      {row.profile_id ? (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] border-primary/50 text-primary"
+                        >
+                          Imported
+                        </Badge>
+                      ) : (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] border-amber-400/50 text-amber-300"
+                        >
+                          Needs review
+                        </Badge>
+                      )}
                       {counts[row.id] ? (
                         <Badge variant="outline" className="text-[10px]">
-                          {counts[row.id]} songs
+                          {counts[row.id]} {counts[row.id] === 1 ? "song" : "songs"}
                         </Badge>
                       ) : null}
                     </div>
                     <p className="text-sm text-muted-foreground truncate">
-                      {[row.email, row.event_date, row.event_type, row.venue_location]
+                      {[row.email, formatEventDate(row.event_date), row.event_type, row.venue_location]
                         .filter(Boolean)
-                        .join(" · ") || "No event details"}
+                        .join(" · ") || "No event details yet"}
                     </p>
                     {linked && (
                       <p className="text-xs text-primary mt-1 flex items-center gap-1">

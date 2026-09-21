@@ -78,6 +78,7 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
   const [profiles, setProfiles] = useState<ProfileWithRequests[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
+  const [plannerPending, setPlannerPending] = useState(0);
   const [selectedClient, setSelectedClient] = useState<ProfileWithRequests | null>(null);
 
   useEffect(() => {
@@ -339,6 +340,11 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
               </TabsTrigger>
               <TabsTrigger value="planner">
                 <CloudDownload className="w-4 h-4 mr-2" /> Vibe Planner Import
+                {plannerPending > 0 && (
+                  <Badge className="ml-2 h-5 min-w-5 px-1.5 text-[10px]">
+                    {plannerPending}
+                  </Badge>
+                )}
               </TabsTrigger>
               <TabsTrigger value="home-media">
                 <ImagePlus className="w-4 h-4 mr-2" /> Home Media
@@ -346,7 +352,10 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
             </TabsList>
 
             <TabsContent value="planner">
-              <PlannerImportPanel onProfilesChanged={() => fetchAllProfiles(false)} />
+              <PlannerImportPanel
+                onProfilesChanged={() => fetchAllProfiles(false)}
+                onPendingCountChange={setPlannerPending}
+              />
             </TabsContent>
 
 

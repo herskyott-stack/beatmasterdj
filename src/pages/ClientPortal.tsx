@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { Music, Star, Plus, Trash2, Send, LogOut, Clipboard, X, Check, Shield, GraduationCap } from "lucide-react";
+import { Music, Star, Plus, Trash2, Send, LogOut, Clipboard, X, Check, Shield, GraduationCap, CheckCircle2, Info } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import {
+  REQUEST_TYPE_DESCRIPTIONS,
+  EMPTY_LIST_COPY,
+  requestTypeLabel,
+} from "@/lib/plannerLabels";
 import type { User } from "@supabase/supabase-js";
 
 type MusicRequest = {
@@ -35,12 +40,14 @@ type Profile = {
 
 const ClientPortal = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { isAdmin } = useAdminCheck();
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [musicRequests, setMusicRequests] = useState<MusicRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
+  const [showSubmittedBanner, setShowSubmittedBanner] = useState(false);
   
   // Form states
   const [newSong, setNewSong] = useState("");
@@ -69,6 +76,9 @@ const ClientPortal = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const submittedFlagKey = (userId: string) =>
+  `beatmaster_playlist_submitted_${userId}`;
+
   const fetchData = async (userId: string) => {
     setLoading(true);
     
@@ -94,8 +104,21 @@ const ClientPortal = () => {
       setMusicRequests(requestsData);
     }
 
+    // Returning visitors still see their submission confirmation.
+    if (localStorage.getItem(submittedFlagKey(userId))) {
+      setShowSubmittedBanner(true);
+    }
+
     setLoading(false);
   };
+
+  // Arriving from a fresh submit (?submitted=true): remember it, show the banner.
+  useEffect(() => {
+    if (searchParams.get("submitted") === "true" && user) {
+      localStorage.setItem(submittedFlagKey(user.id), "1");
+      setShowSubmittedBanner(true);
+    }
+  }, [searchParams, user]);
 
   const handleAddSong = async () => {
     if (!user || !newSong.trim()) {
@@ -107,11 +130,29 @@ const ClientPortal = () => {
       return;
     }
 
+    const title = newSong.trim();
+    const artistName = newArtist.trim();
+
+    // Don't let the same song sneak onto the same list twice.
+    const alreadyAdded = musicRequests.some(
+      (r) =>
+        r.request_type === activeTab &&
+        r.song_title.toLowerCase() === title.toLowerCase() &&
+        (r.artist ?? "").toLowerCase() === artistName.toLowerCase()
+    );
+    if (alreadyAdded) {
+      toast({
+        title: "Already on your list",
+        description: `"${title}" is already in your ${requestTypeLabel(activeTab)} list.`,
+      });
+      return;
+    }
+
     const { data, error } = await supabase.from("music_requests").insert({
       user_id: user.id,
       request_type: activeTab,
-      song_title: newSong.trim(),
-      artist: newArtist.trim() || null,
+      song_title: title,
+      artist: artistName || null,
       notes: newNotes.trim() || null,
     }).select();
 
@@ -131,7 +172,7 @@ const ClientPortal = () => {
       setNewNotes("");
       toast({
         title: "Song Added!",
-        description: `"${newSong}" has been added to your ${activeTab} list.`,
+        description: `"${title}" has been added to your ${requestTypeLabel(activeTab)} list.`,
       });
     }
   };
@@ -202,7 +243,7 @@ const ClientPortal = () => {
       setBulkPaste("");
       toast({
         title: "Songs Added!",
-        description: `${data.length} songs have been added to your ${activeTab} list.`,
+        description: `${data.length} ${data.length === 1 ? "song has" : "songs have"} been added to your ${requestTypeLabel(activeTab)} list.`,
       });
     }
   };
@@ -273,6 +314,10 @@ const ClientPortal = () => {
         description: "Your music selection has been sent. We'll review it and get back to you!",
       });
 
+      // Remember the submission so the confirmation banner survives reloads.
+      localStorage.setItem(submittedFlagKey(user.id), "1");
+      setShowSubmittedBanner(true);
+
       // Navigate to success state
       navigate("/client-portal?submitted=true");
     } catch (error) {
@@ -285,6 +330,12 @@ const ClientPortal = () => {
     }
 
     setSubmitting(false);
+  };
+
+  const dismissSubmittedBanner = () => {
+    setShowSubmittedBanner(false);
+    if (user) localStorage.removeItem(submittedFlagKey(user.id));
+    navigate("/client-portal");
   };
 
   const handleSignOut = async () => {
@@ -345,6 +396,33 @@ const ClientPortal = () => {
             </div>
           </div>
 
+          {/* Submitted confirmation banner */}
+          {showSubmittedBanner && (
+            <Card variant="glass" className="mb-6 border-primary/40">
+              <CardContent className="py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                <CheckCircle2 className="w-9 h-9 text-primary shrink-0" />
+                <div className="flex-1">
+                  <p className="font-medium">Playlist sent to Beatmaster DJ!</p>
+                  <p className="text-sm text-muted-foreground">
+                    {musicRequests.length > 0
+                      ? `Your ${musicRequests.length} ${musicRequests.length === 1 ? "song is" : "songs are"} with us — `
+                      : ""}
+                    DJ Hersky will review everything before your event. You can
+                    keep adding songs below and hit Submit again anytime.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={dismissSubmittedBanner}
+                  className="shrink-0"
+                >
+                  Add more songs
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-6">
@@ -360,21 +438,35 @@ const ClientPortal = () => {
                 </CardHeader>
                 <CardContent>
                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <TabsList className="grid w-full grid-cols-3 mb-6">
+                    <TabsList className="grid w-full grid-cols-3 mb-4">
                       <TabsTrigger value="priority" className="text-xs sm:text-sm px-1 sm:px-3">
                         <Star className="w-4 h-4 mr-1 hidden sm:inline" />
                         Priority
+                        <span className="ml-1.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] leading-none">
+                          {getSongsByType("priority").length}
+                        </span>
                       </TabsTrigger>
                       <TabsTrigger value="additional" className="text-xs sm:text-sm px-1 sm:px-3">
                         <Plus className="w-4 h-4 mr-1 hidden sm:inline" />
                         Additional
+                        <span className="ml-1.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] leading-none">
+                          {getSongsByType("additional").length}
+                        </span>
                       </TabsTrigger>
                       <TabsTrigger value="do_not_play" className="text-xs sm:text-sm px-1 sm:px-3">
                         <X className="w-4 h-4 mr-1 hidden sm:inline" />
                         <span className="sm:hidden">Skip</span>
                         <span className="hidden sm:inline">Do Not Play</span>
+                        <span className="ml-1.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] leading-none">
+                          {getSongsByType("do_not_play").length}
+                        </span>
                       </TabsTrigger>
                     </TabsList>
+
+                    <p className="text-xs text-muted-foreground flex items-start gap-1.5 mb-2">
+                      <Info className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
+                      {REQUEST_TYPE_DESCRIPTIONS[activeTab]}
+                    </p>
 
                     <div className="space-y-6">
                       {/* Add Single Song */}
@@ -385,12 +477,18 @@ const ClientPortal = () => {
                             placeholder="Song title"
                             value={newSong}
                             onChange={(e) => setNewSong(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") handleAddSong();
+                            }}
                             className="bg-card/50 border-white/10"
                           />
                           <Input
                             placeholder="Artist (optional)"
                             value={newArtist}
                             onChange={(e) => setNewArtist(e.target.value)}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter") handleAddSong();
+                            }}
                             className="bg-card/50 border-white/10"
                           />
                         </div>
@@ -443,9 +541,15 @@ const ClientPortal = () => {
                         </h3>
                         
                         {getSongsByType(activeTab).length === 0 ? (
-                          <p className="text-muted-foreground text-sm py-4 text-center">
-                            No songs added yet. Start adding songs above!
-                          </p>
+                          <div className="text-center py-8 text-sm">
+                            <Music className="w-8 h-8 mx-auto mb-2 text-muted-foreground opacity-50" />
+                            <p className="font-medium text-foreground/80 mb-1">
+                              {EMPTY_LIST_COPY[activeTab].title}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {EMPTY_LIST_COPY[activeTab].body}
+                            </p>
+                          </div>
                         ) : (
                           <div className="space-y-2 max-h-64 overflow-y-auto">
                             {getSongsByType(activeTab).map((song) => (
@@ -521,7 +625,9 @@ const ClientPortal = () => {
                     {submitting ? "Submitting..." : "Submit Playlist"}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    Submit when you're done to send your music list to Beatmaster DJ
+                    {musicRequests.length === 0
+                      ? "Add at least one song to enable the button, then submit to send your list to Beatmaster DJ."
+                      : "Submit when you're done — you can always add more songs and submit again."}
                   </p>
                 </CardContent>
               </Card>
