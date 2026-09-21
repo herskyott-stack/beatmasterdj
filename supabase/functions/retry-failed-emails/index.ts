@@ -1,15 +1,15 @@
 // Automatic retry for emails that failed due to transient sender-domain
 // verification errors (e.g., "domain_not_verified" returned while
 // notify.beatmasterdj.ca was still provisioning). Once the domain becomes
-// Active, the next scheduled run picks up DLQ rows and re-invokes
-// send-transactional-email with the original templateData snapshot stored
-// in email_send_log.metadata.
+// Active, the next scheduled run picks up DLQ rows and resends them with the
+// original templateData snapshot stored in email_send_log.metadata.
 //
 // Safe to run frequently: rows are only retried once per invocation, and
 // each retry produces its own message_id / pending row, so the DLQ row is
 // marked as "retried" via metadata to prevent infinite loops.
 
 import { createClient } from 'npm:@supabase/supabase-js@2'
+import { sendTemplateEmailLogged } from '../_shared/transactional-email-templates/send-and-log.ts'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
