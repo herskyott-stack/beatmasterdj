@@ -1,10 +1,12 @@
-import { Home, Menu, X, Music } from "lucide-react";
+import { Home, Menu, X, Music, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAdminCheck } from "@/hooks/useAdminCheck";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { isAdmin } = useAdminCheck();
 
   const navLinks = [
     { href: "/", label: "Home", isRoute: true },
@@ -12,6 +14,8 @@ const Navbar = () => {
     { href: "/book", label: "Packages", isRoute: true },
     { href: "#addons", label: "Add-Ons" },
     { href: "/mentorship", label: "Mentorship", isRoute: true },
+    { href: "/pricing-guide", label: "Pricing Guide", isRoute: true },
+    { href: "/web-design", label: "Web Design", isRoute: true },
     { href: "/giveaway", label: "Giveaway", isRoute: true },
     { href: "/about", label: "About", isRoute: true },
     { href: "/auth", label: "Client Portal", isRoute: true },
@@ -102,6 +106,15 @@ const Navbar = () => {
                   </a>
                 )
               ))}
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  className="flex items-center gap-2 border-t border-white/10 pt-4 font-display text-xs uppercase tracking-[0.15em] text-primary transition-colors hover:text-secondary"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <ShieldCheck className="h-4 w-4" /> Admin Portal
+                </Link>
+              )}
               <Button variant="hero" size="default" className="mt-4" asChild>
                 <Link to="/book">Book Now</Link>
               </Button>

@@ -32,6 +32,8 @@ import ContestSettings from "./pages/admin/ContestSettings";
 import EmailStatus from "./pages/admin/EmailStatus";
 import PaymentsOverview from "./pages/admin/PaymentsOverview";
 import UnsubscribePage from "./pages/UnsubscribePage";
+import PricingGuidePage from "./pages/PricingGuidePage";
+import WebDesignPage from "./pages/WebDesignPage";
 import NotFound from "./pages/NotFound";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -82,6 +84,8 @@ function App() {
               <Route path="/admin/payments" element={<PaymentsOverview />} />
               <Route path="/unsubscribe" element={<UnsubscribePage />} />
               <Route path="/email-unsubscribe" element={<UnsubscribePage />} />
+               <Route path="/pricing-guide" element={<PricingGuidePage />} />
+               <Route path="/web-design" element={<WebDesignPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
               </Routes>
