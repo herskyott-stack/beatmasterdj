@@ -25,7 +25,8 @@ const TermsPage = () => {
             <h2 className="font-display text-xl font-bold text-white mb-2">Bookings &amp; deposits</h2>
             <p>
               Your date is reserved once a signed agreement and the required deposit
-              are received. Deposits are non-refundable but transferable to a new
+              are received. A non-refundable deposit of 50% of the booking total is
+              required to secure your date. Deposits are non-refundable but transferable to a new
               date (one transfer per booking), subject to availability.
             </p>
           </section>

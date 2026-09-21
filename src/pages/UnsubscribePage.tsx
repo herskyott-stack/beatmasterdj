@@ -58,7 +58,7 @@ export default function UnsubscribePage() {
                 <>
                   <p>You&apos;ve been unsubscribed.</p>
                   <p className="text-sm text-muted-foreground">
-                    You won't receive further contest emails from BeatMaster DJ.
+                    You won't receive further contest emails from Hersky DJ & AV.
                   </p>
                 </>
               )}

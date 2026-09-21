@@ -8,7 +8,7 @@ import { useContestSettings, formatContestDate } from "@/hooks/useContestSetting
 const GiveawayRulesPage = () => {
   const { settings } = useContestSettings();
   const endsLabel = settings ? formatContestDate(settings.end_date) : "the contest end date";
-  const name = settings?.contest_name ?? "BeatmasterDJ Fall Wedding & Event Giveaway";
+  const name = settings?.contest_name ?? "Hersky DJ & AV Fall Wedding & Event Giveaway";
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,7 +30,7 @@ const GiveawayRulesPage = () => {
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">1. Eligibility</h2>
               <p>Open to legal residents of Canada aged 18 or older (or age of majority in their
-                province). Employees and immediate family of BeatmasterDJ / Hersky DJ &amp; AV are
+                province). Employees and immediate family of Hersky DJ &amp; AV are
                 not eligible. Void where prohibited.</p>
             </section>
 
@@ -44,9 +44,9 @@ const GiveawayRulesPage = () => {
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">3. Bonus Entries</h2>
               <p>You can earn up to <strong>3 bonus entries</strong> by (a) following
-                @beatmasterdj on Instagram, (b) sharing the contest post to your story, and
-                (c) tagging @beatmasterdj in that story. All three must be completed and{" "}
-                <strong>verified by BeatmasterDJ</strong> before they count. You'll be asked for
+                @hersky.ott on Instagram, (b) sharing the contest post to your story, and
+                (c) tagging @hersky.ott in that story. All three must be completed and{" "}
+                <strong>verified by Hersky DJ &amp; AV</strong> before they count. You'll be asked for
                 your Instagram handle so we can verify.</p>
             </section>
 
@@ -76,14 +76,14 @@ const GiveawayRulesPage = () => {
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">7. Privacy</h2>
               <p>Information collected is used only to administer this contest and follow up about
-                BeatmasterDJ services. We do not sell or share entrant data with third parties.</p>
+                Hersky DJ &amp; AV services. We do not sell or share entrant data with third parties.</p>
             </section>
 
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">8. General</h2>
-              <p>By entering, participants agree to these rules and to the decisions of BeatmasterDJ,
+              <p>By entering, participants agree to these rules and to the decisions of Hersky DJ &amp; AV,
                 which are final and binding. This promotion is not sponsored, endorsed, or
-                administered by Instagram or any other social platform. BeatmasterDJ may modify or
+                administered by Instagram or any other social platform. Hersky DJ &amp; AV may modify or
                 cancel the contest if fraud or a technical issue impairs its integrity.</p>
             </section>
 

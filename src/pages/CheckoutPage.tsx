@@ -344,7 +344,7 @@ const CheckoutPage = () => {
                         <p>Neither party shall be liable for failure to perform due to circumstances beyond their control, including but not limited to: natural disasters, pandemics, government restrictions, or venue cancellations.</p>
 
                         <p><strong className="text-foreground">7. OVERTIME</strong></p>
-                        <p>If the Client requests DJ services beyond the contracted hours, overtime will be charged at $200 per hour, billed in 30-minute increments.</p>
+                        <p>If the Client requests DJ services beyond the contracted hours, additional time is charged at $200 per hour when pre-booked at least 7 days before the event, or $250 per hour for day-of extensions (subject to availability), billed in 30-minute increments.</p>
 
                         <p className="pt-4"><strong className="text-foreground">8. AGREEMENT</strong></p>
                         <p>By signing below, both parties agree to the terms and conditions outlined in this agreement.</p>

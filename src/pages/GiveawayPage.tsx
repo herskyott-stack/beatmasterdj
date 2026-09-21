@@ -18,7 +18,7 @@ import { CONTEST_PACKAGES, getPackageById } from "@/lib/contestPackages";
 import ContestCountdown from "@/components/contest/ContestCountdown";
 
 const LS_KEY = "beatmasterdj_giveaway_form_v1";
-const IG_HANDLE = "beatmasterdj.ca";
+const IG_HANDLE = "hersky.ott";
 const IG_URL = `https://instagram.com/${IG_HANDLE}`;
 
 const entrySchema = z.object({
@@ -442,7 +442,7 @@ const GiveawayPage = () => {
                       <label className="flex items-start gap-3 text-sm cursor-pointer">
                         <Checkbox checked={bonus.tagged}
                           onCheckedChange={(v) => setBonus({ ...bonus, tagged: v === true })}/>
-                        <span>Tag <strong>3 friends</strong> in the post's comments — anyone getting married, planning a party, or booking an event soon</span>
+                        <span>Tag {" "}<a href={IG_URL} target="_blank" rel="noreferrer" className="text-primary underline">@{IG_HANDLE}</a>{" "}in that story — so we can verify your bonus entry</span>
                       </label>
                     </div>
 

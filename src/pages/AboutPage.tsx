@@ -6,23 +6,23 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 const stats = [
-  { number: "14+", label: "Years Experience", icon: Calendar },
-  { number: "2000+", label: "Events Completed", icon: Music },
-  { number: "500+", label: "Happy Couples", icon: Heart },
-  { number: "15+", label: "Professional DJs", icon: Users },
+  { number: "15+", label: "Years Experience", icon: Calendar },
+  { number: "500+", label: "Events Completed", icon: Music },
+  { number: "97%", label: "Client Satisfaction", icon: Heart },
+  { number: "2+", label: "Pro DJ Team", icon: Users },
 ];
 
 const teamMembers = [
   {
-    name: "Jacob Herscovitch",
+    name: "Jake Herscovitch",
     role: "Founder & Master DJ",
-    bio: "DJing since the age of 12, Jacob founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
+    bio: "DJing since the age of 13, Jake founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
     specialties: ["Weddings", "Corporate Events", "EDM"],
   },
   {
     name: "The Hersky Crew",
     role: "Professional DJ Team",
-    bio: "Our handpicked team of professional DJs shares Jacob's passion for music and commitment to excellence. Each member brings their unique style while maintaining our signature standard of quality.",
+    bio: "Our handpicked team of professional DJs shares Jake's passion for music and commitment to excellence. Each member brings their unique style while maintaining our signature standard of quality.",
     specialties: ["All Event Types", "Multiple Genres", "Bilingual Services"],
   },
 ];
@@ -67,7 +67,7 @@ const AboutPage = () => {
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
                 Since 2012, we've been Ottawa's premier DJ service, bringing energy, 
-                professionalism, and unforgettable music experiences to thousands of events.
+                professionalism, and unforgettable music experiences to 500+ events.
               </p>
             </div>
           </div>
@@ -104,7 +104,7 @@ const AboutPage = () => {
                   </h2>
                   <div className="space-y-4 text-muted-foreground leading-relaxed">
                     <p>
-                      Hersky DJ & AV was founded in 2012 by Jacob Herscovitch, a passionate DJ who 
+                      Hersky DJ & AV was founded in 2012 by Jake Herscovitch, a passionate DJ who 
                       believed that every event deserves exceptional entertainment. What started as 
                       a one-man operation quickly grew into Ottawa's most trusted DJ service.
                     </p>
@@ -114,7 +114,7 @@ const AboutPage = () => {
                       corporate galas, school proms to high-energy club nights – we've done it all.
                     </p>
                     <p>
-                      Today, with over 14 years of experience and thousands of successful events 
+                      Today, with over 15 years of experience and 500+ successful events 
                       under our belt, we continue to innovate and elevate the standard of DJ 
                       entertainment in the Ottawa region and beyond.
                     </p>
