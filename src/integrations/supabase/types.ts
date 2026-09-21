@@ -364,42 +364,6 @@ export type Database = {
         }
         Relationships: []
       }
-      leads: {
-        Row: {
-          business_name: string | null
-          created_at: string
-          email: string
-          id: string
-          message: string | null
-          metadata: Json
-          name: string
-          phone: string | null
-          service_interest: string
-        }
-        Insert: {
-          business_name?: string | null
-          created_at?: string
-          email: string
-          id?: string
-          message?: string | null
-          metadata?: Json
-          name: string
-          phone?: string | null
-          service_interest: string
-        }
-        Update: {
-          business_name?: string | null
-          created_at?: string
-          email?: string
-          id?: string
-          message?: string | null
-          metadata?: Json
-          name?: string
-          phone?: string | null
-          service_interest?: string
-        }
-        Relationships: []
-      }
       lesson_access: {
         Row: {
           created_at: string
