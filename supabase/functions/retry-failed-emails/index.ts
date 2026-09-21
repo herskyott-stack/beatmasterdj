@@ -85,32 +85,27 @@ Deno.serve(async (req) => {
       })
       .eq('id', row.id)
 
-    const { data, error: invokeError } = await supabase.functions.invoke(
-      'send-transactional-email',
-      {
-        body: {
-          templateName: row.template_name,
-          recipientEmail: meta.original_recipient ?? row.recipient_email,
+    try {
+      const result = await sendTemplateEmailLogged(
+        row.template_name,
+        meta.original_recipient ?? row.recipient_email,
+        {
           idempotencyKey: `retry-${row.message_id}-${attempts}`,
           templateData: meta.template_data,
         },
-      },
-    )
-
-    if (invokeError) {
-      console.error('retry-failed-emails: re-enqueue failed', {
-        message_id: row.message_id,
-        error: invokeError.message,
-      })
-      failed++
-    } else {
-      console.log('retry-failed-emails: re-enqueued', {
+      )
+      console.log('retry-failed-emails: resent', {
         message_id: row.message_id,
         template: row.template_name,
-        recipient: row.recipient_email,
-        response: data,
+        result,
       })
       retried++
+    } catch (sendError) {
+      console.error('retry-failed-emails: resend failed', {
+        message_id: row.message_id,
+        error: sendError instanceof Error ? sendError.message : String(sendError),
+      })
+      failed++
     }
   }
 
