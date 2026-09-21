@@ -39,7 +39,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden 2xl:flex items-center gap-4">
+          <div className="hidden xl:flex items-center gap-4">
             {navLinks.map((link) => (
               link.isRoute ? (
                 <Link
@@ -65,10 +65,10 @@ const Navbar = () => {
           </div>
 
           {/* Mobile Buttons */}
-          <div className="2xl:hidden flex items-center gap-3">
+          <div className="xl:hidden flex items-center gap-3">
             <Link
               to="/"
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(var(--primary)_/_0.25)] transition-all duration-300"
+              className="flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(var(--primary)_/_0.25)] transition-all duration-300"
             >
               <Home className="w-4 h-4 text-primary" />
             </Link>
@@ -77,7 +77,7 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-              className="flex items-center justify-center w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+              className="flex items-center justify-center w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -87,7 +87,7 @@ const Navbar = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="2xl:hidden max-h-[calc(100vh-4rem)] overflow-y-auto py-4 border-t border-white/10 animate-fade-in">
+          <div className="xl:hidden max-h-[calc(100vh-4rem)] overflow-y-auto py-4 border-t border-white/10 animate-fade-in">
             <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 link.isRoute ? (

@@ -597,7 +597,7 @@ const MentorshipPage = () => {
         <section className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <h2 className="font-display text-3xl md:text-4xl font-bold mb-6 text-center gradient-text">
-              Frequently Asked
+              Frequently Asked Questions
             </h2>
             <Accordion type="single" collapsible className="space-y-2">
               <AccordionItem value="q1" className="border border-white/10 rounded-lg px-4 bg-card/40">

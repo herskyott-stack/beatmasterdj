@@ -619,7 +619,7 @@ const PackagesPage = () => {
                     <CardDescription>{pkg.description}</CardDescription>
                     <div className="mt-4">
                       <span className="font-display text-4xl font-bold gradient-text">{pkg.price}</span>
-                      <span className="ml-2 text-xs text-muted-foreground align-middle">+ 13% tax</span>
+                      <span className="ml-2 text-xs text-muted-foreground align-middle">+ 13% HST</span>
                     </div>
                   </CardHeader>
                   <CardContent className="pb-6">

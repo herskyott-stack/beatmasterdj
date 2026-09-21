@@ -27,14 +27,14 @@ const HeroSection = () => {
         <div className="max-w-4xl mx-auto">
           {/* Main Heading */}
           <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[0.95] animate-fade-in" style={{ animationDelay: "0.1s" }}>
-            <span className="text-white">ELEVATE YOUR</span>
+            <span className="text-white">OTTAWA'S DJ FOR</span>
             <br />
-            <span className="gradient-text">EVENT EXPERIENCE</span>
+            <span className="gradient-text">PACKED DANCE FLOORS</span>
           </h1>
 
           {/* Subheading */}
           <p className="text-base md:text-lg text-zinc-400 max-w-2xl mx-auto mb-12 leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s" }}>
-            Professional DJ services for weddings, corporate events, school functions, private parties, and electrifying EDM experiences. Creating unforgettable moments through music.
+            500+ events. 15+ years. One packed dance floor. Wedding, corporate and party DJ services across Ottawa — pro sound, lighting and AV included.
           </p>
 
           {/* CTA Buttons */}
@@ -47,6 +47,11 @@ const HeroSection = () => {
                 </Link>
               </Button>
             </MagneticButton>
+            <Button variant="outline" size="xl" asChild>
+              <Link to="/pricing-guide">
+                See Pricing
+              </Link>
+            </Button>
           </div>
 
           {/* Stats */}

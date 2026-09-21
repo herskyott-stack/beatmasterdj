@@ -459,7 +459,7 @@ const CheckoutPage = () => {
                             console.error('Payment error:', error);
                             toast({
                               title: "Payment Error",
-                              description: error.message || "Failed to create payment session. Please try e-transfer instead.",
+                              description: error.message || "Failed to create payment session. Please try again or contact us.",
                               variant: "destructive",
                             });
                           } finally {

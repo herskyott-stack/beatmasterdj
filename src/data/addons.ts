@@ -293,7 +293,7 @@ export const addons: Addon[] = [
       },
       {
         q: "Can I combine it with cold sparklers?",
-        a: "Yes — and the combination looks incredible. Bundle both for $500 (save $50).",
+        a: "Yes — and the combination looks incredible. Ask us about bundling both together."
       },
     ],
     image: dryIce,

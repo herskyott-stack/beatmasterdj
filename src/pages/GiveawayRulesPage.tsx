@@ -8,7 +8,7 @@ import { useContestSettings, formatContestDate } from "@/hooks/useContestSetting
 const GiveawayRulesPage = () => {
   const { settings } = useContestSettings();
   const endsLabel = settings ? formatContestDate(settings.end_date) : "the contest end date";
-  const name = settings?.contest_name ?? "BeatmasterDJ Summer Wedding & Event Giveaway";
+  const name = settings?.contest_name ?? "BeatmasterDJ Fall Wedding & Event Giveaway";
 
   return (
     <div className="min-h-screen bg-background">
@@ -37,7 +37,7 @@ const GiveawayRulesPage = () => {
             <section>
               <h2 className="font-display text-xl font-semibold text-foreground mb-2">2. How to Enter</h2>
               <p>Complete the entry form at <strong>/giveaway</strong> with your name, email, and
-                event details. <strong>One entry per person and per email address.</strong> Duplicate
+                event details. <strong>One entry per person.</strong> Duplicate
                 or automated submissions will be disqualified.</p>
             </section>
 
@@ -62,7 +62,7 @@ const GiveawayRulesPage = () => {
                 professional sound system, clean transitions with curated playlists, one custom mix,
                 and optional ceremony audio. The prize is <strong>non-transferable</strong>, has{" "}
                 <strong>no cash value</strong>, and must be redeemed within 12 months of the winner
-                announcement for an event location within our normal service area.</p>
+                announcement for an event location within our service area (Ottawa–Gatineau and surrounding regions).</p>
             </section>
 
             <section>

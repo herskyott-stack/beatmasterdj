@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Send, Instagram, Facebook, Youtube } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
@@ -16,11 +16,11 @@ const ContactSection = () => {
         {/* Section Header */}
         <div className="text-center mb-16">
           <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-            <span className="text-foreground">LET'S </span>
-            <span className="gradient-text">CONNECT</span>
+            <span className="text-foreground">LOCK IN </span>
+            <span className="gradient-text">YOUR DATE</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Ready to make your event unforgettable? Get in touch and let's start planning.
+            Tell us about your event and get a personalized quote within 24 hours. Dates book fast — especially wedding season.
           </p>
         </div>
 
@@ -33,7 +33,7 @@ const ContactSection = () => {
                 <input type="hidden" name="_subject" value="New DJ Booking Inquiry!" />
                 <input type="hidden" name="_captcha" value="false" />
                 <input type="hidden" name="_template" value="table" />
-                <input type="hidden" name="_autoresponse" value="Thanks for reaching out to BeatMaster DJ & AV! I got your inquiry and will get back to you within 24 hours. — Jake" />
+                <input type="hidden" name="_autoresponse" value="Thanks for reaching out to Hersky DJ & AV! I got your inquiry and will get back to you within 24 hours. — Jake" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">First Name</label>
@@ -77,32 +77,37 @@ const ContactSection = () => {
                     <optgroup label="Wedding">
                       <option value="Wedding - General Inquiry">Wedding — General Inquiry</option>
                       <option value="Wedding - Essential Package">Wedding — Essential ($1,800)</option>
-                      <option value="Wedding - Premium Package">Wedding — Premium ($2,800)</option>
-                      <option value="Wedding - Luxury Package">Wedding — Luxury ($4,200)</option>
+                      <option value="Wedding - Classic Package">Wedding — Classic ($2,500)</option>
+                      <option value="Wedding - Premium Package">Wedding — Premium ($3,500)</option>
+                      <option value="Wedding - Ultimate Package">Wedding — Ultimate ($5,000)</option>
                     </optgroup>
                     <optgroup label="Corporate Event">
                       <option value="Corporate - General Inquiry">Corporate — General Inquiry</option>
                       <option value="Corporate - Starter Package">Corporate — Starter ($1,800)</option>
-                      <option value="Corporate - Professional Package">Corporate — Professional ($3,000)</option>
-                      <option value="Corporate - Executive Package">Corporate — Executive ($5,000)</option>
+                      <option value="Corporate - Professional Package">Corporate — Professional ($2,800)</option>
+                      <option value="Corporate - Executive Package">Corporate — Executive ($3,500)</option>
+                      <option value="Corporate - Enterprise Package">Corporate — Enterprise ($5,000)</option>
                     </optgroup>
                     <optgroup label="School Event">
                       <option value="School - General Inquiry">School — General Inquiry</option>
-                      <option value="School - Basic Package">School — Basic ($1,800)</option>
-                      <option value="School - Standard Package">School — Standard ($2,500)</option>
-                      <option value="School - Premium Package">School — Premium ($3,800)</option>
+                      <option value="School - Basic Package">School — Basic ($1,200)</option>
+                      <option value="School - Standard Package">School — Standard ($1,600)</option>
+                      <option value="School - Prom Package">School — Prom ($1,800)</option>
+                      <option value="School - Homecoming Package">School — Homecoming ($2,500)</option>
                     </optgroup>
                     <optgroup label="Private Party">
                       <option value="Private - General Inquiry">Private Party — General Inquiry</option>
-                      <option value="Private - Party Starter Package">Private — Party Starter ($1,800)</option>
-                      <option value="Private - Party Pro Package">Private — Party Pro ($2,800)</option>
-                      <option value="Private - Ultimate Party Package">Private — Ultimate Party ($4,500)</option>
+                      <option value="Private - Party Starter Package">Private — Party Starter ($1,500)</option>
+                      <option value="Private - Celebration Package">Private — Celebration ($1,800)</option>
+                      <option value="Private - VIP Party Package">Private — VIP Party ($2,500)</option>
+                      <option value="Private - Extravaganza Package">Private — Extravaganza ($4,000)</option>
                     </optgroup>
                     <optgroup label="EDM Event">
                       <option value="EDM - General Inquiry">EDM — General Inquiry</option>
-                      <option value="EDM - Club Night Package">EDM — Club Night ($2,000)</option>
+                      <option value="EDM - Club Night Package">EDM — Club Night ($1,500)</option>
+                      <option value="EDM - Rave Ready Package">EDM — Rave Ready ($2,500)</option>
                       <option value="EDM - Festival Package">EDM — Festival ($4,000)</option>
-                      <option value="EDM - Mega Rave Package">EDM — Mega Rave ($7,000)</option>
+                      <option value="EDM - Ultra Package">EDM — Ultra ($5,000)</option>
                     </optgroup>
                     <optgroup label="Karaoke">
                       <option value="Karaoke - General Inquiry">Karaoke — General Inquiry</option>
@@ -169,9 +174,7 @@ const ContactSection = () => {
               <h3 className="font-display text-xl font-bold mb-4">Follow Us</h3>
               <div className="flex gap-4">
                 {[
-                  { icon: Instagram, href: "#", label: "Instagram" },
-                  { icon: Facebook, href: "#", label: "Facebook" },
-                  { icon: Youtube, href: "#", label: "YouTube" },
+                  { icon: Instagram, href: "https://instagram.com/hersky.ott", label: "Instagram" },
                 ].map((social) => (
                   <a
                     key={social.label}
