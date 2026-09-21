@@ -384,10 +384,14 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
 
           {/* Synced Planner Data (cross-site) */}
           <div>
-            <h3 className="font-display text-lg font-semibold flex items-center gap-2 mb-4">
+            <h3 className="font-display text-lg font-semibold flex items-center gap-2 mb-1">
               <Music className="w-5 h-5 text-primary" />
-              Synced Planner Data
+              Vibe Planner Details
             </h3>
+            <p className="text-xs text-muted-foreground mb-4">
+              Everything this client planned in the Vibe Planner app — songs,
+              playlists, notes, timeline, add-ons and files.
+            </p>
             <SyncedClientPanel profileId={client.id} email={client.email} />
           </div>
 
@@ -395,7 +399,7 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
 
           {/* Music Selections */}
           <div>
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-1">
               <h3 className="font-display text-lg font-semibold flex items-center gap-2">
                 <Music className="w-5 h-5 text-primary" />
                 Music Selections
@@ -405,6 +409,9 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
                 Download PDF
               </Button>
             </div>
+            <p className="text-xs text-muted-foreground mb-4">
+              Songs this client added themselves through the client portal.
+            </p>
 
             {loading ? (
               <div className="text-center py-8">
