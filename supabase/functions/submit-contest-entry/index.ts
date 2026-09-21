@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
+import { sendTemplateEmailLogged } from "../_shared/transactional-email-templates/send-and-log.ts";
 
 const STATIC_ORIGINS = new Set([
   "https://beatmasterdj.lovable.app",
@@ -209,29 +210,21 @@ serve(async (req) => {
     };
 
     const [customerEmail, adminEmail] = await Promise.allSettled([
-      admin.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "contest-confirmation",
-          recipientEmail: String(email).trim(),
-          idempotencyKey: `contest-confirmation-${inserted.id}`,
-          templateData: emailPayload,
-        },
+      sendTemplateEmailLogged("contest-confirmation", String(email).trim(), {
+        idempotencyKey: `contest-confirmation-${inserted.id}`,
+        templateData: emailPayload,
       }),
-      admin.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "contest-admin-notification",
-          recipientEmail: "hersky.ott@gmail.com",
-          idempotencyKey: `contest-admin-notification-${inserted.id}`,
-          templateData: emailPayload,
-        },
+      sendTemplateEmailLogged("contest-admin-notification", "hersky.ott@gmail.com", {
+        idempotencyKey: `contest-admin-notification-${inserted.id}`,
+        templateData: emailPayload,
       }),
     ]);
 
-    const emailQueued = [customerEmail, adminEmail].map((result) =>
-      result.status === "fulfilled" && !result.value.error
+    const emailQueued = [customerEmail, adminEmail].map(
+      (result) => result.status === "fulfilled",
     );
     if (!emailQueued.every(Boolean)) {
-      console.error("contest email enqueue incomplete", { emailQueued, entryId: inserted.id });
+      console.error("contest email send incomplete", { emailQueued, entryId: inserted.id });
     }
 
 
