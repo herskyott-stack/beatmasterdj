@@ -7,6 +7,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { supabase } from "@/integrations/supabase/client";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name.").max(100, "Name is too long."),
@@ -64,6 +65,19 @@ const PricingGuidePage = () => {
 
     setSubmitting(true);
     try {
+      // Save the lead to Supabase (never blocks the user-facing success state).
+      try {
+        const { error: leadError } = await supabase.from("leads").insert({
+          name: parsed.data.name,
+          email: parsed.data.email,
+          service_interest: "pricing-guide",
+          metadata: { source: "Ottawa Wedding DJ Pricing Guide 2026" },
+        });
+        if (leadError) console.error("Failed to save lead to Supabase:", leadError.message);
+      } catch (leadException) {
+        console.error("Failed to save lead to Supabase:", leadException);
+      }
+
       const response = await fetch("https://formsubmit.co/ajax/hersky.ott@gmail.com", {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
