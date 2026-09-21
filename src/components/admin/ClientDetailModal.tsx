@@ -103,7 +103,7 @@ const ClientDetailModal = ({ client, onClose }: ClientDetailModalProps) => {
     // Header
     doc.setFontSize(24);
     doc.setTextColor(0, 150, 255);
-    doc.text("HERSKY DJ & AV", pageWidth / 2, 20, { align: "center" });
+    doc.text("BEATMASTER DJ", pageWidth / 2, 20, { align: "center" });
 
     doc.setFontSize(16);
     doc.setTextColor(60, 60, 60);

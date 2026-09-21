@@ -16,7 +16,7 @@ const teamMembers = [
   {
     name: "Jake Herscovitch",
     role: "Founder & Master DJ",
-    bio: "DJing since the age of 13, Jake founded Hersky DJ & AV in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
+    bio: "DJing since the age of 13, Jake founded Beatmaster DJ in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
     specialties: ["Weddings", "Corporate Events", "EDM"],
   },
   {
@@ -63,7 +63,7 @@ const AboutPage = () => {
               </span>
               <h1 className="font-display text-5xl md:text-6xl font-bold mb-6 dj-heading glitch-text">
                 <span className="text-foreground">ABOUT </span>
-                <span className="gradient-text">HERSKY DJ & AV</span>
+                <span className="gradient-text">BEATMASTER DJ</span>
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
                 Since 2012, we've been Ottawa's premier DJ service, bringing energy, 
@@ -104,7 +104,7 @@ const AboutPage = () => {
                   </h2>
                   <div className="space-y-4 text-muted-foreground leading-relaxed">
                     <p>
-                      Hersky DJ & AV was founded in 2012 by Jake Herscovitch, a passionate DJ who 
+                      Beatmaster DJ was founded in 2012 by Jake Herscovitch, a passionate DJ who 
                       believed that every event deserves exceptional entertainment. What started as 
                       a one-man operation quickly grew into Ottawa's most trusted DJ service.
                     </p>

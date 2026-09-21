@@ -13,7 +13,7 @@ export const EmailChangeEmail = ({ siteName, oldEmail, newEmail, confirmationUrl
       <Container style={container}>
         <Section style={header}>
           <Text style={brand}>BeatMaster DJ</Text>
-          <Text style={tagline}>Hersky DJ &amp; AV · Ottawa</Text>
+          <Text style={tagline}>Beatmaster DJ · Ottawa</Text>
         </Section>
         <Section style={body}>
           <Heading style={h1}>Confirm your email change</Heading>

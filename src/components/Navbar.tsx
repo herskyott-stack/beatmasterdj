@@ -34,7 +34,7 @@ const Navbar = () => {
               <div className="absolute inset-0 bg-primary/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
             <span className="font-display text-lg xl:text-xl font-bold gradient-text whitespace-nowrap glitch-text">
-              HERSKY DJ & AV
+              BEATMASTER DJ
             </span>
           </Link>
 

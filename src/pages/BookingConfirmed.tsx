@@ -133,7 +133,7 @@ const BookingConfirmed = () => {
             </h1>
 
             <p className="text-lg text-muted-foreground mb-8">
-              Thank you for choosing Hersky DJ & AV! Your deposit has been received
+              Thank you for choosing Beatmaster DJ! Your deposit has been received
               and your booking request has been submitted successfully.
             </p>
 
@@ -163,7 +163,7 @@ const BookingConfirmed = () => {
                     <div>
                       <p className="font-medium">Confirmation Email</p>
                       <p className="text-sm text-muted-foreground">
-                        You'll receive a confirmation email from Hersky DJ & AV within 24 hours.
+                        You'll receive a confirmation email from Beatmaster DJ within 24 hours.
                       </p>
                     </div>
                   </div>

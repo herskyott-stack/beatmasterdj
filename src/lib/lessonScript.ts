@@ -88,7 +88,7 @@ function notesToSpoken(notes: string): string {
 export function buildScript(lesson: ScriptLesson, module: ScriptModule, totalLessonsInModule?: number): string {
   const intro =
     `[INTRO]\n` +
-    `Welcome back to the Hersky DJ Mentorship. I'm Hersky, and in this lesson — ` +
+    `Welcome back to the Beatmaster DJ Mentorship. I'm Hersky, and in this lesson — ` +
     `Module ${module.module_number}, Lesson ${lesson.lesson_number}: ${lesson.title} — ` +
     (lesson.description?.trim()
       ? `we're going to cover ${stripInline(lesson.description.trim())}.`

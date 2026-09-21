@@ -23,7 +23,7 @@ const AddonDetailPage = () => {
 
   useEffect(() => {
     if (addon) {
-      document.title = `${addon.name} | Hersky DJ & AV`;
+      document.title = `${addon.name} | Beatmaster DJ`;
     }
   }, [addon]);
 

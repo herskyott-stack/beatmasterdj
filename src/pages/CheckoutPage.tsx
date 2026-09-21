@@ -309,7 +309,7 @@ const CheckoutPage = () => {
                   <CardContent className="space-y-6">
                     {/* Contract Content */}
                     <div className="bg-card/30 rounded-lg p-6 max-h-96 overflow-y-auto border border-white/10">
-                      <h3 className="font-display text-lg font-bold mb-4 text-primary">HERSKY DJ & AV SERVICES AGREEMENT</h3>
+                      <h3 className="font-display text-lg font-bold mb-4 text-primary">BEATMASTER DJ SERVICES AGREEMENT</h3>
                       
                       <div className="space-y-4 text-sm text-muted-foreground">
                         <p><strong className="text-foreground">Event Details:</strong></p>
@@ -329,16 +329,16 @@ const CheckoutPage = () => {
                         <p>A non-refundable deposit of 50% (${deposit}) is required to secure the booking date. The remaining balance (${total - deposit}) is due on the day of the event, prior to the start of services.</p>
 
                         <p><strong className="text-foreground">2. CANCELLATION POLICY</strong></p>
-                        <p>If the Client cancels the event more than 30 days before the event date, the deposit may be applied to a future booking within 12 months. Cancellations within 30 days of the event date will result in forfeiture of the deposit. If Hersky DJ & AV cancels, a full refund will be provided.</p>
+                        <p>If the Client cancels the event more than 30 days before the event date, the deposit may be applied to a future booking within 12 months. Cancellations within 30 days of the event date will result in forfeiture of the deposit. If Beatmaster DJ cancels, a full refund will be provided.</p>
 
                         <p><strong className="text-foreground">3. EQUIPMENT & SETUP</strong></p>
-                        <p>Hersky DJ & AV will provide all necessary equipment as outlined in the selected package. The Client agrees to provide adequate space and access to electrical outlets (standard 110V). Setup will begin approximately 1-2 hours before the event start time.</p>
+                        <p>Beatmaster DJ will provide all necessary equipment as outlined in the selected package. The Client agrees to provide adequate space and access to electrical outlets (standard 110V). Setup will begin approximately 1-2 hours before the event start time.</p>
 
                         <p><strong className="text-foreground">4. MUSIC & CONTENT</strong></p>
-                        <p>The Client may provide song requests and do-not-play lists. Hersky DJ & AV reserves the right to modify selections to maintain appropriate event atmosphere and comply with venue policies.</p>
+                        <p>The Client may provide song requests and do-not-play lists. Beatmaster DJ reserves the right to modify selections to maintain appropriate event atmosphere and comply with venue policies.</p>
 
                         <p><strong className="text-foreground">5. LIABILITY</strong></p>
-                        <p>Hersky DJ & AV is not responsible for any injuries or damages caused by guests or third parties. The Client is responsible for ensuring the venue permits amplified music and agrees to indemnify Hersky DJ & AV against any claims arising from the event.</p>
+                        <p>Beatmaster DJ is not responsible for any injuries or damages caused by guests or third parties. The Client is responsible for ensuring the venue permits amplified music and agrees to indemnify Beatmaster DJ against any claims arising from the event.</p>
 
                         <p><strong className="text-foreground">6. FORCE MAJEURE</strong></p>
                         <p>Neither party shall be liable for failure to perform due to circumstances beyond their control, including but not limited to: natural disasters, pandemics, government restrictions, or venue cancellations.</p>

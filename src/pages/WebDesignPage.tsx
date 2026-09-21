@@ -145,7 +145,7 @@ const QuoteRequestForm = () => {
 
 const WebDesignPage = () => {
   useEffect(() => {
-    document.title = "Ottawa Small Business Web Design | Hersky DJ & AV";
+    document.title = "Ottawa Small Business Web Design | Beatmaster DJ";
   }, []);
   return (
     <div className="min-h-screen bg-background">
