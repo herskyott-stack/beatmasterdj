@@ -88,19 +88,15 @@ const handler = async (req: Request): Promise<Response> => {
       doNotPlaySongs,
     };
     const sendMusic = (recipient: string, keySuffix: string) =>
-      emailClient.functions.invoke("send-transactional-email", {
-        body: {
-          templateName: "music-submission",
-          recipientEmail: recipient,
-          idempotencyKey: `music-submission-${user.id}-${keySuffix}-${Date.now()}`,
-          templateData,
-        },
+      sendTemplateEmailLogged("music-submission", recipient, {
+        idempotencyKey: `music-submission-${user.id}-${keySuffix}-${Date.now()}`,
+        templateData,
       });
-    const [{ error: adminErr }, customerRes] = await Promise.all([
+    const [adminRes, customerRes] = await Promise.allSettled([
       sendMusic("hersky.ott@gmail.com", "admin"),
-      clientEmail ? sendMusic(clientEmail, "customer") : Promise.resolve({ error: null } as any),
+      clientEmail ? sendMusic(clientEmail, "customer") : Promise.resolve({ sent: true } as const),
     ]);
-    if (adminErr) { console.error("Admin music email error:", adminErr); throw adminErr; }
+    if (adminRes.status === "rejected") { console.error("Admin music email error:", adminRes.reason); throw adminRes.reason; }
     if ((customerRes as any)?.error) console.error("Customer music email error:", (customerRes as any).error);
 
     console.log("Music notification email queued successfully");
