@@ -17,7 +17,7 @@ const isAllowedOrigin = (o: string) =>
 
 const buildCors = (origin: string | null) => ({
   "Access-Control-Allow-Origin":
-    origin && isAllowedOrigin(origin) ? origin : "https://beatmasterdj.lovable.app",
+    origin && isAllowedOrigin(origin) ? origin : "https://beatmasterdj.ca",
   "Vary": "Origin",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
