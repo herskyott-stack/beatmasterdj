@@ -88,13 +88,13 @@ const Navbar = () => {
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="2xl:hidden max-h-[calc(100vh-4rem)] overflow-y-auto py-4 border-t border-white/10 animate-fade-in">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
               {navLinks.map((link) => (
                 link.isRoute ? (
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-2"
+                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-1.5"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -103,7 +103,7 @@ const Navbar = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-2"
+                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-1.5"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -119,7 +119,7 @@ const Navbar = () => {
                   <ShieldCheck className="h-4 w-4" /> Admin Portal
                 </Link>
               )}
-              <Button variant="hero" size="default" className="mt-4" asChild>
+              <Button variant="hero" size="default" className="mt-2" asChild>
                 <Link to="/book">Book Now</Link>
               </Button>
             </div>
