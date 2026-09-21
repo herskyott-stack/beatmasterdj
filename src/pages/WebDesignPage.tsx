@@ -71,7 +71,7 @@ const QuoteRequestForm = () => {
         service_interest: "web-design",
         metadata: { source: "Web design quote request form" },
       });
-      if (leadError) throw new Error("Could not save your request.");
+      if (leadError) console.error("Failed to save lead:", leadError.message);
 
       const response = await fetch("https://formsubmit.co/ajax/hersky.ott@gmail.com", {
         method: "POST",
