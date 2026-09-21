@@ -5,86 +5,87 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const QUIZ_TOOL = {
-  type: "function",
-  function: {
-    name: "emit_quiz",
-    description: "Return exactly 5 multiple-choice questions grounded in the lesson notes.",
-    parameters: {
-      type: "object",
-      properties: {
-        questions: {
-          type: "array",
-          minItems: 5,
-          maxItems: 5,
-          items: {
-            type: "object",
-            properties: {
-              question_text: { type: "string" },
-              explanation: { type: "string" },
-              answers: {
-                type: "array",
-                minItems: 4,
-                maxItems: 4,
-                items: {
-                  type: "object",
-                  properties: {
-                    answer_text: { type: "string" },
-                    is_correct: { type: "boolean" },
-                  },
-                  required: ["answer_text", "is_correct"],
-                  additionalProperties: false,
-                },
-              },
-            },
-            required: ["question_text", "explanation", "answers"],
-            additionalProperties: false,
-          },
-        },
-      },
-      required: ["questions"],
-      additionalProperties: false,
-    },
-  },
+// COST CUT (2026-09-21): replaced the metered Lovable AI Gateway
+// (ai.gateway.lovable.dev — burns Lovable credits per call) with the FREE
+// Pollinations text API (text.pollinations.ai — no key, no signup). Tool-calling
+// was swapped for a strict "respond with JSON only" prompt plus shape
+// validation below. Same DB read/write logic and same response contract.
+// Revert via git history if needed.
+// Honest caveats: free community service (no SLA, 10-60s per lesson); long
+// lesson notes are truncated to ~6000 chars for URL length safety.
+
+type QuizQuestion = {
+  question_text: string;
+  explanation: string;
+  answers: { answer_text: string; is_correct: boolean }[];
 };
 
-async function generateQuizForLesson(notes: string, title: string, apiKey: string) {
-  const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "google/gemini-2.5-flash",
-      messages: [
-        {
-          role: "system",
-          content:
-            "You write multiple-choice DJ-curriculum quizzes. Each question must be grounded in the lesson notes provided. 4 options per question, exactly 1 correct. Each question gets a 1-2 sentence explanation of why the right answer is right. Return via the emit_quiz tool only.",
-        },
-        {
-          role: "user",
-          content: `Lesson title: ${title}\n\nLesson notes:\n${notes}\n\nWrite 5 multiple-choice questions covering the most important concepts from these notes.`,
-        },
-      ],
-      tools: [QUIZ_TOOL],
-      tool_choice: { type: "function", function: { name: "emit_quiz" } },
-    }),
+function extractJson(text: string): unknown {
+  // Strip markdown code fences if the model wraps the JSON.
+  const fenced = /```(?:json)?\s*([\s\S]*?)```/i.exec(text);
+  const candidate = fenced ? fenced[1] : text;
+  const start = candidate.indexOf("{");
+  const end = candidate.lastIndexOf("}");
+  if (start === -1 || end === -1 || end <= start) throw new Error("No JSON object in AI response");
+  return JSON.parse(candidate.slice(start, end + 1));
+}
+
+function validateQuestions(raw: unknown): QuizQuestion[] {
+  const obj = raw as { questions?: unknown };
+  if (!obj || !Array.isArray(obj.questions) || obj.questions.length !== 5) {
+    throw new Error("AI did not return exactly 5 questions");
+  }
+  return obj.questions.map((q: unknown, i: number) => {
+    const qq = q as QuizQuestion;
+    if (typeof qq.question_text !== "string" || typeof qq.explanation !== "string") {
+      throw new Error(`Question ${i} missing text/explanation`);
+    }
+    if (!Array.isArray(qq.answers) || qq.answers.length !== 4) {
+      throw new Error(`Question ${i} does not have exactly 4 answers`);
+    }
+    const correct = qq.answers.filter((a) => a && a.is_correct === true).length;
+    if (correct !== 1) throw new Error(`Question ${i} does not have exactly 1 correct answer`);
+    for (const a of qq.answers) {
+      if (typeof a.answer_text !== "string") throw new Error(`Question ${i} has malformed answer`);
+    }
+    return qq;
   });
-  if (!resp.ok) throw new Error(`AI ${resp.status}: ${await resp.text()}`);
-  const data = await resp.json();
-  const args = data.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-  if (!args) throw new Error("No tool call in response");
-  return JSON.parse(args).questions;
+}
+
+async function generateQuizForLesson(notes: string, title: string): Promise<QuizQuestion[]> {
+  const prompt = `You write multiple-choice DJ-curriculum quizzes. Each question must be grounded in the lesson notes provided. 4 options per question, exactly 1 correct. Each question gets a 1-2 sentence explanation of why the right answer is right.
+
+Lesson title: ${title}
+
+Lesson notes:
+${notes.slice(0, 6000)}
+
+Write 5 multiple-choice questions covering the most important concepts from these notes.
+
+Respond with ONLY a JSON object, no other text, in exactly this shape:
+{"questions":[{"question_text":"...","explanation":"...","answers":[{"answer_text":"...","is_correct":true},{"answer_text":"...","is_correct":false},{"answer_text":"...","is_correct":false},{"answer_text":"...","is_correct":false}]}]}`;
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 120000);
+  let text: string;
+  try {
+    const resp = await fetch(`https://text.pollinations.ai/${encodeURIComponent(prompt)}`, {
+      headers: { Accept: "text/plain" },
+      signal: controller.signal,
+    });
+    if (!resp.ok) throw new Error(`AI ${resp.status}: ${await resp.text()}`);
+    text = await resp.text();
+  } finally {
+    clearTimeout(timeout);
+  }
+  return validateQuestions(extractJson(text));
 }
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   try {
     const { limit = 10 } = await req.json().catch(() => ({}));
-    const apiKey = Deno.env.get("LOVABLE_API_KEY");
-    if (!apiKey) throw new Error("LOVABLE_API_KEY missing");
+    // No API key needed anymore (free Pollinations API).
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
@@ -113,7 +114,7 @@ Deno.serve(async (req) => {
     const payload: any[] = [];
     for (const lesson of eligible) {
       try {
-        const questions = await generateQuizForLesson(lesson.notes, lesson.title, apiKey);
+        const questions = await generateQuizForLesson(lesson.notes, lesson.title);
         payload.push({ lesson_id: lesson.id, questions });
         results.push({ id: lesson.id, ok: true, count: questions.length });
       } catch (e) {
