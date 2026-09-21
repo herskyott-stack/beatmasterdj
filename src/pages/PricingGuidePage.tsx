@@ -107,7 +107,7 @@ const PricingGuidePage = () => {
       <main className="pt-24 md:pt-32 pb-20">
         <section className="container mx-auto px-4 pb-20 md:pb-28">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="mb-4 font-display text-xs uppercase tracking-[0.2em] text-primary">Free 2026 buyer’s guide</p>
+            <p className="mb-4 font-display text-xs uppercase tracking-[0.2em] text-primary">Free 2026 pricing breakdown</p>
             <h1 className="font-display text-4xl font-extrabold md:text-6xl">Ottawa Wedding DJ Pricing Guide 2026</h1>
             <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">What you’ll actually pay — and what to ask before you book.</p>
           </div>
@@ -117,7 +117,11 @@ const PricingGuidePage = () => {
               {success ? (
                 <div className="flex flex-col items-center py-5 text-center" role="status">
                   <CheckCircle2 className="mb-4 h-12 w-12 text-primary" />
-                  <h2 className="font-display text-2xl font-bold">Check your inbox — the guide is on its way.</h2>
+                  <h2 className="font-display text-2xl font-bold">Check your inbox — the pricing summary is on its way.</h2>
+                  <p className="mt-3 text-muted-foreground">Ready for the next step?</p>
+                  <Button variant="hero" size="lg" asChild className="mt-4">
+                    <Link to="/book">Check Your Date</Link>
+                  </Button>
                 </div>
               ) : (
                 <form onSubmit={submitLead} noValidate className="space-y-4">
@@ -131,7 +135,7 @@ const PricingGuidePage = () => {
                   </div>
                   {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
                   <Button type="submit" variant="hero" size="lg" className="w-full" disabled={submitting}>
-                    <Send className="h-4 w-4" /> {submitting ? "Sending…" : "Send me the guide"}
+                    <Send className="h-4 w-4" /> {submitting ? "Sending…" : "Email me the pricing breakdown"}
                   </Button>
                 </form>
               )}

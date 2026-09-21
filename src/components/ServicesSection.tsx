@@ -1,4 +1,4 @@
-import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor } from "lucide-react";
+import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor, Sparkles } from "lucide-react";
 import mentorshipImg from "@/assets/services/mentorship.jpg";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ const services = [
   {
     icon: Heart,
     title: "Weddings",
-    description: "Make your special day unforgettable with romantic melodies and dance floor hits.",
+    description: "Ceremony to last dance — seamless MC, pro sound, and a dance floor that stays full all night.",
     color: "text-secondary",
     gradient: "from-secondary/20 to-accent/20",
     route: "/packages/weddings",
@@ -26,7 +26,7 @@ const services = [
   {
     icon: Building2,
     title: "Corporate Events",
-    description: "Professional entertainment for galas, conferences, and company celebrations.",
+    description: "Polished, on-brand entertainment for galas, conferences and holiday parties. Always on time, always professional.",
     color: "text-primary",
     gradient: "from-primary/20 to-accent/20",
     route: "/packages/corporate",
@@ -44,7 +44,7 @@ const services = [
   {
     icon: Users,
     title: "Private Events",
-    description: "Birthdays, anniversaries, and celebrations tailored to your taste.",
+    description: "Birthdays, anniversaries and milestones — your playlist, your vibe, zero cheesy DJ clichés.",
     color: "text-secondary",
     gradient: "from-secondary/20 to-primary/20",
     route: "/packages/private",
@@ -78,7 +78,7 @@ const services = [
     image: avImg,
   },
   {
-    icon: GraduationCap,
+    icon: Sparkles,
     title: "DJ Mentorship",
     description: "1-on-1 weekly lessons with a working pro DJ. Hobbyist to Pro Entrepreneur tracks.",
     color: "text-primary",

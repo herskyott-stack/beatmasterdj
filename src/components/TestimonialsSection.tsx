@@ -1,13 +1,13 @@
 import { Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 const testimonials = [
   {
     name: "Sarah & Mike Thompson",
     event: "Wedding Reception",
-    quote: "Jacob and his team made our wedding unforgettable! The dance floor was packed all night. He read the crowd perfectly and even learned our special song request.",
+    quote: "Jake and his team made our wedding unforgettable! The dance floor was packed all night. He read the crowd perfectly and even learned our special song request.",
     rating: 5,
     avatar: "ST",
   },
@@ -69,7 +69,7 @@ const TestimonialsSection = () => {
             <span className="gradient-text">CLIENTS SAY</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Over 10 years of creating unforgettable moments across Ottawa and beyond
+            Over 15 years of creating unforgettable moments across Ottawa and beyond
           </p>
         </div>
 

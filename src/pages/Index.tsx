@@ -39,11 +39,10 @@ const Index = () => {
                     New • DJ Mentorship
                   </p>
                   <h3 className="font-display text-2xl md:text-3xl font-bold mb-2">
-                    Learn from a working professional DJ
+                    Go from bedroom DJ to booked & paid
                   </h3>
                   <p className="text-muted-foreground text-sm md:text-base">
-                    Two tracks — bring your own gear or learn on ours. Hobbyist to Pro
-                    Entrepreneur, weekly 1-on-1 sessions starting at $350/month.
+                    Weekly 1-on-1 mentorship with a working pro. Two tracks — bring your own gear or learn on ours — from hobbyist to DJ entrepreneur.
                   </p>
                 </div>
                 <Button variant="hero" size="lg" asChild className="shrink-0">

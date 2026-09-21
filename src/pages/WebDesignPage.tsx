@@ -11,8 +11,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 
 const packages = [
-  { name: "Starter Site", price: "$1,800", timeline: "About 2 weeks", items: ["5-page custom website", "Mobile-ready design", "Contact form", "Google Maps", "Basic search setup"] },
-  { name: "Business Site", price: "$3,800", timeline: "About 4 weeks", featured: true, items: ["Everything in Starter", "Up to 12 pages", "Booking or quote requests", "Blog, testimonials, and gallery", "Advanced search setup and analytics", "Copywriting polish"] },
+  { name: "Starter Site", price: "$1,800", timeline: "About 2 weeks", items: ["5-page custom website", "Mobile-ready design", "Contact form", "Google Maps", "Basic SEO setup"] },
+  { name: "Business Site", price: "$3,800", timeline: "About 4 weeks", featured: true, items: ["Everything in Starter", "Up to 12 pages", "Booking or quote requests", "Blog, testimonials, and gallery", "Advanced SEO and analytics", "Copywriting polish"] },
   { name: "Premium / Custom", price: "From $7,500", timeline: "About 6–8 weeks", items: ["Everything in Business", "Unlimited pages", "Online store or custom connections", "AI chat assistant", "Custom design system and brand refresh", "90 days of priority support"] },
 ];
 

@@ -1,4 +1,5 @@
 import { Music } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -6,12 +7,12 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Logo */}
-          <a href="#" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <Music className="w-8 h-8 text-primary" />
             <span className="font-display text-xl font-bold gradient-text">
               HERSKY DJ & AV
             </span>
-          </a>
+          </Link>
 
           {/* Copyright */}
           <p className="text-sm text-muted-foreground text-center">
@@ -29,12 +30,12 @@ const Footer = () => {
             <a href="/mentorship" className="drumpad-link text-sm text-muted-foreground transition-colors">
               Mentorship
             </a>
-            <a href="#" className="drumpad-link text-sm text-muted-foreground transition-colors">
+            <Link to="/privacy" className="drumpad-link text-sm text-muted-foreground transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="drumpad-link text-sm text-muted-foreground transition-colors">
+            </Link>
+            <Link to="/terms" className="drumpad-link text-sm text-muted-foreground transition-colors">
               Terms of Service
-            </a>
+            </Link>
           </div>
         </div>
       </div>
