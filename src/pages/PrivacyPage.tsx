@@ -15,7 +15,7 @@ const PrivacyPage = () => {
           <section>
             <h2 className="font-display text-xl font-bold text-white mb-2">Who we are</h2>
             <p>
-              Hersky DJ &amp; AV ("we", "us") is an Ottawa-based DJ and event entertainment
+              Beatmaster DJ ("we", "us") is an Ottawa-based DJ and event entertainment
               business. This policy explains how we handle your information when you use
               beatmasterdj.ca or contact us about our services.
             </p>

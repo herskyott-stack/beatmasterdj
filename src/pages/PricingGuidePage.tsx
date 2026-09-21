@@ -49,7 +49,7 @@ const PricingGuidePage = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    document.title = "Ottawa Wedding DJ Pricing Guide 2026 | Hersky DJ & AV";
+    document.title = "Ottawa Wedding DJ Pricing Guide 2026 | Beatmaster DJ";
   }, []);
 
   const submitLead = async (event: FormEvent<HTMLFormElement>) => {

@@ -150,7 +150,7 @@ const AuthPage = () => {
 
       toast({
         title: "Account Created!",
-        description: "Welcome to Hersky DJ & AV. You can now manage your music requests.",
+        description: "Welcome to Beatmaster DJ. You can now manage your music requests.",
       });
     }
     

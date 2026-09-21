@@ -10,13 +10,13 @@ const Footer = () => {
           <Link to="/" className="flex items-center gap-3">
             <Music className="w-8 h-8 text-primary" />
             <span className="font-display text-xl font-bold gradient-text">
-              HERSKY DJ & AV
+              BEATMASTER DJ
             </span>
           </Link>
 
           {/* Copyright */}
           <p className="text-sm text-muted-foreground text-center">
-            © {new Date().getFullYear()} Hersky DJ & AV. All rights reserved.
+            © {new Date().getFullYear()} Beatmaster DJ. All rights reserved.
           </p>
 
           {/* Links */}

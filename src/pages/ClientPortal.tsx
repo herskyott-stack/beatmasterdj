@@ -521,7 +521,7 @@ const ClientPortal = () => {
                     {submitting ? "Submitting..." : "Submit Playlist"}
                   </Button>
                   <p className="text-xs text-muted-foreground text-center">
-                    Submit when you're done to send your music list to Hersky DJ & AV
+                    Submit when you're done to send your music list to Beatmaster DJ
                   </p>
                 </CardContent>
               </Card>

@@ -13,12 +13,12 @@ export const EmailShell = ({ preview, children }: Props) => (
     <Body style={body}>
       <Container style={container}>
         <Section style={header}>
-          <Text style={brand}>BeatMaster DJ</Text>
-          <Text style={tagline}>Hersky DJ &amp; AV · Ottawa</Text>
+          <Text style={brand}>Beatmaster DJ</Text>
+          <Text style={tagline}>Beatmaster DJ · Ottawa</Text>
         </Section>
         <Section style={content}>{children}</Section>
         <Section style={footer}>
-          <Text style={footerText}>BeatMaster DJ · Hersky DJ &amp; AV · Ottawa, Ontario</Text>
+          <Text style={footerText}>Beatmaster DJ · Ottawa, Ontario</Text>
         </Section>
       </Container>
     </Body>

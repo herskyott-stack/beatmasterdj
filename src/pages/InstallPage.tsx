@@ -35,7 +35,7 @@ const InstallPage = () => {
               <span className="gradient-text">APP</span>
             </h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Install Hersky DJ & AV on your device for the best experience. Access our services anytime, even offline.
+              Install Beatmaster DJ on your device for the best experience. Access our services anytime, even offline.
             </p>
           </div>
 
@@ -46,7 +46,7 @@ const InstallPage = () => {
                 <CheckCircle className="w-8 h-8 text-green-500" />
                 <div>
                   <h3 className="font-display font-bold text-lg">App Already Installed!</h3>
-                  <p className="text-muted-foreground">You can find Hersky DJ on your home screen.</p>
+                  <p className="text-muted-foreground">You can find Beatmaster DJ on your home screen.</p>
                 </div>
               </CardContent>
             </Card>
@@ -161,7 +161,7 @@ const InstallPage = () => {
                   <div className="text-sm text-muted-foreground">
                     <p className="mb-2">Look for the install icon in your browser's address bar, or:</p>
                     <ul className="space-y-1 text-xs">
-                      <li>• Chrome: Menu → Install Hersky DJ</li>
+                      <li>• Chrome: Menu → Install Beatmaster DJ</li>
                       <li>• Edge: Settings → Apps → Install</li>
                     </ul>
                   </div>

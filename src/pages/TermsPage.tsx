@@ -15,7 +15,7 @@ const TermsPage = () => {
           <section>
             <h2 className="font-display text-xl font-bold text-white mb-2">The basics</h2>
             <p>
-              By using beatmasterdj.ca you agree to these terms. Hersky DJ &amp; AV
+              By using beatmasterdj.ca you agree to these terms. Beatmaster DJ
               provides DJ, MC, lighting, and AV services for events in the Ottawa area
               and beyond.
             </p>

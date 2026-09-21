@@ -1,7 +1,7 @@
 import { useFX } from "@/contexts/FXContext";
 
 const MESSAGE =
-  "● UPCOMING ● SAVE 15% OFF UNTIL END OF MAY ● SAVE 20% IF YOU BOOK BEFORE APRIL 30TH ● HERSKY DJ & AV ● OTTAWA, ON ● ";
+  "● UPCOMING ● SAVE 15% OFF UNTIL END OF MAY ● SAVE 20% IF YOU BOOK BEFORE APRIL 30TH ● BEATMASTER DJ ● OTTAWA, ON ● ";
 
 const MarqueeTicker = () => {
   const { fxEnabled } = useFX();
