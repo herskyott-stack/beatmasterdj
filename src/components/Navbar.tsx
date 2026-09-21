@@ -59,6 +59,14 @@ const Navbar = () => {
                 </a>
               )
             ))}
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="flex items-center gap-1.5 font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-primary hover:text-secondary transition-all duration-500 ease-out"
+              >
+                <ShieldCheck className="h-4 w-4" /> Admin
+              </Link>
+            )}
             <Button variant="hero" size="default" asChild>
               <Link to="/book">Book Now</Link>
             </Button>
