@@ -92,8 +92,8 @@ const ContactSection = () => {
                       <option value="School - General Inquiry">School — General Inquiry</option>
                       <option value="School - Basic Package">School — Basic ($1,200)</option>
                       <option value="School - Standard Package">School — Standard ($1,600)</option>
-                      <option value="School - Prom Package">School — Prom ($1,800)</option>
-                      <option value="School - Homecoming Package">School — Homecoming ($2,500)</option>
+                      <option value="School - Prom Package">School — Prom ($2,160)</option>
+                      <option value="School - Homecoming Package">School — Homecoming ($3,000)</option>
                     </optgroup>
                     <optgroup label="Private Party">
                       <option value="Private - General Inquiry">Private Party — General Inquiry</option>

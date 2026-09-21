@@ -32,7 +32,7 @@ const HUDCorners = () => {
       </div>
       <div className={`${cls} bottom-3 left-3`}>
         <div>LOC: OTTAWA, ON</div>
-        <div>BEATMASTER.FX</div>
+        <div>HERSKY.FX</div>
       </div>
       <div className={`${cls} bottom-3 right-3 text-right`}>
         <div>X: {String(mouseX).padStart(4, "0")}</div>

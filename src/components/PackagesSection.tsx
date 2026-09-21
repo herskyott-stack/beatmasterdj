@@ -179,8 +179,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Prom Package",
-      price: "$1,800",
-      priceNum: 1800,
+      price: "$2,160",
+      priceNum: 2160,
       description: "Perfect for prom night",
       features: [
         "5 hours of DJ service",
@@ -194,8 +194,8 @@ const packageData: Record<string, Package[]> = {
     },
     {
       name: "Homecoming",
-      price: "$2,500",
-      priceNum: 2500,
+      price: "$3,000",
+      priceNum: 3000,
       description: "Ultimate homecoming experience",
       features: [
         "6 hours of DJ service",

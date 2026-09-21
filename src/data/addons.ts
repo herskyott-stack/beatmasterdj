@@ -194,7 +194,7 @@ export const addons: Addon[] = [
     technicalDetails: [
       "Must be confirmed at least 7 days before event (last-minute extensions $250/hr if available)",
       "Subject to venue end-time and noise bylaws",
-      "Single-rate flat pricing — no surprise overtime",
+      "Flat hourly pricing — $200/hr pre-booked, $250/hr for day-of extensions, no surprises",
     ],
     faq: [
       {
