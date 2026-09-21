@@ -2,9 +2,9 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const ALLOWED_ORIGINS = [
-  "https://beatmasterdj.lovable.app",
   "https://beatmasterdj.ca",
   "https://www.beatmasterdj.ca",
+  "https://beatmasterdj.lovable.app",
   "http://localhost:5173",
   "http://localhost:3000",
   "http://localhost:8080",

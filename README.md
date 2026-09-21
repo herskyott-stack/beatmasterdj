@@ -1,29 +1,27 @@
-# HERSKY DJ &AV
+# Beatmaster DJ
 
-Create me a DJ website  corporate events schools private events and EDM events 
+**Premium wedding & event entertainment — Ottawa, Ontario.**
 
-Make four different packages for every single different services. Also at different price points starting from $1,500 bucks for weddings and the biggest package being $5,000. 
-Get also add-on packages like coldsparklers photo booth extra hours and karaoke and dry ice
+Live site: https://beatmasterdj.ca
 
-This project was built with [Lovable](https://lovable.dev).
-
-**Live app**: https://beatmasterdj.lovable.app
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/e517470f-0014-420a-99d8-a444a5762210).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
+Online booking, packages & pricing, giveaways, DJ mentorship, and client portal —
+built with Vite + React + TypeScript + Tailwind CSS, backed by Supabase
+(Auth, Postgres, Storage, Edge Functions) and Stripe checkout.
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
 ```sh
 git clone <this-repository-url>
-cd <repository-name>
+cd beatmasterdj
 npm i
 npm run dev
 ```
+
+## Deploy
+
+Pushes to `main` auto-deploy to production.
+
+## Brand
+
+- Entertainment brand: **Beatmaster DJ** (matches beatmasterdj.ca)
+- Personal identity: **DJ Hersky**

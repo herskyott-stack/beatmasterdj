@@ -3,9 +3,9 @@ import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 
 const ALLOWED_ORIGINS = [
-  "https://beatmasterdj.lovable.app",
   "https://beatmasterdj.ca",
   "https://www.beatmasterdj.ca",
+  "https://beatmasterdj.lovable.app",
   "http://localhost:5173",
   "http://localhost:3000",
   "http://localhost:8080",

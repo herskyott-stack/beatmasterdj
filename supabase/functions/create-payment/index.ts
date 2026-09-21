@@ -133,7 +133,7 @@ serve(async (req) => {
       logStep("New customer created", { customerId });
     }
 
-    const origin = req.headers.get("origin") || "https://beatmasterdj.lovable.app";
+    const origin = req.headers.get("origin") || "https://beatmasterdj.ca";
 
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
