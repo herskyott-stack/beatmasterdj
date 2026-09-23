@@ -1,43 +1,13 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+// Unsubscribes are handled by the one-click link included in every email
+// (managed delivery). This page covers older links and the Privacy page link.
 export default function UnsubscribePage() {
-  const [params] = useSearchParams();
-  const token = params.get("token") ?? "";
-  const [state, setState] = useState<"checking" | "idle" | "working" | "done" | "invalid">("checking");
-
-  const run = async () => {
-    if (!token) return setState("invalid");
-    setState("working");
-    const { data, error } = await supabase.functions.invoke("handle-email-unsubscribe", {
-      body: { token },
-    });
-    if (error || !data?.success) return setState("invalid");
-    setState("done");
-  };
-
-  useEffect(() => {
-    if (!token) {
-      setState("invalid");
-      return;
-    }
-    const validate = async () => {
-      const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-      const publishableKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-      const response = await fetch(
-        `${baseUrl}/functions/v1/handle-email-unsubscribe?token=${encodeURIComponent(token)}`,
-        { headers: { apikey: publishableKey } },
-      );
-      const result = await response.json().catch(() => ({}));
-      setState(response.ok && result.valid ? "idle" : "invalid");
-    };
-    void validate();
-  }, [token]);
+  const mailto =
+    "mailto:hersky.ott@gmail.com?subject=Unsubscribe%20request&body=Please%20unsubscribe%20this%20email%20address%20from%20Beatmaster%20DJ%20emails.";
 
   return (
     <div className="min-h-screen bg-background">
@@ -47,24 +17,16 @@ export default function UnsubscribePage() {
           <Card variant="glass">
             <CardContent className="pt-8 pb-8 text-center space-y-4">
               <h1 className="font-display text-2xl">Unsubscribe</h1>
-              {state === "invalid" && (
-                <p className="text-muted-foreground">
-                  This unsubscribe link is invalid or has already been used.
-                </p>
-              )}
-              {state === "checking" && <p className="text-muted-foreground">Checking your link…</p>}
-              {state === "working" && <p className="text-muted-foreground">Processing…</p>}
-              {state === "done" && (
-                <>
-                  <p>You&apos;ve been unsubscribed.</p>
-                  <p className="text-sm text-muted-foreground">
-                    You won't receive further contest emails from Beatmaster DJ.
-                  </p>
-                </>
-              )}
-              {state === "idle" && (
-                <Button variant="hero" onClick={run}>Confirm unsubscribe</Button>
-              )}
+              <p className="text-muted-foreground">
+                Every email from Beatmaster DJ includes an <strong>Unsubscribe</strong> link at the
+                bottom. Click it in any recent email to opt out instantly.
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Clicked an older link, or can't find it? Send us a request and we'll remove you right away.
+              </p>
+              <Button variant="hero" asChild>
+                <a href={mailto}>Request to unsubscribe</a>
+              </Button>
             </CardContent>
           </Card>
         </div>
