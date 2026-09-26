@@ -6,14 +6,25 @@ import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
 // Import real stock photos
 import weddingImg from "@/assets/services/wedding-dj.jpg";
-import corporateImg from "@/assets/services/corporate-event.jpg";
 import schoolImg from "@/assets/services/school-event.jpg";
 import privateImg from "@/assets/services/private-party.jpg";
 import edmImg from "@/assets/services/edm-event.jpg";
 import karaokeImg from "@/assets/services/karaoke-service.jpg";
 import avImg from "@/assets/services/av-service.jpg";
 
-const services = [
+// Real photo: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
+import corporateLiveImg from "@/assets/corporate/desert-oasis-3.jpg";
+
+const services: Array<{
+  icon: typeof Building2;
+  title: string;
+  description: string;
+  color: string;
+  gradient: string;
+  route: string;
+  image: string;
+  credit?: string;
+}> = [
   {
     icon: Heart,
     title: "Weddings",
@@ -30,7 +41,8 @@ const services = [
     color: "text-primary",
     gradient: "from-primary/20 to-accent/20",
     route: "/packages/corporate",
-    image: corporateImg,
+    image: corporateLiveImg,
+    credit: "Tim Skinner © Canadian Museum of Nature",
   },
   {
     icon: GraduationCap,
@@ -135,6 +147,15 @@ const ServicesSection = () => {
                       <service.icon className={`w-6 h-6 ${service.color}`} />
                     </div>
                   </div>
+
+                  {/* Photo credit */}
+                  {service.credit && (
+                    <div className="absolute bottom-4 right-4">
+                      <span className="text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                        {service.credit}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 <CardContent className="p-6">

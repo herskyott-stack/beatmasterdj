@@ -16,6 +16,11 @@ import edmHero from "@/assets/categories/edm-hero.jpg";
 import karaokeHero from "@/assets/categories/karaoke-hero.jpg";
 import avHero from "@/assets/categories/av-hero.jpg";
 
+// Real photos: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
+import corpLive1 from "@/assets/corporate/desert-oasis-1.jpg";
+import corpLive2 from "@/assets/corporate/desert-oasis-2.jpg";
+import corpLive3 from "@/assets/corporate/desert-oasis-3.jpg";
+
 type Package = {
   name: string;
   price: string;
@@ -580,6 +585,33 @@ const PackagesPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Recent corporate work — real photos, corporate category only */}
+        {category === "corporate" && (
+          <div className="container mx-auto px-4 mb-16">
+            <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-center">
+              <span className="text-foreground">RECENT </span>
+              <span className="gradient-text">CORPORATE WORK</span>
+            </h2>
+            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
+              DJ Hersky live at Desert Oasis — Nature Nocturne, Canadian Museum of Nature.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+              {[corpLive1, corpLive2, corpLive3].map((src, i) => (
+                <div key={i} className="relative rounded-md overflow-hidden aspect-[4/3]">
+                  <img
+                    src={src}
+                    alt="DJ Hersky performing at a corporate event"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-muted-foreground text-center mt-4">
+              Photos: Tim Skinner © Canadian Museum of Nature
+            </p>
+          </div>
+        )}
 
         {/* Packages Grid */}
         <div className="container mx-auto px-4">

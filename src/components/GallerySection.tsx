@@ -12,13 +12,21 @@ import gallery4 from "@/assets/gallery/gallery-4.jpg";
 import gallery5 from "@/assets/gallery/gallery-5.jpg";
 import gallery6 from "@/assets/gallery/gallery-6.jpg";
 
-const galleryImages = [
+// Real photos: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
+import corpLive1 from "@/assets/corporate/desert-oasis-1.jpg";
+import corpLive2 from "@/assets/corporate/desert-oasis-2.jpg";
+import corpLive3 from "@/assets/corporate/desert-oasis-3.jpg";
+
+const galleryImages: Array<{ src: string; alt: string; category: string; credit?: string }> = [
   { src: gallery1, alt: "Wedding celebration with DJ", category: "Wedding" },
   { src: gallery2, alt: "Concert crowd energy", category: "EDM Event" },
   { src: gallery3, alt: "DJ mixing at event", category: "Private Party" },
   { src: gallery4, alt: "Festival atmosphere", category: "Corporate Gala" },
   { src: gallery5, alt: "Dance floor packed", category: "School Prom" },
   { src: gallery6, alt: "Live performance", category: "Wedding" },
+  { src: corpLive1, alt: "DJ Hersky live at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
+  { src: corpLive2, alt: "DJ Hersky on Denon decks at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
+  { src: corpLive3, alt: "DJ Hersky performing at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
 ];
 
 const GallerySection = () => {
@@ -67,6 +75,11 @@ const GallerySection = () => {
                   <span className="inline-block px-3 py-1 text-xs font-display uppercase tracking-wider bg-primary/90 rounded-full">
                     {image.category}
                   </span>
+                  {image.credit && (
+                    <p className="text-[10px] text-white/80 mt-2 bg-black/50 inline-block px-2 py-1 rounded">
+                      {image.credit}
+                    </p>
+                  )}
                 </div>
               </div>
             </Card>
@@ -84,11 +97,18 @@ const GallerySection = () => {
             <X className="w-6 h-6" />
           </button>
           {selectedImage && (
-            <img
-              src={selectedImage}
-              alt="Gallery image"
-              className="w-full h-auto rounded-xl"
-            />
+            <div>
+              <img
+                src={selectedImage}
+                alt="Gallery image"
+                className="w-full h-auto rounded-xl"
+              />
+              {galleryImages.find((i) => i.src === selectedImage)?.credit && (
+                <p className="text-xs text-white/70 text-center mt-3">
+                  {galleryImages.find((i) => i.src === selectedImage)?.credit}
+                </p>
+              )}
+            </div>
           )}
         </DialogContent>
       </Dialog>
