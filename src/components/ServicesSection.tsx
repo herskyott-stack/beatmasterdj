@@ -28,7 +28,6 @@ const services: Array<{
   description: string;
   route: string;
   image: string;
-  credit?: string;
   span?: boolean;
 }> = [
   {
@@ -45,7 +44,6 @@ const services: Array<{
     description: "Polished, on-brand entertainment for galas, conferences and holiday parties. Always on time, always professional.",
     route: "/packages/corporate",
     image: corporateLiveImg,
-    credit: "Tim Skinner © Canadian Museum of Nature",
   },
   {
     icon: GraduationCap,
@@ -138,15 +136,6 @@ const ServicesSection = () => {
                   <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.6)]">
                     <ArrowUpRight className="w-5 h-5" />
                   </div>
-
-                  {/* Photo credit */}
-                  {service.credit && (
-                    <div className="absolute top-4 right-4">
-                      <span className="text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
-                        {service.credit}
-                      </span>
-                    </div>
-                  )}
                 </div>
 
                 <CardContent className="p-6">
