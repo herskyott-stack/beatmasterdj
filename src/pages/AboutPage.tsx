@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SectionHeader from "@/components/SectionHeader";
 
 // Real photos of DJ Hersky performing
 import aboutJakeImg from "@/assets/real/about-jake.jpg";
@@ -73,16 +74,13 @@ const AboutPage = () => {
 
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center max-w-4xl mx-auto">
-              <p className="eyebrow mb-4">
-                Our Story
-              </p>
-              <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight mb-6">
-                About Beatmaster DJ
-              </h1>
-              <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-                Since 2012, we've been Ottawa's premier DJ service, bringing energy,
-                professionalism, and unforgettable music experiences to 500+ events.
-              </p>
+              <SectionHeader
+                as="h1"
+                eyebrow="Our Story"
+                title="About Beatmaster DJ"
+                sub="Since 2012, we've been Ottawa's premier DJ service, bringing energy, professionalism, and unforgettable music experiences to 500+ events."
+                align="center"
+              />
             </div>
           </div>
         </section>
@@ -141,13 +139,11 @@ const AboutPage = () => {
         {/* Team Section */}
         <section className="py-20 md:py-28">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-14 md:mb-20">
-              <p className="eyebrow mb-4">The Crew</p>
-              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Meet the Team</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-                Our experienced professionals are dedicated to making your event extraordinary
-              </p>
-            </div>
+            <SectionHeader
+              eyebrow="The Crew"
+              title="Meet the team"
+              sub="Our experienced professionals are dedicated to making your event extraordinary."
+            />
 
             <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
               {teamMembers.map((member, index) => (
@@ -190,9 +186,10 @@ const AboutPage = () => {
         {/* Values Section */}
         <section className="py-20 md:py-28 bg-muted/30">
           <div className="container mx-auto px-4">
-            <div className="text-center mb-14 md:mb-20">
-              <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Our Values</h2>
-            </div>
+            <SectionHeader
+              eyebrow="Why Us"
+              title="Our values"
+            />
 
             <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
               {values.map((value, index) => (

@@ -2,10 +2,11 @@ import { Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
+import SectionHeader from "@/components/SectionHeader";
 
 // Real reviews from the HERSKY - DJ & AV Google Business Profile.
 // 5.0 average, 17 reviews, every single one 5 stars. Wording is verbatim.
-import sydneyFeatureImg from "@/assets/real/parford-1.jpg";
+import sydneyFeatureImg from "@/assets/real/weddings/sydney-blake-dance-floor.jpg";
 
 const GoogleG = () => (
   <svg viewBox="0 0 24 24" className="w-4 h-4 shrink-0" aria-label="Google">
@@ -127,14 +128,12 @@ const TestimonialsSection = () => {
   return (
     <section ref={ref} className="py-20 md:py-28 relative overflow-hidden bass-drop">
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Google Reviews</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">What our clients say</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            5.0 average from 17 verified Google reviews — every single one 5 stars.
-          </p>
-        </div>
+        <SectionHeader
+          index="06"
+          eyebrow="Google Reviews"
+          title="What our clients say"
+          sub="5.0 average from 17 verified Google reviews — every single one 5 stars."
+        />
 
         {/* Featured review — Sydney Senechal */}
         <Card variant="featured" className="mb-6 overflow-hidden">
@@ -143,10 +142,13 @@ const TestimonialsSection = () => {
               <div className="relative min-h-[280px] md:min-h-[360px]">
                 <img
                   src={sydneyFeatureImg}
-                  alt="DJ Hersky performing with LED wall production"
+                  alt="Packed dance floor at Sydney and Blake's tented wedding"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/20" />
+                <span className="absolute bottom-3 left-3 text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                  Yash Patel Photography
+                </span>
               </div>
               <div className="p-8 md:p-10 flex flex-col justify-center">
                 <Quote className="w-8 h-8 text-primary/40 mb-4" />
@@ -180,7 +182,8 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <Card
               key={index}
-              className="hover:border-primary/40 hover:-translate-y-1"
+              variant="glass"
+              className="lift-hover hover:border-primary/40"
             >
               <CardContent className="p-6 flex flex-col h-full">
                 {/* Quote Icon */}

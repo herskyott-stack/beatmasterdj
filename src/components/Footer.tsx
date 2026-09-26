@@ -1,10 +1,12 @@
-import { Music, Instagram, Phone, Mail, MapPin } from "lucide-react";
+import { Music, Instagram, Phone, Mail, MapPin, ArrowUp } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="border-t border-white/10 bg-card/40">
-      <div className="container mx-auto px-4 py-14 md:py-16">
+    <footer className="relative border-t border-white/10 bg-card/40 overflow-hidden">
+      {/* faint top glow */}
+      <div aria-hidden="true" className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+      <div className="container mx-auto px-4 py-14 md:py-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
@@ -129,6 +131,13 @@ const Footer = () => {
             >
               Terms of Service
             </Link>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              aria-label="Back to top"
+              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/50 transition-colors"
+            >
+              <ArrowUp className="w-4 h-4" />
+            </button>
           </div>
         </div>
       </div>

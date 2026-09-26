@@ -2,6 +2,7 @@ import { Mail, Phone, MapPin, Send, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
+import SectionHeader from "@/components/SectionHeader";
 
 const inputClasses =
   "w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all";
@@ -11,14 +12,12 @@ const ContactSection = () => {
   return (
     <section ref={ref} id="contact" className="py-20 md:py-28 relative overflow-hidden bg-card/40 border-y border-white/5 bass-drop">
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Get in touch</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Lock in your date</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            Tell us about your event and get a personalized quote within 24 hours. Dates book fast — especially wedding season.
-          </p>
-        </div>
+        <SectionHeader
+          index="08"
+          eyebrow="Get in touch"
+          title="Lock in your date"
+          sub="Tell us about your event and get a personalized quote within 24 hours. Dates book fast — especially wedding season."
+        />
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
@@ -151,7 +150,7 @@ const ContactSection = () => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/10 hover:border-primary/50 transition-colors duration-300 group"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/10 hover:border-primary/50 transition-colors duration-300 group lift-hover"
                   >
                     <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-primary" />

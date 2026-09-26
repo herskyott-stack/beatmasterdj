@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCart } from "@/contexts/CartContext";
 import { useNavigate, Link } from "react-router-dom";
 import { packageData, categoryImages, type Package } from "@/pages/BookingPage";
+import SectionHeader from "@/components/SectionHeader";
+import { cn } from "@/lib/utils";
 
 const BookingPreview = () => {
   const { addItem } = useCart();
@@ -25,15 +27,16 @@ const BookingPreview = () => {
   };
 
   return (
-    <section id="book" className="py-20 md:py-28 bg-card/40 border-y border-white/5">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Packages</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Book your event</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            Select a package to begin. Add-ons and details can be customized at checkout.
-          </p>
-        </div>
+    <section id="book" className="py-20 md:py-28 bg-card/40 border-y border-white/5 relative overflow-hidden">
+      {/* faint backdrop texture */}
+      <div aria-hidden="true" className="absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-primary/[0.05] rounded-full blur-[120px] pointer-events-none" />
+      <div className="container mx-auto px-4 relative z-10">
+        <SectionHeader
+          index="02"
+          eyebrow="Packages"
+          title="Book your event"
+          sub="Select a package to begin. Add-ons and details can be customized at checkout."
+        />
 
         <Tabs defaultValue="weddings" className="max-w-6xl mx-auto">
           <TabsList className="flex flex-wrap justify-center gap-2 mb-10 bg-transparent h-auto p-0">
@@ -55,9 +58,10 @@ const BookingPreview = () => {
                   <Card
                     key={pkg.name}
                     variant={pkg.featured ? "featured" : "glass"}
-                    className={`relative hover:border-primary/40 hover:-translate-y-1 overflow-hidden ${
-                      pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
-                    }`}
+                    className={cn(
+                      "lift-hover relative overflow-hidden hover:border-primary/40",
+                      pkg.featured ? "featured-edge lg:-mt-4 lg:mb-4" : ""
+                    )}
                   >
                     <div className="absolute inset-0 z-0">
                       <img src={categoryImages[category]} alt="" className="w-full h-full object-cover opacity-30" />
@@ -65,18 +69,18 @@ const BookingPreview = () => {
                     </div>
 
                     {pkg.featured && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full z-10">
-                        <div className="flex items-center gap-1">
+                      <div className="absolute top-4 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-primary rounded-full z-10 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.7)]">
+                        <div className="flex items-center gap-1.5">
                           <Star className="w-3 h-3 fill-current text-primary-foreground" />
-                          <span className="text-xs font-display uppercase tracking-wider text-primary-foreground">Most Popular</span>
+                          <span className="text-[11px] font-bold font-display uppercase tracking-[0.14em] text-primary-foreground whitespace-nowrap">Most Popular</span>
                         </div>
                       </div>
                     )}
-                    <CardHeader className="text-center pb-4 relative z-10">
-                      <CardTitle className="font-display text-xl text-white">{pkg.name}</CardTitle>
+                    <CardHeader className="text-center pb-4 relative z-10 pt-8">
+                      <CardTitle className="font-display text-xl text-white tracking-tight">{pkg.name}</CardTitle>
                       <CardDescription>{pkg.description}</CardDescription>
                       <div className="mt-4">
-                        <span className="font-display text-4xl font-bold text-primary">{pkg.price}</span>
+                        <span className="font-display text-[2.5rem] leading-none font-bold text-white tabular-nums">{pkg.price}</span>
                         <span className="ml-2 text-xs text-muted-foreground align-middle">+ 13% tax</span>
                       </div>
                     </CardHeader>

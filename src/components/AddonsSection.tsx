@@ -3,20 +3,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import { addons } from "@/data/addons";
+import SectionHeader from "@/components/SectionHeader";
 
 const AddonsSection = () => {
   const ref = useRevealOnScroll<HTMLElement>();
   return (
     <section ref={ref} id="addons" className="py-20 md:py-28 relative overflow-hidden bass-drop">
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Add-Ons</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Enhance your experience</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            Take your event to the next level with our premium add-on services. Tap any card for full details.
-          </p>
-        </div>
+        <SectionHeader
+          index="04"
+          eyebrow="Add-Ons"
+          title="Enhance your experience"
+          sub="Take your event to the next level with our premium add-on services. Tap any card for full details."
+        />
 
         {/* Add-ons Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto stagger-fade-in">
@@ -31,7 +30,7 @@ const AddonsSection = () => {
               >
                 <Card
                   variant="glass"
-                  className="group-hover:border-primary/40 group-hover:-translate-y-1 flex flex-col overflow-hidden h-full cursor-pointer"
+                  className="lift-hover group-hover:border-primary/40 flex flex-col overflow-hidden h-full cursor-pointer"
                 >
                   {/* Image Section */}
                   {addon.image && (

@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import SectionHeader from "@/components/SectionHeader";
 
 // Package images
 import weddingPackageImg from "@/assets/real/weddings/wedding-reception-tablesetting.jpg";
@@ -509,11 +510,11 @@ const BookingPage = () => {
         {/* Header */}
         <div className="container mx-auto px-4">
           <div className="text-center mb-14 md:mb-20">
-            <p className="eyebrow mb-4">Booking</p>
-            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Book Your Event</h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-              Select a package to begin your booking. Add-ons can be added during checkout.
-            </p>
+            <SectionHeader
+              eyebrow="Booking"
+              title="Book your event"
+              sub="Select a package to begin your booking. Add-ons can be added during checkout."
+            />
           </div>
 
           {/* Package Tabs */}

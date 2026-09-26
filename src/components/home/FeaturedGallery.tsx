@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Play, X } from "lucide-react";
+import SectionHeader from "@/components/SectionHeader";
 
 type Item = {
   id: string;
@@ -33,15 +34,12 @@ const FeaturedGallery = () => {
   return (
     <section className="py-20 md:py-28 relative">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Featured</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
-            Moments &amp; Highlights
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            A look behind the decks — events, setups, and unforgettable nights.
-          </p>
-        </div>
+        <SectionHeader
+          index="03"
+          eyebrow="Featured"
+          title="Moments & highlights"
+          sub="A look behind the decks — events, setups, and unforgettable nights."
+        />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {items.map((it) => (

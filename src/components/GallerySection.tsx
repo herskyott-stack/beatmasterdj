@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { X } from "lucide-react";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
+import SectionHeader from "@/components/SectionHeader";
 
 // Import gallery images
 import gallery1 from "@/assets/gallery/gallery-1.jpg";
@@ -56,8 +57,8 @@ const galleryImages: Array<{ src: string; alt: string; category: string; credit?
   { src: corpLive3, alt: "DJ Hersky performing at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: club1, alt: "DJ Hersky in the red-lit booth", category: "EDM Event" },
   { src: club2, alt: "DJ Hersky early banner set", category: "EDM Event" },
-  { src: club3, alt: "DJ Hersky with light trails", category: "EDM Event", credit: "© LMF" },
-  { src: club4, alt: "DJ Hersky in red and blue light", category: "EDM Event", credit: "© LMF" },
+  { src: club3, alt: "DJ Hersky with light trails", category: "EDM Event" },
+  { src: club4, alt: "DJ Hersky in red and blue light", category: "EDM Event" },
   { src: club5, alt: "DJ Hersky club set with green headphones", category: "EDM Event" },
   { src: parford1, alt: "DJ Hersky at PARFORD FMG with LED backdrop", category: "EDM Event" },
   { src: parford2, alt: "DJ Hersky performing at PARFORD FMG", category: "EDM Event" },
@@ -70,14 +71,12 @@ const GallerySection = () => {
   return (
     <section ref={ref} id="gallery" className="py-20 md:py-28 relative overflow-hidden bg-card/40 border-y border-white/5 bass-drop">
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Our Work</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Event gallery</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            Moments captured from our most memorable events
-          </p>
-        </div>
+        <SectionHeader
+          index="05"
+          eyebrow="Our Work"
+          title="Real events, real energy"
+          sub="Moments captured from our most memorable events."
+        />
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
@@ -85,7 +84,7 @@ const GallerySection = () => {
             <Card
               key={index}
               variant="glass"
-              className="group cursor-pointer overflow-hidden aspect-square hover:border-primary/40"
+              className="group cursor-pointer overflow-hidden aspect-square hover:border-primary/40 lift-hover"
               onClick={() => setSelectedImage(image.src)}
             >
               <div className="relative w-full h-full">

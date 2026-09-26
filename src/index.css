@@ -62,9 +62,18 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   html, body {
     @apply overflow-x-hidden;
     max-width: 100%;
+  }
+
+  ::selection {
+    background: hsl(var(--primary) / 0.35);
+    color: #fff;
   }
 
   body {
@@ -228,5 +237,78 @@
   }
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.5);
+  }
+
+  /* ---- Premium remake: micro-interactions ---- */
+
+  /* Shine sweep for primary CTAs (applied to the `hero` button variant) */
+  .btn-shine {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .btn-shine::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(105deg, transparent 40%, hsl(0 0% 100% / 0.28) 50%, transparent 60%);
+    transform: translateX(-120%);
+    transition: transform 0.7s ease;
+    pointer-events: none;
+  }
+  .btn-shine:hover::after {
+    transform: translateX(120%);
+  }
+
+  /* Hero scroll cue */
+  @keyframes scroll-cue-kf {
+    0% { transform: scaleY(0); transform-origin: top; }
+    45% { transform: scaleY(1); transform-origin: top; }
+    55% { transform: scaleY(1); transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+  .scroll-cue-line {
+    animation: scroll-cue-kf 2.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue-line { animation: none; }
+  }
+
+  /* Full-screen mobile menu entrance */
+  @keyframes menu-link-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .menu-link-in {
+    opacity: 0;
+    animation: menu-link-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .menu-link-in { opacity: 1; animation: none; }
+  }
+
+  /* Soft top-edge glow for featured pricing cards */
+  .featured-edge {
+    position: relative;
+  }
+  .featured-edge::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 12%;
+    right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.9), transparent);
+  }
+
+  /* Refined card hover lift (GPU-only) */
+  .lift-hover {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+    will-change: transform;
+  }
+  .lift-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
   }
 }

@@ -1,7 +1,9 @@
-import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor, Sparkles } from "lucide-react";
+import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor, Sparkles, ArrowUpRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
+import SectionHeader from "@/components/SectionHeader";
+import { cn } from "@/lib/utils";
 
 // Real wedding photo from DJ Hersky's own wedding gigs
 import weddingImg from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
@@ -27,6 +29,7 @@ const services: Array<{
   route: string;
   image: string;
   credit?: string;
+  span?: boolean;
 }> = [
   {
     icon: Heart,
@@ -34,6 +37,7 @@ const services: Array<{
     description: "Ceremony to last dance — seamless MC, pro sound, and a dance floor that stays full all night.",
     route: "/packages/weddings",
     image: weddingImg,
+    span: true,
   },
   {
     icon: Building2,
@@ -92,46 +96,52 @@ const ServicesSection = () => {
   return (
     <section ref={ref} id="services" className="py-20 md:py-28 relative overflow-hidden bass-drop">
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <div className="text-center mb-14 md:mb-20">
-          <p className="eyebrow mb-4">Our Services</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Our services</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
-            From intimate gatherings to large-scale productions, we bring the perfect soundtrack to every occasion.
-          </p>
-        </div>
+        <SectionHeader
+          index="01"
+          eyebrow="Our Services"
+          title="Every event, dialed in"
+          sub="From intimate gatherings to large-scale productions, we bring the perfect soundtrack to every occasion."
+        />
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto stagger-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 max-w-6xl mx-auto stagger-fade-in">
           {services.map((service) => (
             <Link
               key={service.title}
               to={service.route}
-              className="block"
+              className={cn("block group", service.span && "lg:col-span-2")}
+              aria-label={`${service.title} — view packages`}
             >
               <Card
                 variant="glass"
-                className="group cursor-pointer hover:border-primary/40 hover:-translate-y-1 h-full overflow-hidden"
+                className="lift-hover h-full overflow-hidden hover:border-primary/40 cursor-pointer"
               >
                 {/* Image Section */}
-                <div className="relative h-44 overflow-hidden">
+                <div className={cn("relative overflow-hidden", service.span ? "h-52 md:h-64" : "h-44")}>
                   <img
                     src={service.image}
                     alt={`${service.title} DJ services`}
+                    loading="lazy"
                     className="w-full h-full object-cover image-zoom"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/30 to-transparent" />
+                  <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/[0.06] transition-colors duration-500" />
 
                   {/* Icon Badge */}
                   <div className="absolute bottom-4 left-4">
-                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center">
+                    <div className="w-12 h-12 rounded-xl bg-black/40 border border-white/15 backdrop-blur-md flex items-center justify-center group-hover:border-primary/50 transition-colors duration-300">
                       <service.icon className="w-6 h-6 text-primary" />
                     </div>
                   </div>
 
+                  {/* Hover arrow affordance */}
+                  <div className="absolute bottom-4 right-4 w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.6)]">
+                    <ArrowUpRight className="w-5 h-5" />
+                  </div>
+
                   {/* Photo credit */}
                   {service.credit && (
-                    <div className="absolute bottom-4 right-4">
+                    <div className="absolute top-4 right-4">
                       <span className="text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
                         {service.credit}
                       </span>
@@ -140,7 +150,7 @@ const ServicesSection = () => {
                 </div>
 
                 <CardContent className="p-6">
-                  <h3 className="font-display text-lg font-bold text-white mb-2">
+                  <h3 className="font-display text-lg font-bold text-white mb-2 tracking-tight group-hover:text-primary transition-colors duration-300">
                     {service.title}
                   </h3>
                   <p className="text-muted-foreground text-sm leading-relaxed">
