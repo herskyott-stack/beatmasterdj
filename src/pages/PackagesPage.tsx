@@ -47,6 +47,10 @@ import weddingBooth from "@/assets/real/weddings/wedding-clara-shane.jpg";
 import weddingBridalParty from "@/assets/real/weddings/wedding-bridal-party.jpg";
 import weddingSign from "@/assets/real/weddings/wedding-sign-charlene-vincent.jpg";
 import weddingWine from "@/assets/real/weddings/wedding-wine-bottle.jpg";
+// Sydney & Blake wedding (shot by Yash Patel) — Jake DJ'd this wedding
+import sbTentDance from "@/assets/real/weddings/sydney-blake-tent-dance.jpg";
+import sbDanceFloor from "@/assets/real/weddings/sydney-blake-dance-floor.jpg";
+import sbEntrance from "@/assets/real/weddings/sydney-blake-grand-entrance.jpg";
 
 // Real gear that powers karaoke nights
 import mcx8000Gear from "@/assets/gear/denon-mcx8000.jpg";
@@ -114,7 +118,7 @@ const realPhotoStrips: Record<string, { titleA: string; titleB: string; blurb: s
   weddingsVibes: {
     titleA: "WEDDING ",
     titleB: "VIBES",
-    blurb: "The fun stuff — bouquet catches, photo booths, bridal parties, and lakeside bets.",
+    blurb: "The fun stuff — bouquet catches, photo booths, bridal parties, and packed dance floors.",
     alt: "Behind the scenes at DJ Hersky's wedding gigs",
     photos: [
       { src: weddingBouquet },
@@ -122,6 +126,9 @@ const realPhotoStrips: Record<string, { titleA: string; titleB: string; blurb: s
       { src: weddingBridalParty },
       { src: weddingSign },
       { src: weddingWine },
+      { src: sbTentDance, credit: "Yash Patel Photography" },
+      { src: sbDanceFloor, credit: "Yash Patel Photography" },
+      { src: sbEntrance, credit: "Yash Patel Photography" },
     ],
   },
   karaoke: {

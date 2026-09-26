@@ -25,6 +25,9 @@ import wedWine from "@/assets/real/weddings/wedding-wine-bottle.jpg";
 import wedBooth from "@/assets/real/weddings/wedding-clara-shane.jpg";
 import wedCeremony from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
 import wedHall from "@/assets/real/weddings/wedding-reception-hall-2025.jpg";
+// Sydney & Blake wedding (shot by Yash Patel) — Jake DJ'd this wedding
+import sbFirstDance from "@/assets/real/weddings/sydney-blake-first-dance.jpg";
+import sbGroupCheer from "@/assets/real/weddings/sydney-blake-group-cheer.jpg";
 // Real club photos of DJ Hersky
 import club1 from "@/assets/real/club-1.jpg";
 import club2 from "@/assets/real/club-2.jpg";
@@ -46,6 +49,8 @@ const galleryImages: Array<{ src: string; alt: string; category: string; credit?
   { src: wedBooth, alt: "DJ Hersky in the photo booth at Clara and Shane's wedding", category: "Wedding" },
   { src: wedCeremony, alt: "Forest wedding ceremony by DJ Hersky", category: "Wedding" },
   { src: wedHall, alt: "Elegant wedding reception hall", category: "Wedding" },
+  { src: sbFirstDance, alt: "First dance at Sydney and Blake's wedding", category: "Wedding", credit: "Yash Patel Photography" },
+  { src: sbGroupCheer, alt: "The whole wedding crew cheering for Sydney and Blake", category: "Wedding", credit: "Yash Patel Photography" },
   { src: corpLive1, alt: "DJ Hersky live at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: corpLive2, alt: "DJ Hersky on Denon decks at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: corpLive3, alt: "DJ Hersky performing at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
