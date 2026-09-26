@@ -6,3 +6,4 @@
 - [x] Add secure Admin Portal access to the signed-in mobile dropdown.
 - [x] Verify desktop and phone layouts, routes, signed-in admin visibility, and runtime errors.
 - [x] Clarify the GitHub connection path for all projects.
+- [x] Restore the backend connection and prevent missing settings from causing a blank screen.
