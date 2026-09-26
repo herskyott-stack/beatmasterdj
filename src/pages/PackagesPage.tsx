@@ -21,6 +21,63 @@ import corpLive1 from "@/assets/corporate/desert-oasis-1.jpg";
 import corpLive2 from "@/assets/corporate/desert-oasis-2.jpg";
 import corpLive3 from "@/assets/corporate/desert-oasis-3.jpg";
 
+// Real performance photos of DJ Hersky
+import edmLive from "@/assets/real/edm.jpg";
+import clubLive1 from "@/assets/real/club-1.jpg";
+import parfordLive1 from "@/assets/real/parford-1.jpg";
+import privateLive from "@/assets/real/private.jpg";
+import clubLive3 from "@/assets/real/club-3.jpg";
+import heroLive from "@/assets/real/hero.jpg";
+import avLive from "@/assets/real/av.jpg";
+import decksLive from "@/assets/real/mentorship.jpg";
+import parfordLive2 from "@/assets/real/parford-2.jpg";
+
+type StripPhoto = { src: string; credit?: string };
+
+// Real-photo strips per package category (only where we have real photos)
+const realPhotoStrips: Record<string, { titleA: string; titleB: string; blurb: string; alt: string; photos: StripPhoto[] }> = {
+  corporate: {
+    titleA: "RECENT ",
+    titleB: "CORPORATE WORK",
+    blurb: "DJ Hersky live at Desert Oasis — Nature Nocturne, Canadian Museum of Nature.",
+    alt: "DJ Hersky performing at a corporate event",
+    photos: [
+      { src: corpLive1, credit: "Tim Skinner © Canadian Museum of Nature" },
+      { src: corpLive2, credit: "Tim Skinner © Canadian Museum of Nature" },
+      { src: corpLive3, credit: "Tim Skinner © Canadian Museum of Nature" },
+    ],
+  },
+  edm: {
+    titleA: "LIVE ",
+    titleB: "IN THE CLUB",
+    blurb: "Real nights, real crowds — DJ Hersky doing what he does best.",
+    alt: "DJ Hersky performing at a club event",
+    photos: [{ src: edmLive }, { src: clubLive1 }, { src: parfordLive1 }],
+  },
+  private: {
+    titleA: "REAL ",
+    titleB: "PARTY ENERGY",
+    blurb: "Birthdays, milestones, packed dance floors — this is what it looks like.",
+    alt: "DJ Hersky performing at a private party",
+    photos: [
+      { src: privateLive, credit: "© LMF" },
+      { src: clubLive3, credit: "© LMF" },
+      { src: heroLive, credit: "© LMF" },
+    ],
+  },
+  av: {
+    titleA: "THE RIG ",
+    titleB: "IN ACTION",
+    blurb: "Pro decks, real lighting, LED walls — the actual setup, live.",
+    alt: "DJ Hersky's AV setup in action",
+    photos: [
+      { src: avLive, credit: "© LMF" },
+      { src: decksLive },
+      { src: parfordLive2 },
+    ],
+  },
+};
+
 type Package = {
   name: string;
   price: string;
@@ -586,30 +643,32 @@ const PackagesPage = () => {
           </div>
         </div>
 
-        {/* Recent corporate work — real photos, corporate category only */}
-        {category === "corporate" && (
+        {/* Real performance photos — per category */}
+        {category && realPhotoStrips[category] && (
           <div className="container mx-auto px-4 mb-16">
             <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-center">
-              <span className="text-foreground">RECENT </span>
-              <span className="gradient-text">CORPORATE WORK</span>
+              <span className="text-foreground">{realPhotoStrips[category].titleA}</span>
+              <span className="gradient-text">{realPhotoStrips[category].titleB}</span>
             </h2>
             <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-              DJ Hersky live at Desert Oasis — Nature Nocturne, Canadian Museum of Nature.
+              {realPhotoStrips[category].blurb}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-              {[corpLive1, corpLive2, corpLive3].map((src, i) => (
+              {realPhotoStrips[category].photos.map((photo, i) => (
                 <div key={i} className="relative rounded-md overflow-hidden aspect-[4/3]">
                   <img
-                    src={src}
-                    alt="DJ Hersky performing at a corporate event"
+                    src={photo.src}
+                    alt={realPhotoStrips[category].alt}
                     className="w-full h-full object-cover"
                   />
+                  {photo.credit && (
+                    <span className="absolute bottom-2 right-2 text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                      {photo.credit}
+                    </span>
+                  )}
                 </div>
               ))}
             </div>
-            <p className="text-xs text-muted-foreground text-center mt-4">
-              Photos: Tim Skinner © Canadian Museum of Nature
-            </p>
           </div>
         )}
 

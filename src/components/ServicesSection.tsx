@@ -1,5 +1,4 @@
 import { Heart, Building2, GraduationCap, Users, Zap, Mic2, Monitor, Sparkles } from "lucide-react";
-import mentorshipImg from "@/assets/services/mentorship.jpg";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
@@ -7,10 +6,13 @@ import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 // Import real stock photos
 import weddingImg from "@/assets/services/wedding-dj.jpg";
 import schoolImg from "@/assets/services/school-event.jpg";
-import privateImg from "@/assets/services/private-party.jpg";
-import edmImg from "@/assets/services/edm-event.jpg";
 import karaokeImg from "@/assets/services/karaoke-service.jpg";
-import avImg from "@/assets/services/av-service.jpg";
+
+// Real photos of DJ Hersky performing
+import privateLiveImg from "@/assets/real/private.jpg";
+import edmLiveImg from "@/assets/real/edm.jpg";
+import avLiveImg from "@/assets/real/av.jpg";
+import mentorshipLiveImg from "@/assets/real/mentorship.jpg";
 
 // Real photo: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
 import corporateLiveImg from "@/assets/corporate/desert-oasis-3.jpg";
@@ -60,7 +62,8 @@ const services: Array<{
     color: "text-secondary",
     gradient: "from-secondary/20 to-primary/20",
     route: "/packages/private",
-    image: privateImg,
+    image: privateLiveImg,
+    credit: "© LMF",
   },
   {
     icon: Zap,
@@ -69,7 +72,7 @@ const services: Array<{
     color: "text-primary",
     gradient: "from-primary/20 to-secondary/20",
     route: "/packages/edm",
-    image: edmImg,
+    image: edmLiveImg,
   },
   {
     icon: Mic2,
@@ -87,7 +90,8 @@ const services: Array<{
     color: "text-secondary",
     gradient: "from-secondary/20 to-accent/20",
     route: "/packages/av",
-    image: avImg,
+    image: avLiveImg,
+    credit: "© LMF",
   },
   {
     icon: Sparkles,
@@ -96,7 +100,7 @@ const services: Array<{
     color: "text-primary",
     gradient: "from-primary/20 to-secondary/20",
     route: "/mentorship",
-    image: mentorshipImg,
+    image: mentorshipLiveImg,
   },
 ];
 

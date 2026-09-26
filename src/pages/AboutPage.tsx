@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
+// Real photos of DJ Hersky performing
+import aboutJakeImg from "@/assets/real/about-jake.jpg";
+import aboutCrewImg from "@/assets/real/about-crew.jpg";
+
 const stats = [
   { number: "15+", label: "Years Experience", icon: Calendar },
   { number: "500+", label: "Events Completed", icon: Music },
@@ -12,18 +16,31 @@ const stats = [
   { number: "2+", label: "Pro DJ Team", icon: Users },
 ];
 
-const teamMembers = [
+const teamMembers: Array<{
+  name: string;
+  role: string;
+  bio: string;
+  specialties: string[];
+  photo: string;
+  photoAlt: string;
+  credit?: string;
+}> = [
   {
     name: "Jake Herscovitch",
     role: "Founder & Master DJ",
     bio: "DJing since the age of 13, Jake founded Beatmaster DJ in 2012 with a vision to bring world-class entertainment to every event. A true master of reading the crowd, he's performed at hundreds of weddings, corporate events, and clubs across Canada.",
     specialties: ["Weddings", "Corporate Events", "EDM"],
+    photo: aboutJakeImg,
+    photoAlt: "DJ Hersky performing live on stage",
   },
   {
     name: "The Hersky Crew",
     role: "Professional DJ Team",
     bio: "Our handpicked team of professional DJs shares Jake's passion for music and commitment to excellence. Each member brings their unique style while maintaining our signature standard of quality.",
     specialties: ["All Event Types", "Multiple Genres", "Bilingual Services"],
+    photo: aboutCrewImg,
+    photoAlt: "The Hersky crew live in the DJ booth",
+    credit: "@613digitalclicks",
   },
 ];
 
@@ -142,8 +159,17 @@ const AboutPage = () => {
               {teamMembers.map((member, index) => (
                 <Card key={index} variant={index === 0 ? "featured" : "glass"}>
                   <CardContent className="p-8">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-r from-primary to-accent flex items-center justify-center mb-6">
-                      <Music className="w-10 h-10 text-white" />
+                    <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden mb-6">
+                      <img
+                        src={member.photo}
+                        alt={member.photoAlt}
+                        className="w-full h-full object-cover"
+                      />
+                      {member.credit && (
+                        <span className="absolute bottom-2 right-2 text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                          {member.credit}
+                        </span>
+                      )}
                     </div>
                     <h3 className="font-display text-2xl font-bold mb-2">{member.name}</h3>
                     <p className="text-primary font-display uppercase tracking-wider text-sm mb-4">

@@ -17,6 +17,15 @@ import corpLive1 from "@/assets/corporate/desert-oasis-1.jpg";
 import corpLive2 from "@/assets/corporate/desert-oasis-2.jpg";
 import corpLive3 from "@/assets/corporate/desert-oasis-3.jpg";
 
+// Real club photos of DJ Hersky
+import club1 from "@/assets/real/club-1.jpg";
+import club2 from "@/assets/real/club-2.jpg";
+import club3 from "@/assets/real/club-3.jpg";
+import club4 from "@/assets/real/club-4.jpg";
+import club5 from "@/assets/real/club-5.jpg";
+import parford1 from "@/assets/real/parford-1.jpg";
+import parford2 from "@/assets/real/parford-2.jpg";
+
 const galleryImages: Array<{ src: string; alt: string; category: string; credit?: string }> = [
   { src: gallery1, alt: "Wedding celebration with DJ", category: "Wedding" },
   { src: gallery2, alt: "Concert crowd energy", category: "EDM Event" },
@@ -27,6 +36,13 @@ const galleryImages: Array<{ src: string; alt: string; category: string; credit?
   { src: corpLive1, alt: "DJ Hersky live at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: corpLive2, alt: "DJ Hersky on Denon decks at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: corpLive3, alt: "DJ Hersky performing at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
+  { src: club1, alt: "DJ Hersky in the red-lit booth", category: "EDM Event" },
+  { src: club2, alt: "DJ Hersky early banner set", category: "EDM Event" },
+  { src: club3, alt: "DJ Hersky with light trails", category: "EDM Event", credit: "© LMF" },
+  { src: club4, alt: "DJ Hersky in red and blue light", category: "EDM Event", credit: "© LMF" },
+  { src: club5, alt: "DJ Hersky club set with green headphones", category: "EDM Event" },
+  { src: parford1, alt: "DJ Hersky at PARFORD FMG with LED backdrop", category: "EDM Event" },
+  { src: parford2, alt: "DJ Hersky performing at PARFORD FMG", category: "EDM Event" },
 ];
 
 const GallerySection = () => {

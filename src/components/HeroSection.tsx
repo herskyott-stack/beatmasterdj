@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Star, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroImage from "@/assets/hero-wedding.jpg";
+import heroImage from "@/assets/real/hero.jpg";
 import MagneticButton from "@/components/fx/MagneticButton";
 
 const HeroSection = () => {
@@ -11,11 +11,12 @@ const HeroSection = () => {
       <div className="absolute inset-0">
         <img
           src={heroImage}
-          alt="Beautiful wedding celebration with DJ"
+          alt="DJ Hersky performing live for a packed dance floor"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/70 to-black" />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-secondary/10 mix-blend-screen" />
+        <span className="absolute bottom-3 right-4 text-[10px] text-white/50 z-10">© LMF</span>
       </div>
 
       {/* Animated Glow Effects */}
