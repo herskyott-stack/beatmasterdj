@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import GearSection from "@/components/GearSection";
 
 // Import category hero images
 import weddingHero from "@/assets/categories/wedding-hero.jpg";
@@ -109,9 +110,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Perfect for intimate ceremonies",
         features: [
           "4 hours of DJ service",
-          "Professional sound system",
+          "Mackie + EV pro sound system",
           "Wireless microphone",
-          "Basic lighting package",
+          "LED pixel bars, wireless DMX",
           "Music consultation",
           "MC services",
         ],
@@ -123,9 +124,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Our most popular wedding package",
         features: [
           "6 hours of DJ service",
-          "Premium sound system",
+          "Mackie tops + EV 1200W sub",
           "2 wireless microphones",
-          "Enhanced lighting package",
+          "Moving heads + pixel bars, wireless DMX",
           "Music consultation",
           "MC services",
           "Custom playlist creation",
@@ -140,9 +141,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Elevated entertainment experience",
         features: [
           "8 hours of DJ service",
-          "Premium sound system",
+          "Mackie tops + EV 1200W sub",
           "3 wireless microphones",
-          "Professional lighting rig",
+          "Movers, pixel bars + laser, wireless DMX",
           "Unlimited consultations",
           "MC services",
           "Custom playlist creation",
@@ -157,9 +158,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "The complete luxury experience",
         features: [
           "10 hours of DJ service",
-          "Concert-grade sound system",
+          "Full EV sub stack + Mackie tops",
           "4 wireless microphones",
-          "Intelligent lighting system",
+          "Full intelligent rig: movers, bars, laser + fog",
           "Unlimited consultations",
           "MC services",
           "Custom playlist creation",
@@ -181,9 +182,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Ideal for small gatherings",
         features: [
           "4 hours of DJ service",
-          "Professional sound system",
+          "Mackie + EV pro sound system",
           "Background music curation",
-          "Basic lighting",
+          "LED pixel-bar lighting",
           "Setup & breakdown",
         ],
       },
@@ -194,7 +195,7 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Perfect for corporate celebrations",
         features: [
           "6 hours of DJ service",
-          "Premium sound system",
+          "Mackie tops + EV 1200W sub",
           "Custom corporate playlist",
           "Enhanced lighting",
           "Wireless microphones",
@@ -210,9 +211,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "High-end corporate entertainment",
         features: [
           "8 hours of DJ service",
-          "Concert-grade sound",
+          "EV 1200W subs + Mackie tops",
           "Custom branding integration",
-          "Professional lighting rig",
+          "Movers, pixel bars + laser, wireless DMX",
           "Multiple microphones",
           "Full MC services",
           "Event coordination",
@@ -228,7 +229,7 @@ const packageData: Record<string, { title: string; description: string; packages
           "10+ hours of service",
           "Multi-zone audio system",
           "Full AV integration",
-          "Intelligent lighting system",
+          "Full intelligent rig: movers, bars, laser + fog",
           "Multiple DJ setup",
           "Full production team",
           "Brand activation support",
@@ -250,7 +251,7 @@ const packageData: Record<string, { title: string; description: string; packages
           "3 hours of DJ service",
           "Age-appropriate music",
           "Sound system",
-          "Basic lighting",
+          "LED pixel-bar lighting",
           "Microphone for announcements",
         ],
       },
@@ -262,8 +263,8 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "4 hours of DJ service",
           "Age-appropriate music",
-          "Premium sound system",
-          "Dance floor lighting",
+          "Mackie tops + EV 1200W sub",
+          "Dance-floor lighting: pixel bars + movers",
           "Microphone",
           "Interactive games",
         ],
@@ -277,8 +278,8 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "5 hours of DJ service",
           "Custom prom playlist",
-          "Concert sound system",
-          "Professional lighting",
+          "Mackie tops + EV sub stack",
+          "Intelligent lighting: movers, bars, laser",
           "Fog machine",
           "Photo booth integration",
           "MC services",
@@ -292,7 +293,7 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "6 hours of DJ service",
           "Custom themed playlist",
-          "Full sound system",
+          "Full Mackie + EV sound system",
           "Stadium lighting setup",
           "Multiple effect machines",
           "Dance competitions",
@@ -314,7 +315,7 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "3 hours of DJ service",
           "Sound system",
-          "Basic lighting",
+          "LED pixel-bar lighting",
           "Music requests",
           "Setup & breakdown",
         ],
@@ -326,8 +327,8 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Milestone celebrations",
         features: [
           "4 hours of DJ service",
-          "Premium sound system",
-          "Party lighting package",
+          "Mackie tops + EV 1200W sub",
+          "LED pixel bars + moving heads",
           "Wireless microphone",
           "Custom playlist",
           "MC services",
@@ -341,9 +342,9 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Exclusive private events",
         features: [
           "6 hours of DJ service",
-          "Concert-grade sound",
-          "Professional lighting",
-          "Fog/haze machine",
+          "EV 1200W subs + Mackie tops",
+          "Intelligent lighting: movers, bars, laser",
+          "Fog machine FX",
           "Custom playlist",
           "MC & entertainment",
           "Game coordination",
@@ -379,8 +380,8 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "4 hours of DJ service",
           "EDM-focused setlist",
-          "Club sound system",
-          "Basic lighting & lasers",
+          "Mackie + EV club sound",
+          "Pixel bars + laser, wireless DMX",
           "Live mixing",
         ],
       },
@@ -392,9 +393,9 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "6 hours of DJ service",
           "Full EDM production",
-          "Festival sound system",
+          "EV sub stack + Mackie tops",
           "Laser show",
-          "LED panels",
+          "LED pixel-bar walls",
           "Live mixing & drops",
           "CO2 jets",
         ],
@@ -408,9 +409,9 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "8 hours of DJ service",
           "Multi-genre EDM sets",
-          "Concert sound system",
-          "Full laser array",
-          "LED wall panels",
+          "Mackie tops + EV sub stack",
+          "Laser FX show",
+          "LED pixel-bar walls",
           "Pyrotechnics",
           "Live remixing",
           "Visual effects",
@@ -424,9 +425,9 @@ const packageData: Record<string, { title: string; description: string; packages
         features: [
           "10+ hours of service",
           "Multiple DJ rotations",
-          "Stadium sound system",
-          "360° laser experience",
-          "Massive LED setup",
+          "Full EV/Mackie concert sound",
+          "Laser FX experience",
+          "Full pixel-bar + mover light show",
           "Full pyro package",
           "Live production",
           "VIP area audio",
@@ -449,7 +450,7 @@ const packageData: Record<string, { title: string; description: string; packages
           "2 wireless microphones",
           "Lyrics on TV screen",
           "10,000+ song library",
-          "Basic sound system",
+          "Mackie pro sound",
         ],
       },
       {
@@ -462,7 +463,7 @@ const packageData: Record<string, { title: string; description: string; packages
           "2 wireless microphones",
           "Projected lyrics display",
           "15,000+ song library",
-          "Premium sound system",
+          "Mackie tops + EV 1200W sub",
           "Song request queue",
         ],
         featured: true,
@@ -477,8 +478,8 @@ const packageData: Record<string, { title: string; description: string; packages
           "2 wireless microphones",
           "Large screen projection",
           "20,000+ song library",
-          "Concert sound system",
-          "Stage lighting",
+          "Mackie tops + EV sub stack",
+          "Pixel-bar stage lighting",
           "Song request queue",
         ],
       },
@@ -492,8 +493,8 @@ const packageData: Record<string, { title: string; description: string; packages
           "2 wireless microphones",
           "Dual screen setup",
           "Unlimited song library",
-          "Professional sound system",
-          "Stage lighting & effects",
+          "Mackie + EV pro sound system",
+          "Pixel bars, laser + fog FX",
           "Song request app",
           "Backup equipment",
         ],
@@ -502,7 +503,7 @@ const packageData: Record<string, { title: string; description: string; packages
   },
   av: {
     title: "AV Production Packages",
-    description: "Full audio-visual production with LED walls, staging, and professional sound systems.",
+    description: "Full audio-visual production with pro sound, intelligent lighting, and staging.",
     packages: [
       {
         name: "Basic AV",
@@ -510,8 +511,8 @@ const packageData: Record<string, { title: string; description: string; packages
         priceNum: 3625,
         description: "Essential AV setup",
         features: [
-          "Professional sound system",
-          "2 speaker stacks",
+          "Mackie + EV pro sound system",
+          "Mackie tops on tripod stands",
           "Wireless microphones",
           "Basic stage lighting",
           "Setup & teardown",
@@ -524,11 +525,11 @@ const packageData: Record<string, { title: string; description: string; packages
         priceNum: 6500,
         description: "Enhanced production",
         features: [
-          "Concert-grade sound",
-          "4 speaker stacks + subs",
+          "EV 1200W subs + Mackie tops",
+          "Full-range stacks + EV subwoofers",
           "Multiple wireless mics",
           "LED uplighting",
-          "Projector & screen",
+          "Laser + fog FX",
           "Setup & teardown",
           "On-site technician",
           "Backup equipment",
@@ -541,11 +542,11 @@ const packageData: Record<string, { title: string; description: string; packages
         priceNum: 10750,
         description: "Full production package",
         features: [
-          "Stadium sound system",
-          "Line array speakers",
+          "Full EV/Mackie concert sound",
+          "EV sub array + Mackie tops",
           "Multiple wireless systems",
-          "LED video wall",
-          "Intelligent lighting rig",
+          "Intelligent lighting rig: movers, bars, laser",
+          "Wireless DMX across every fixture",
           "Stage design",
           "Production team",
           "Backup systems",
@@ -558,11 +559,11 @@ const packageData: Record<string, { title: string; description: string; packages
         description: "Large-scale production",
         features: [
           "Multi-zone audio system",
-          "Large LED video walls",
+          "Full intelligent lighting production",
           "Full lighting design",
           "Custom staging",
-          "Live video production",
-          "Multiple camera setup",
+          "Dual fog + laser FX show",
+          "Dedicated lighting operator",
           "Full production crew",
           "24/7 support",
           "Complete redundancy",
@@ -744,6 +745,9 @@ const PackagesPage = () => {
             })}
           </div>
         </div>
+
+        {/* The real rig — every package runs on this gear */}
+        <GearSection />
 
         {/* CTA Section */}
         <div className="container mx-auto px-4 mt-16">
