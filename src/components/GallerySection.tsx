@@ -22,7 +22,6 @@ import corpLive3 from "@/assets/corporate/desert-oasis-3.jpg";
 // Real wedding photos from DJ Hersky's own wedding gigs
 import wedSign from "@/assets/real/weddings/wedding-sign-charlene-vincent.jpg";
 import wedWine from "@/assets/real/weddings/wedding-wine-bottle.jpg";
-import wedLake from "@/assets/real/weddings/wedding-lake.jpg";
 import wedBooth from "@/assets/real/weddings/wedding-clara-shane.jpg";
 import wedCeremony from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
 import wedHall from "@/assets/real/weddings/wedding-reception-hall-2025.jpg";
@@ -45,7 +44,6 @@ const galleryImages: Array<{ src: string; alt: string; category: string; credit?
   { src: wedSign, alt: "Welcome sign at Charlene and Vincent's wedding, Wakefield QC", category: "Wedding" },
   { src: wedWine, alt: "Custom wine bottle at a Beatmaster DJ wedding", category: "Wedding" },
   { src: wedBooth, alt: "DJ Hersky in the photo booth at Clara and Shane's wedding", category: "Wedding" },
-  { src: wedLake, alt: "Lakeside wedding moments", category: "Wedding" },
   { src: wedCeremony, alt: "Forest wedding ceremony by DJ Hersky", category: "Wedding" },
   { src: wedHall, alt: "Elegant wedding reception hall", category: "Wedding" },
   { src: corpLive1, alt: "DJ Hersky live at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },

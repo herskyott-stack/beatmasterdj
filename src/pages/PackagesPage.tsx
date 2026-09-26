@@ -47,7 +47,6 @@ import weddingBooth from "@/assets/real/weddings/wedding-clara-shane.jpg";
 import weddingBridalParty from "@/assets/real/weddings/wedding-bridal-party.jpg";
 import weddingSign from "@/assets/real/weddings/wedding-sign-charlene-vincent.jpg";
 import weddingWine from "@/assets/real/weddings/wedding-wine-bottle.jpg";
-import weddingLake from "@/assets/real/weddings/wedding-lake.jpg";
 
 // Real gear that powers karaoke nights
 import mcx8000Gear from "@/assets/gear/denon-mcx8000.jpg";
@@ -123,7 +122,6 @@ const realPhotoStrips: Record<string, { titleA: string; titleB: string; blurb: s
       { src: weddingBridalParty },
       { src: weddingSign },
       { src: weddingWine },
-      { src: weddingLake },
     ],
   },
   karaoke: {
