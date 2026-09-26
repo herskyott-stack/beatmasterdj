@@ -85,7 +85,7 @@ const realPhotoStrips: Record<string, { titleA: string; titleB: string; blurb: s
     blurb: "Birthdays, milestones, packed dance floors — this is what it looks like.",
     alt: "DJ Hersky performing at a private party",
     photos: [
-      { src: privateLive, credit: "© LMF" },
+      { src: privateLive },
       { src: clubLive3, credit: "© LMF" },
       { src: heroLive, credit: "© LMF" },
     ],

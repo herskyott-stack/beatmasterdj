@@ -56,7 +56,6 @@ const services: Array<{
     description: "Birthdays, anniversaries and milestones — your playlist, your vibe, zero cheesy DJ clichés.",
     route: "/packages/private",
     image: privateLiveImg,
-    credit: "© LMF",
   },
   {
     icon: Zap,
