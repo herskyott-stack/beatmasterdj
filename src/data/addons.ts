@@ -1,8 +1,7 @@
 import { Sparkles, Camera, Clock, Mic, Wind, Plus, type LucideIcon } from "lucide-react";
 
 import coldSparklers from "@/assets/addons/cold-sparklers.jpg";
-import photoBooth from "@/assets/addons/photo-booth.jpg";
-import karaoke from "@/assets/addons/karaoke.jpg";
+import karaokeRig from "@/assets/gear/denon-mcx8000.jpg";
 import dryIce from "@/assets/addons/dry-ice.jpg";
 import extraHours from "@/assets/addons/extra-hours.jpg";
 
@@ -116,7 +115,7 @@ export const addons: Addon[] = [
         a: "Yes. The instant share screen lets them text, email, or post directly to Instagram and Facebook from the booth.",
       },
     ],
-    image: photoBooth,
+    image: null,
     icon: Camera,
     popular: false,
   },
@@ -166,7 +165,7 @@ export const addons: Addon[] = [
         a: "Standard 4×6 photo prints, or classic 2×6 strip-style — your choice.",
       },
     ],
-    image: photoBooth,
+    image: null,
     icon: Camera,
     popular: true,
   },
@@ -249,7 +248,7 @@ export const addons: Addon[] = [
         a: "Send us the request 48 hours before the event and we'll add it free of charge.",
       },
     ],
-    image: karaoke,
+    image: karaokeRig,
     icon: Mic,
     popular: false,
   },

@@ -6,8 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
 
 import coldSparklers from "@/assets/addons/cold-sparklers.jpg";
-import photoBooth from "@/assets/addons/photo-booth.jpg";
-import karaoke from "@/assets/addons/karaoke.jpg";
+import karaokeRig from "@/assets/gear/denon-mcx8000.jpg";
 import dryIce from "@/assets/addons/dry-ice.jpg";
 import extraHours from "@/assets/addons/extra-hours.jpg";
 
@@ -30,7 +29,7 @@ const addons = [
     priceDisplay: "$750",
     description: "Premium photo booth with props and custom backdrops. Digital copies only.",
     popular: false,
-    image: photoBooth,
+    image: null,
   },
   {
     id: "photo-booth-prints",
@@ -40,7 +39,7 @@ const addons = [
     priceDisplay: "$900",
     description: "Premium photo booth with props, custom backdrops, and unlimited instant prints for your guests.",
     popular: true,
-    image: photoBooth,
+    image: null,
   },
   {
     id: "extra-hours",
@@ -60,7 +59,7 @@ const addons = [
     priceDisplay: "$350",
     description: "Full karaoke setup with thousands of songs, lyrics display, and wireless microphones.",
     popular: false,
-    image: karaoke,
+    image: karaokeRig,
   },
   {
     id: "dry-ice",

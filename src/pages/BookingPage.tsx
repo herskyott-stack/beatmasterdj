@@ -8,13 +8,13 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
 // Package images
-import weddingPackageImg from "@/assets/packages/wedding-package.jpg";
-import corporatePackageImg from "@/assets/packages/corporate-package.jpg";
+import weddingPackageImg from "@/assets/real/weddings/wedding-reception-tablesetting.jpg";
+import corporatePackageImg from "@/assets/corporate/desert-oasis-3.jpg";
 import schoolPackageImg from "@/assets/packages/school-package.jpg";
 import privatePackageImg from "@/assets/packages/private-package.jpg";
-import edmPackageImg from "@/assets/packages/edm-package.jpg";
-import karaokePackageImg from "@/assets/packages/karaoke-package.jpg";
-import avPackageImg from "@/assets/packages/av-package.jpg";
+import edmPackageImg from "@/assets/real/club-2.jpg";
+import karaokePackageImg from "@/assets/gear/denon-mcx8000.jpg";
+import avPackageImg from "@/assets/gear/dmx-console.jpg";
 
 type Package = {
   name: string;

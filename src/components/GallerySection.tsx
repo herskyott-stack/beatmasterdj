@@ -9,14 +9,23 @@ import gallery1 from "@/assets/gallery/gallery-1.jpg";
 import gallery2 from "@/assets/gallery/gallery-2.jpg";
 import gallery3 from "@/assets/gallery/gallery-3.jpg";
 import gallery4 from "@/assets/gallery/gallery-4.jpg";
-import gallery5 from "@/assets/gallery/gallery-5.jpg";
-import gallery6 from "@/assets/gallery/gallery-6.jpg";
+// Verified real photo: DJ Hersky live, arms raised over a packed crowd
+import gallery5 from "@/assets/real/gallery-crowd.jpg";
+// Real photo: packed dance floor at one of DJ Hersky's wedding gigs
+import gallery6 from "@/assets/real/weddings/wedding-dance-floor.jpg";
 
 // Real photos: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
 import corpLive1 from "@/assets/corporate/desert-oasis-1.jpg";
 import corpLive2 from "@/assets/corporate/desert-oasis-2.jpg";
 import corpLive3 from "@/assets/corporate/desert-oasis-3.jpg";
 
+// Real wedding photos from DJ Hersky's own wedding gigs
+import wedSign from "@/assets/real/weddings/wedding-sign-charlene-vincent.jpg";
+import wedWine from "@/assets/real/weddings/wedding-wine-bottle.jpg";
+import wedLake from "@/assets/real/weddings/wedding-lake.jpg";
+import wedBooth from "@/assets/real/weddings/wedding-clara-shane.jpg";
+import wedCeremony from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
+import wedHall from "@/assets/real/weddings/wedding-reception-hall-2025.jpg";
 // Real club photos of DJ Hersky
 import club1 from "@/assets/real/club-1.jpg";
 import club2 from "@/assets/real/club-2.jpg";
@@ -27,12 +36,18 @@ import parford1 from "@/assets/real/parford-1.jpg";
 import parford2 from "@/assets/real/parford-2.jpg";
 
 const galleryImages: Array<{ src: string; alt: string; category: string; credit?: string }> = [
-  { src: gallery1, alt: "Wedding celebration with DJ", category: "Wedding" },
+  { src: gallery1, alt: "Confetti over a packed wedding dance floor", category: "Wedding" },
   { src: gallery2, alt: "Concert crowd energy", category: "EDM Event" },
   { src: gallery3, alt: "DJ mixing at event", category: "Private Party" },
   { src: gallery4, alt: "Festival atmosphere", category: "Corporate Gala" },
-  { src: gallery5, alt: "Dance floor packed", category: "School Prom" },
-  { src: gallery6, alt: "Live performance", category: "Wedding" },
+  { src: gallery5, alt: "DJ Hersky live, crowd going off", category: "EDM Event" },
+  { src: gallery6, alt: "Packed wedding dance floor", category: "Wedding" },
+  { src: wedSign, alt: "Welcome sign at Charlene and Vincent's wedding, Wakefield QC", category: "Wedding" },
+  { src: wedWine, alt: "Custom wine bottle at a Beatmaster DJ wedding", category: "Wedding" },
+  { src: wedBooth, alt: "DJ Hersky in the photo booth at Clara and Shane's wedding", category: "Wedding" },
+  { src: wedLake, alt: "Lakeside wedding moments", category: "Wedding" },
+  { src: wedCeremony, alt: "Forest wedding ceremony by DJ Hersky", category: "Wedding" },
+  { src: wedHall, alt: "Elegant wedding reception hall", category: "Wedding" },
   { src: corpLive1, alt: "DJ Hersky live at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: corpLive2, alt: "DJ Hersky on Denon decks at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },
   { src: corpLive3, alt: "DJ Hersky performing at Desert Oasis, Canadian Museum of Nature", category: "Corporate Gala", credit: "Tim Skinner © Canadian Museum of Nature" },

@@ -9,13 +9,13 @@ import Footer from "@/components/Footer";
 import GearSection from "@/components/GearSection";
 
 // Import category hero images
-import weddingHero from "@/assets/categories/wedding-hero.jpg";
+import weddingHero from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
 import corporateHero from "@/assets/categories/corporate-hero.jpg";
 import schoolHero from "@/assets/categories/school-hero.jpg";
 import privateHero from "@/assets/categories/private-hero.jpg";
 import edmHero from "@/assets/categories/edm-hero.jpg";
-import karaokeHero from "@/assets/categories/karaoke-hero.jpg";
-import avHero from "@/assets/categories/av-hero.jpg";
+import karaokeHero from "@/assets/gear/denon-mcx8000.jpg";
+import avHero from "@/assets/real/parford-1.jpg";
 
 // Real photos: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
 import corpLive1 from "@/assets/corporate/desert-oasis-1.jpg";
@@ -29,9 +29,30 @@ import parfordLive1 from "@/assets/real/parford-1.jpg";
 import privateLive from "@/assets/real/private.jpg";
 import clubLive3 from "@/assets/real/club-3.jpg";
 import heroLive from "@/assets/real/hero.jpg";
-import avLive from "@/assets/real/av.jpg";
+// Real product photo: ADJ WMX1 — DJ Hersky's own lighting controller
+import wmx1Live from "@/assets/gear/wmx1.webp";
 import decksLive from "@/assets/real/mentorship.jpg";
 import parfordLive2 from "@/assets/real/parford-2.jpg";
+
+// Real wedding photos from DJ Hersky's own wedding gigs
+import weddingCeremony from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
+import weddingHall2025 from "@/assets/real/weddings/wedding-reception-hall-2025.jpg";
+import weddingHall2024 from "@/assets/real/weddings/wedding-reception-hall-2024.jpg";
+import weddingReception from "@/assets/real/weddings/wedding-reception-tablesetting.jpg";
+import weddingDanceFloor from "@/assets/real/weddings/wedding-dance-floor.jpg";
+import weddingToasts from "@/assets/real/weddings/wedding-tent-toasts.jpg";
+// Personality row: the fun, human side of Jake's wedding gigs
+import weddingBouquet from "@/assets/real/weddings/wedding-bouquet-catch.jpg";
+import weddingBooth from "@/assets/real/weddings/wedding-clara-shane.jpg";
+import weddingBridalParty from "@/assets/real/weddings/wedding-bridal-party.jpg";
+import weddingSign from "@/assets/real/weddings/wedding-sign-charlene-vincent.jpg";
+import weddingWine from "@/assets/real/weddings/wedding-wine-bottle.jpg";
+import weddingLake from "@/assets/real/weddings/wedding-lake.jpg";
+
+// Real gear that powers karaoke nights
+import mcx8000Gear from "@/assets/gear/denon-mcx8000.jpg";
+import movingHeadGear from "@/assets/gear/moving-head.jpg";
+import pixelBarGear from "@/assets/gear/pixel-bar.jpg";
 
 type StripPhoto = { src: string; credit?: string };
 
@@ -69,12 +90,51 @@ const realPhotoStrips: Record<string, { titleA: string; titleB: string; blurb: s
   av: {
     titleA: "THE RIG ",
     titleB: "IN ACTION",
-    blurb: "Pro decks, real lighting, LED walls — the actual setup, live.",
+    blurb: "Pro decks, real lighting — the actual rig, live.",
     alt: "DJ Hersky's AV setup in action",
     photos: [
-      { src: avLive, credit: "© LMF" },
+      { src: wmx1Live },
       { src: decksLive },
       { src: parfordLive2 },
+    ],
+  },
+  weddings: {
+    titleA: "REAL ",
+    titleB: "WEDDINGS",
+    blurb: "Ceremonies, receptions, and dance floors that stayed full — shot at DJ Hersky's own wedding gigs.",
+    alt: "Real wedding gigs by DJ Hersky",
+    photos: [
+      { src: weddingCeremony },
+      { src: weddingHall2025 },
+      { src: weddingHall2024 },
+      { src: weddingReception },
+      { src: weddingToasts },
+      { src: weddingDanceFloor },
+    ],
+  },
+  weddingsVibes: {
+    titleA: "WEDDING ",
+    titleB: "VIBES",
+    blurb: "The fun stuff — bouquet catches, photo booths, bridal parties, and lakeside bets.",
+    alt: "Behind the scenes at DJ Hersky's wedding gigs",
+    photos: [
+      { src: weddingBouquet },
+      { src: weddingBooth },
+      { src: weddingBridalParty },
+      { src: weddingSign },
+      { src: weddingWine },
+      { src: weddingLake },
+    ],
+  },
+  karaoke: {
+    titleA: "THE RIG ",
+    titleB: "BEHIND KARAOKE",
+    blurb: "Denon decks, pro sound, and pixel-bar stage lighting — the same real rig behind every karaoke night.",
+    alt: "DJ Hersky's karaoke rig",
+    photos: [
+      { src: mcx8000Gear },
+      { src: pixelBarGear },
+      { src: movingHeadGear },
     ],
   },
 };
@@ -644,34 +704,32 @@ const PackagesPage = () => {
           </div>
         </div>
 
-        {/* Real performance photos — per category */}
-        {category && realPhotoStrips[category] && (
-          <div className="container mx-auto px-4 mb-16">
-            <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-center">
-              <span className="text-foreground">{realPhotoStrips[category].titleA}</span>
-              <span className="gradient-text">{realPhotoStrips[category].titleB}</span>
-            </h2>
-            <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">
-              {realPhotoStrips[category].blurb}
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
-              {realPhotoStrips[category].photos.map((photo, i) => (
-                <div key={i} className="relative rounded-md overflow-hidden aspect-[4/3]">
-                  <img
-                    src={photo.src}
-                    alt={realPhotoStrips[category].alt}
-                    className="w-full h-full object-cover"
-                  />
-                  {photo.credit && (
-                    <span className="absolute bottom-2 right-2 text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
-                      {photo.credit}
-                    </span>
-                  )}
+        {/* Real performance photos — per category (weddings gets a second personality row) */}
+        {category &&
+          realPhotoStrips[category] &&
+          [realPhotoStrips[category], ...(category === "weddings" ? [realPhotoStrips.weddingsVibes] : [])].map(
+            (strip, si) => (
+              <div key={si} className="container mx-auto px-4 mb-16">
+                <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-center">
+                  <span className="text-foreground">{strip.titleA}</span>
+                  <span className="gradient-text">{strip.titleB}</span>
+                </h2>
+                <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">{strip.blurb}</p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
+                  {strip.photos.map((photo, i) => (
+                    <div key={i} className="relative rounded-md overflow-hidden aspect-[4/3]">
+                      <img src={photo.src} alt={strip.alt} className="w-full h-full object-cover" />
+                      {photo.credit && (
+                        <span className="absolute bottom-2 right-2 text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                          {photo.credit}
+                        </span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        )}
+              </div>
+            )
+          )}
 
         {/* Packages Grid */}
         <div className="container mx-auto px-4">

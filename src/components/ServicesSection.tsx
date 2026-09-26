@@ -3,15 +3,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
-// Import real stock photos
-import weddingImg from "@/assets/services/wedding-dj.jpg";
+// Real wedding photo from DJ Hersky's own wedding gigs
+import weddingImg from "@/assets/real/weddings/wedding-forest-ceremony.jpg";
+// Generic school-crowd photo (stock, not DJ Hersky)
 import schoolImg from "@/assets/services/school-event.jpg";
-import karaokeImg from "@/assets/services/karaoke-service.jpg";
+// Real product photo: Denon MCX8000 — the controller behind karaoke nights
+import karaokeImg from "@/assets/gear/denon-mcx8000.jpg";
 
 // Real photos of DJ Hersky performing
 import privateLiveImg from "@/assets/real/private.jpg";
 import edmLiveImg from "@/assets/real/edm.jpg";
-import avLiveImg from "@/assets/real/av.jpg";
+// Real product photo: ADJ WMX1 — DJ Hersky's own lighting controller
+import avLiveImg from "@/assets/gear/wmx1.webp";
 import mentorshipLiveImg from "@/assets/real/mentorship.jpg";
 
 // Real photo: DJ Hersky live at Desert Oasis, Canadian Museum of Nature
@@ -86,12 +89,11 @@ const services: Array<{
   {
     icon: Monitor,
     title: "AV Production",
-    description: "Full audio-visual production with LED walls, staging, and professional sound systems.",
+    description: "Pro lighting production — DMX-controlled moving heads, pixel bars, laser, and concert-grade sound.",
     color: "text-secondary",
     gradient: "from-secondary/20 to-accent/20",
     route: "/packages/av",
     image: avLiveImg,
-    credit: "© LMF",
   },
   {
     icon: Sparkles,
