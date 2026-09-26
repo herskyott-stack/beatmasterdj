@@ -9,16 +9,101 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY a
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-// Never throws at module load: if the env config is missing, `supabase` is a
-// stub that throws only when actually used, so a missing key can never blank
-// the whole site again.
+// Never throws at module load and never throws when used: if the env config
+// is missing, `supabase` is a safe no-op stub that behaves like a logged-out
+// client against an empty database, so a missing key can never blank the
+// whole site again. Backend-dependent features simply see "logged out" and
+// empty data instead of crashing the app.
+
+type AnyRecord = Record<string, any>;
+
+const EMPTY_LIST = { data: [] as any[], error: null };
+const EMPTY_SINGLE = { data: null, error: null };
+
+/** Chainable, awaitable query-builder stub: `await supabase.from("t").select().eq(...)` */
+function makeQueryStub(): any {
+  let singleRow = false;
+  const builder: AnyRecord = {};
+  const chain = (..._args: any[]) => builder;
+  [
+    'select', 'insert', 'update', 'upsert', 'delete',
+    'eq', 'neq', 'gt', 'gte', 'lt', 'lte', 'like', 'ilike', 'is', 'in',
+    'contains', 'containedBy', 'rangeGt', 'rangeLt', 'rangeGte', 'rangeLte',
+    'rangeAdjacent', 'overlaps', 'textSearch', 'match', 'not', 'or', 'filter',
+    'order', 'limit', 'range', 'csv', 'geojson', 'explain', 'rollback', 'returns',
+  ].forEach((m) => { builder[m] = chain; });
+  builder.single = (..._args: any[]) => { singleRow = true; return builder; };
+  builder.maybeSingle = (..._args: any[]) => { singleRow = true; return builder; };
+  // Thenable so `await` resolves instead of hanging.
+  builder.then = (resolve: (v: any) => void) => {
+    const result = singleRow ? EMPTY_SINGLE : EMPTY_LIST;
+    resolve(result);
+  };
+  return builder;
+}
+
+function makeChannelStub(): any {
+  const ch: AnyRecord = {};
+  ch.on = (..._args: any[]) => ch;
+  ch.subscribe = (cb?: (status: string) => void) => {
+    try { cb && cb('SUBSCRIBED'); } catch { /* ignore */ }
+    return { unsubscribe: () => undefined };
+  };
+  ch.unsubscribe = async () => 'ok';
+  ch.send = async () => 'ok';
+  return ch;
+}
+
+const authStub: AnyRecord = {
+  onAuthStateChange: (_cb: any) => ({
+    data: { subscription: { unsubscribe: () => undefined } },
+    error: null,
+  }),
+  getSession: async () => ({ data: { session: null }, error: null }),
+  getUser: async () => ({ data: { user: null }, error: null }),
+  signOut: async () => ({ error: null }),
+  signUp: async () => ({ data: { user: null, session: null }, error: null }),
+  signInWithPassword: async () => ({ data: { user: null, session: null }, error: null }),
+  signInWithOAuth: async () => ({ data: { provider: null, url: null }, error: null }),
+  signInWithOtp: async () => ({ data: { user: null, session: null }, error: null }),
+  resetPasswordForEmail: async () => ({ data: null, error: null }),
+  updateUser: async () => ({ data: { user: null }, error: null }),
+  setSession: async () => ({ data: { session: null }, error: null }),
+  refreshSession: async () => ({ data: { session: null }, error: null }),
+};
+
+const storageStub: AnyRecord = {
+  from: (_bucket: string) => ({
+    getPublicUrl: (_path: string) => ({ data: { publicUrl: '' } }),
+    upload: async () => ({ data: null, error: null }),
+    remove: async () => ({ data: [], error: null }),
+    list: async () => ({ data: [], error: null }),
+    download: async () => ({ data: null, error: null }),
+    createSignedUrl: async () => ({ data: { signedUrl: '' }, error: null }),
+    createSignedUrls: async () => ({ data: [], error: null }),
+  }),
+};
+
+function createStubClient(): SupabaseClient<Database> {
+  const client: AnyRecord = {
+    auth: authStub,
+    storage: storageStub,
+    functions: {
+      invoke: async () => ({ data: null, error: null }),
+    },
+    from: (_table: string) => makeQueryStub(),
+    schema: (_name: string) => ({ from: (_table: string) => makeQueryStub() }),
+    channel: (_name: string) => makeChannelStub(),
+    getChannels: () => [],
+    removeChannel: async () => ({}),
+    removeAllChannels: async () => [],
+  };
+  return client as unknown as SupabaseClient<Database>;
+}
+
 function createSupabaseClient(): SupabaseClient<Database> {
   if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    return new Proxy({}, {
-      get: () => () => {
-        throw new Error('Supabase is not configured (missing VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY).');
-      },
-    }) as unknown as SupabaseClient<Database>;
+    return createStubClient();
   }
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     auth: {
