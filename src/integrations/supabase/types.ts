@@ -1238,15 +1238,6 @@ export type Database = {
     Functions: {
       bulk_insert_lesson_quizzes: { Args: { _payload: Json }; Returns: number }
       can_edit_payments: { Args: { _user_id: string }; Returns: boolean }
-      delete_email: {
-        Args: { message_id: number; queue_name: string }
-        Returns: boolean
-      }
-      email_queue_dispatch: { Args: never; Returns: undefined }
-      enqueue_email: {
-        Args: { payload: Json; queue_name: string }
-        Returns: number
-      }
       has_admin_area_access: { Args: { _user_id: string }; Returns: boolean }
       has_lesson_access: { Args: { _user_id: string }; Returns: boolean }
       has_role: {
@@ -1256,24 +1247,7 @@ export type Database = {
         }
         Returns: boolean
       }
-      move_to_dlq: {
-        Args: {
-          dlq_name: string
-          message_id: number
-          payload: Json
-          source_queue: string
-        }
-        Returns: number
-      }
       pipeline_stage_rank: { Args: { _stage: string }; Returns: number }
-      read_email_batch: {
-        Args: { batch_size: number; queue_name: string; vt: number }
-        Returns: {
-          message: Json
-          msg_id: number
-          read_ct: number
-        }[]
-      }
     }
     Enums: {
       app_role: "admin" | "user" | "finance_manager" | "assistant"
