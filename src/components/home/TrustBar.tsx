@@ -42,12 +42,12 @@ const TrustBar = () => {
                 i === 2 ? "max-lg:border-l-0" : ""
               }`}
             >
-              <div className="w-11 h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
-                <item.icon className="w-5 h-5 text-primary" />
+              <div className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
+                <item.icon className="w-4 h-4 md:w-5 md:h-5 text-primary" />
               </div>
               <div className="min-w-0">
-                <div className="flex items-center gap-2">
-                  <p className="font-display font-semibold text-white text-sm md:text-base whitespace-nowrap">
+                <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
+                  <p className="font-display font-semibold text-white text-sm md:text-base">
                     {item.title}
                   </p>
                   {item.stars && (
