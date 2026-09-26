@@ -8,6 +8,7 @@ import AddonsSection from "@/components/AddonsSection";
 import FeaturedGallery from "@/components/home/FeaturedGallery";
 import BookingPreview from "@/components/home/BookingPreview";
 import GallerySection from "@/components/GallerySection";
+import VideoReels from "@/components/home/VideoReels";
 import ContestBanner from "@/components/contest/ContestBanner";
 import TrustBar from "@/components/home/TrustBar";
 import TestimonialsSection from "@/components/TestimonialsSection";
@@ -24,7 +25,7 @@ const MentorshipTeaser = () => {
     <section ref={ref} className="py-20 md:py-28 bass-drop">
       <div className="container mx-auto px-4">
         <SectionHeader
-          index="07"
+          index="08"
           eyebrow="DJ Mentorship"
           title="Go from bedroom DJ to booked & paid"
           sub="Weekly 1-on-1 mentorship with a working pro. Two tracks — bring your own gear or learn on ours — from hobbyist to DJ entrepreneur."
@@ -77,6 +78,7 @@ const Index = () => {
 
         <AddonsSection />
         <GallerySection />
+        <VideoReels />
         <TestimonialsSection />
 
         <MentorshipTeaser />

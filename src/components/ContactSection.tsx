@@ -13,7 +13,7 @@ const ContactSection = () => {
     <section ref={ref} id="contact" className="py-20 md:py-28 relative overflow-hidden bg-card/40 border-y border-white/5 bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         <SectionHeader
-          index="08"
+          index="09"
           eyebrow="Get in touch"
           title="Lock in your date"
           sub="Tell us about your event and get a personalized quote within 24 hours. Dates book fast — especially wedding season."

@@ -129,7 +129,7 @@ const TestimonialsSection = () => {
     <section ref={ref} className="py-20 md:py-28 relative overflow-hidden bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         <SectionHeader
-          index="06"
+          index="07"
           eyebrow="Google Reviews"
           title="What our clients say"
           sub="5.0 average from 17 verified Google reviews — every single one 5 stars."
