@@ -362,20 +362,16 @@ const PackagesSection = () => {
   };
 
   return (
-    <section ref={revealRef} id="packages" className="py-24 relative overflow-hidden bass-drop">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
-      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]" />
-      <div className="absolute bottom-1/3 left-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px]" />
+    <section ref={revealRef} id="packages" className="py-20 md:py-28 relative overflow-hidden bass-drop">
+      {/* Subtle ambient glow */}
+      <div className="absolute top-1/3 right-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-            <span className="text-foreground">PRICING </span>
-            <span className="gradient-text-secondary">PACKAGES</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Pricing Packages</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Pricing Packages</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             Choose the perfect package for your event. All packages are fully customizable to meet your specific needs.
           </p>
         </div>
@@ -387,7 +383,7 @@ const PackagesSection = () => {
               <TabsTrigger
                 key={category}
                 value={category}
-                className="font-display uppercase tracking-wider px-6 py-3 rounded-full border border-white/10 bg-card/50 backdrop-blur-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:border-transparent transition-all duration-300"
+                className="uppercase tracking-wider px-6 py-3 rounded-full border border-white/10 bg-card/50 backdrop-blur-sm text-sm font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-transparent transition-all duration-300"
               >
                 {category}
               </TabsTrigger>
@@ -402,23 +398,23 @@ const PackagesSection = () => {
                     <Card
                       key={pkg.name}
                       variant={pkg.featured ? "featured" : "glass"}
-                      className={`relative transition-all duration-500 hover:scale-[1.02] ${
+                      className={`relative transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 ${
                         pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
                       }`}
                     >
                       {pkg.featured && (
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full">
                           <div className="flex items-center gap-1">
-                            <Star className="w-3 h-3 fill-current" />
-                            <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+                            <Star className="w-3 h-3 fill-current text-primary-foreground" />
+                            <span className="text-xs font-semibold uppercase tracking-wider text-primary-foreground">Most Popular</span>
                           </div>
                         </div>
                       )}
                       <CardHeader className="text-center pb-4">
-                        <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                        <CardTitle className="text-xl">{pkg.name}</CardTitle>
                         <CardDescription>{pkg.description}</CardDescription>
                         <div className="mt-4">
-                          <span className="font-display text-4xl font-bold gradient-text">
+                          <span className="font-display text-4xl font-bold text-white">
                             {pkg.price}
                           </span>
                           <span className="ml-2 text-xs text-muted-foreground align-middle">+ 13% tax</span>

@@ -9,6 +9,7 @@ import FeaturedGallery from "@/components/home/FeaturedGallery";
 import BookingPreview from "@/components/home/BookingPreview";
 import GallerySection from "@/components/GallerySection";
 import ContestBanner from "@/components/contest/ContestBanner";
+import TrustBar from "@/components/home/TrustBar";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
@@ -21,25 +22,29 @@ const Index = () => {
       <main>
         <ContestBanner />
         <HeroSection />
-        <BookingPreview />
+        <TrustBar />
         <ServicesSection />
+        <BookingPreview />
         <FeaturedGallery />
-        
+
+        <AddonsSection />
+        <GallerySection />
+        <TestimonialsSection />
 
         {/* Mentorship teaser */}
-        <section className="py-24 md:py-32">
+        <section className="py-20 md:py-28">
           <div className="container mx-auto px-4">
-            <div className="max-w-4xl mx-auto bg-gradient-to-br from-primary/15 via-card/60 to-secondary/15 backdrop-blur-xl border border-primary/30 rounded-md p-6 md:p-10 shadow-[0_0_40px_hsl(var(--primary)_/_0.15)]">
+            <div className="max-w-4xl mx-auto bg-card border border-white/10 rounded-xl p-6 md:p-10">
               <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-                <div className="w-14 h-14 rounded-xl bg-primary/20 border border-primary/40 flex items-center justify-center shrink-0">
+                <div className="w-14 h-14 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                   <GraduationCap className="w-7 h-7 text-primary" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-xs uppercase tracking-wider text-primary font-display mb-2">
+                  <p className="eyebrow mb-2">
                     New • DJ Mentorship
                   </p>
-                  <h3 className="font-display text-2xl md:text-3xl font-bold mb-2">
-                    Go from bedroom DJ to booked & paid
+                  <h3 className="font-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2">
+                    Go from bedroom DJ to booked &amp; paid
                   </h3>
                   <p className="text-muted-foreground text-sm md:text-base">
                     Weekly 1-on-1 mentorship with a working pro. Two tracks — bring your own gear or learn on ours — from hobbyist to DJ entrepreneur.
@@ -55,9 +60,6 @@ const Index = () => {
           </div>
         </section>
 
-        <AddonsSection />
-        <GallerySection />
-        <TestimonialsSection />
         <ContactSection />
       </main>
       <Footer />

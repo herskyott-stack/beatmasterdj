@@ -68,22 +68,13 @@ const GallerySection = () => {
   const ref = useRevealOnScroll<HTMLElement>();
 
   return (
-    <section ref={ref} id="gallery" className="py-24 md:py-32 relative overflow-hidden bass-drop">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-secondary/50 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-card/20 to-background" />
-
+    <section ref={ref} id="gallery" className="py-20 md:py-28 relative overflow-hidden bg-card/40 border-y border-white/5 bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <span className="font-display text-sm uppercase tracking-widest text-primary mb-4 block">
-            Our Work
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-            <span className="text-foreground">EVENT </span>
-            <span className="gradient-text">GALLERY</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Our Work</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Event gallery</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             Moments captured from our most memorable events
           </p>
         </div>
@@ -94,19 +85,19 @@ const GallerySection = () => {
             <Card
               key={index}
               variant="glass"
-              className="group cursor-pointer overflow-hidden aspect-square transition-all duration-500 hover:scale-[1.02] hover:shadow-[0_0_40px_hsl(var(--primary)/0.3)] animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="group cursor-pointer overflow-hidden aspect-square hover:border-primary/40"
               onClick={() => setSelectedImage(image.src)}
             >
               <div className="relative w-full h-full">
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  className="w-full h-full object-cover image-zoom"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <span className="inline-block px-3 py-1 text-xs font-display uppercase tracking-wider bg-primary/90 rounded-full">
+                  <span className="inline-block px-3 py-1 text-xs font-display uppercase tracking-wider bg-primary text-primary-foreground rounded-full">
                     {image.category}
                   </span>
                   {image.credit && (

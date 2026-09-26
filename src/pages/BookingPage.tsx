@@ -505,15 +505,13 @@ const BookingPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main className="pt-24 pb-16">
+      <main className="pt-24 md:pt-32 pb-20">
         {/* Header */}
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-              <span className="text-foreground">BOOK YOUR </span>
-              <span className="gradient-text">EVENT</span>
-            </h1>
-            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+          <div className="text-center mb-14 md:mb-20">
+            <p className="eyebrow mb-4">Booking</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Book Your Event</h1>
+            <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
               Select a package to begin your booking. Add-ons can be added during checkout.
             </p>
           </div>
@@ -525,7 +523,7 @@ const BookingPage = () => {
                 <TabsTrigger
                   key={category}
                   value={category}
-                  className="font-display uppercase tracking-wider px-6 py-3 rounded-full border border-white/10 bg-card/50 backdrop-blur-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:border-transparent transition-all duration-300"
+                  className="uppercase tracking-wider px-6 py-3 rounded-full border border-white/10 bg-card/50 backdrop-blur-sm text-sm font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-transparent transition-all duration-300"
                 >
                   {category}
                 </TabsTrigger>
@@ -539,33 +537,23 @@ const BookingPage = () => {
                     <Card
                       key={pkg.name}
                       variant={pkg.featured ? "featured" : "glass"}
-                      className={`relative transition-all duration-500 hover:scale-[1.02] overflow-hidden ${
+                      className={`relative transition-all duration-300 hover:border-primary/40 hover:-translate-y-1 overflow-hidden ${
                         pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
                       }`}
                     >
-                      {/* Background Image */}
-                      <div className="absolute inset-0 z-0">
-                        <img
-                          src={categoryImages[category]}
-                          alt=""
-                          className="w-full h-full object-cover opacity-40"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-b from-card/60 via-card/80 to-card" />
-                      </div>
-
                       {pkg.featured && (
-                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full z-10">
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full z-10">
                           <div className="flex items-center gap-1">
-                            <Star className="w-3 h-3 fill-current" />
-                            <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+                            <Star className="w-3 h-3 fill-current text-primary-foreground" />
+                            <span className="text-xs font-semibold uppercase tracking-wider text-primary-foreground">Most Popular</span>
                           </div>
                         </div>
                       )}
                       <CardHeader className="text-center pb-4 relative z-10">
-                        <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                        <CardTitle className="text-xl">{pkg.name}</CardTitle>
                         <CardDescription>{pkg.description}</CardDescription>
                         <div className="mt-4">
-                          <span className="font-display text-4xl font-bold gradient-text">
+                          <span className="font-display text-4xl font-bold text-white">
                             {pkg.price}
                           </span>
                         </div>

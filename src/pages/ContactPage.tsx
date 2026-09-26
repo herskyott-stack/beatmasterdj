@@ -6,7 +6,7 @@ const ContactPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      <main>
+      <main className="py-20 md:py-28">
         <ContactSection />
       </main>
       <Footer />

@@ -3,32 +3,28 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
+const inputClasses =
+  "w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all";
+
 const ContactSection = () => {
   const ref = useRevealOnScroll<HTMLElement>();
   return (
-    <section ref={ref} id="contact" className="py-24 md:py-32 relative overflow-hidden bass-drop">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-      <div className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]" />
-      <div className="absolute top-1/4 left-0 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[150px]" />
-
+    <section ref={ref} id="contact" className="py-20 md:py-28 relative overflow-hidden bg-card/40 border-y border-white/5 bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-            <span className="text-foreground">LOCK IN </span>
-            <span className="gradient-text">YOUR DATE</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Get in touch</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Lock in your date</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             Tell us about your event and get a personalized quote within 24 hours. Dates book fast — especially wedding season.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
           {/* Contact Form */}
-          <Card variant="glass" className="p-2">
+          <Card className="p-2">
             <CardContent className="p-6 md:p-8">
-              <h3 className="font-display text-2xl font-bold mb-6">Send a Message</h3>
+              <h3 className="font-display text-2xl font-bold text-white mb-6">Send a Message</h3>
               <form action="https://formsubmit.co/hersky.ott@gmail.com" method="POST" className="space-y-6">
                 <input type="hidden" name="_subject" value="New DJ Booking Inquiry!" />
                 <input type="hidden" name="_captcha" value="false" />
@@ -40,7 +36,7 @@ const ContactSection = () => {
                     <input
                       type="text"
                       name="first_name"
-                      className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                      className={inputClasses}
                       placeholder="John"
                       required
                     />
@@ -50,7 +46,7 @@ const ContactSection = () => {
                     <input
                       type="text"
                       name="last_name"
-                      className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                      className={inputClasses}
                       placeholder="Doe"
                       required
                     />
@@ -61,7 +57,7 @@ const ContactSection = () => {
                   <input
                     type="email"
                     name="email"
-                    className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                    className={inputClasses}
                     placeholder="john@example.com"
                     required
                   />
@@ -70,7 +66,7 @@ const ContactSection = () => {
                   <label className="block text-sm font-medium mb-2">Event Type</label>
                   <select 
                     name="event_type"
-                    className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all"
+                    className={inputClasses}
                     required
                   >
                     <option value="">Select event type or package</option>
@@ -122,7 +118,7 @@ const ContactSection = () => {
                   <textarea
                     name="message"
                     rows={4}
-                    className="w-full px-4 py-3 rounded-lg bg-muted/50 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all resize-none"
+                    className={`${inputClasses} resize-none`}
                     placeholder="Tell us about your event..."
                     required
                   />
@@ -145,7 +141,7 @@ const ContactSection = () => {
           {/* Contact Info */}
           <div className="space-y-8">
             <div>
-              <h3 className="font-display text-2xl font-bold mb-6">Contact Information</h3>
+              <h3 className="font-display text-2xl font-bold text-white mb-6">Contact Information</h3>
               <div className="space-y-4">
                 {[
                   { icon: Phone, label: "Phone", value: "(613) 837-4488", href: "tel:+16138374488" },
@@ -155,14 +151,14 @@ const ContactSection = () => {
                   <a
                     key={item.label}
                     href={item.href}
-                    className="flex items-center gap-4 p-4 rounded-xl bg-card/50 backdrop-blur-sm border border-white/10 hover:border-primary/50 transition-all duration-300 group"
+                    className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/10 hover:border-primary/50 transition-colors duration-300 group"
                   >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center group-hover:from-primary/30 group-hover:to-secondary/30 transition-all duration-300">
+                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shrink-0">
                       <item.icon className="w-5 h-5 text-primary" />
                     </div>
                     <div>
                       <div className="text-sm text-muted-foreground">{item.label}</div>
-                      <div className="font-medium">{item.value}</div>
+                      <div className="font-medium text-white">{item.value}</div>
                     </div>
                   </a>
                 ))}
@@ -171,7 +167,7 @@ const ContactSection = () => {
 
             {/* Social Links */}
             <div>
-              <h3 className="font-display text-xl font-bold mb-4">Follow Us</h3>
+              <h3 className="font-display text-xl font-bold text-white mb-4">Follow Us</h3>
               <div className="flex gap-4">
                 {[
                   { icon: Instagram, href: "https://instagram.com/hersky.ott", label: "Instagram" },
@@ -179,7 +175,7 @@ const ContactSection = () => {
                   <a
                     key={social.label}
                     href={social.href}
-                    className="w-12 h-12 rounded-full bg-card/50 backdrop-blur-sm border border-white/10 flex items-center justify-center hover:border-primary/50 hover:bg-primary/10 transition-all duration-300 group"
+                    className="w-12 h-12 rounded-full bg-card border border-white/10 flex items-center justify-center hover:border-primary/50 transition-colors duration-300 group"
                     aria-label={social.label}
                   >
                     <social.icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
@@ -189,9 +185,9 @@ const ContactSection = () => {
             </div>
 
             {/* Quick Stats */}
-            <Card variant="neon" className="p-6">
+            <Card className="p-6 border-primary/30">
               <div className="text-center">
-                <h4 className="font-display text-lg font-bold mb-2">Quick Response Guarantee</h4>
+                <h4 className="font-display text-lg font-bold text-white mb-2">Quick Response Guarantee</h4>
                 <p className="text-muted-foreground text-sm">
                   We respond to all inquiries within 24 hours. Book your consultation today!
                 </p>

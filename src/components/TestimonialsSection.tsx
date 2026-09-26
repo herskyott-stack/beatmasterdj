@@ -125,28 +125,14 @@ const testimonials = [
 const TestimonialsSection = () => {
   const ref = useRevealOnScroll<HTMLElement>();
   return (
-    <section ref={ref} className="py-24 md:py-32 bg-gradient-to-b from-muted/50 to-background relative overflow-hidden bass-drop">
-      {/* Background Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
-      </div>
-
+    <section ref={ref} className="py-20 md:py-28 relative overflow-hidden bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <span className="font-display text-sm uppercase tracking-widest text-primary mb-4 block">
-            Google Reviews
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-6 dj-heading glitch-text">
-            <span className="text-foreground">WHAT OUR </span>
-            <span className="gradient-text">CLIENTS SAY</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Google Reviews</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">What our clients say</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             5.0 average from 17 verified Google reviews — every single one 5 stars.
-          </p>
-          <p className="text-muted-foreground/70 max-w-2xl mx-auto mt-2">
-            Real reviews from real clients, unedited, straight from our Google Business Profile.
           </p>
         </div>
 
@@ -175,7 +161,7 @@ const TestimonialsSection = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <p className="font-display font-semibold text-foreground">
+                    <p className="font-display font-semibold text-white">
                       {sydneyReview.name}
                     </p>
                     <p className="text-sm text-primary">{sydneyReview.event}</p>
@@ -194,8 +180,7 @@ const TestimonialsSection = () => {
           {testimonials.map((testimonial, index) => (
             <Card
               key={index}
-              variant="glass"
-              className="group hover:border-primary/50 transition-all duration-300"
+              className="hover:border-primary/40 hover:-translate-y-1"
             >
               <CardContent className="p-6 flex flex-col h-full">
                 {/* Quote Icon */}
@@ -217,7 +202,7 @@ const TestimonialsSection = () => {
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1">
-                    <p className="font-display font-semibold text-foreground">
+                    <p className="font-display font-semibold text-white">
                       {testimonial.name}
                     </p>
                     <p className="text-sm text-primary">{testimonial.event}</p>

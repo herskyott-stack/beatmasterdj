@@ -25,14 +25,12 @@ const BookingPreview = () => {
   };
 
   return (
-    <section id="book" className="py-24 md:py-32">
+    <section id="book" className="py-20 md:py-28 bg-card/40 border-y border-white/5">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10 md:mb-12">
-          <h2 className="font-display text-3xl md:text-5xl font-bold mb-4 dj-heading">
-            <span className="text-foreground">BOOK YOUR </span>
-            <span className="gradient-text">EVENT</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Packages</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Book your event</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             Select a package to begin. Add-ons and details can be customized at checkout.
           </p>
         </div>
@@ -43,7 +41,7 @@ const BookingPreview = () => {
               <TabsTrigger
                 key={category}
                 value={category}
-                className="font-display uppercase tracking-wider px-5 py-2.5 rounded-full border border-white/10 bg-card/50 backdrop-blur-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:border-transparent transition-all duration-300 text-xs md:text-sm"
+                className="font-display uppercase tracking-wider px-5 py-2.5 rounded-full border border-white/10 bg-card/50 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:border-transparent hover:border-primary/40 transition-colors duration-200 text-xs md:text-sm"
               >
                 {category}
               </TabsTrigger>
@@ -57,28 +55,28 @@ const BookingPreview = () => {
                   <Card
                     key={pkg.name}
                     variant={pkg.featured ? "featured" : "glass"}
-                    className={`relative transition-all duration-500 hover:scale-[1.02] overflow-hidden ${
+                    className={`relative hover:border-primary/40 hover:-translate-y-1 overflow-hidden ${
                       pkg.featured ? "lg:-mt-4 lg:mb-4" : ""
                     }`}
                   >
                     <div className="absolute inset-0 z-0">
-                      <img src={categoryImages[category]} alt="" className="w-full h-full object-cover opacity-40" />
-                      <div className="absolute inset-0 bg-gradient-to-b from-card/60 via-card/80 to-card" />
+                      <img src={categoryImages[category]} alt="" className="w-full h-full object-cover opacity-30" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-card/70 via-card/85 to-card" />
                     </div>
 
                     {pkg.featured && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full z-10">
+                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full z-10">
                         <div className="flex items-center gap-1">
-                          <Star className="w-3 h-3 fill-current" />
-                          <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+                          <Star className="w-3 h-3 fill-current text-primary-foreground" />
+                          <span className="text-xs font-display uppercase tracking-wider text-primary-foreground">Most Popular</span>
                         </div>
                       </div>
                     )}
                     <CardHeader className="text-center pb-4 relative z-10">
-                      <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                      <CardTitle className="font-display text-xl text-white">{pkg.name}</CardTitle>
                       <CardDescription>{pkg.description}</CardDescription>
                       <div className="mt-4">
-                        <span className="font-display text-4xl font-bold gradient-text">{pkg.price}</span>
+                        <span className="font-display text-4xl font-bold text-primary">{pkg.price}</span>
                         <span className="ml-2 text-xs text-muted-foreground align-middle">+ 13% tax</span>
                       </div>
                     </CardHeader>

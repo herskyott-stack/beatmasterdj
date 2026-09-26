@@ -20,10 +20,10 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "pwa-192x192.png", "pwa-512x512.png"],
       manifest: {
-        name: "Hersky DJ & AV - Premium Event Entertainment",
-        short_name: "Hersky DJ",
-        description: "Professional DJ services for weddings, corporate events, and private parties. Book your next unforgettable event experience.",
-        theme_color: "#0891b2",
+        name: "Beatmaster DJ - Ottawa Wedding & Event DJ",
+        short_name: "Beatmaster DJ",
+        description: "Professional DJ services for weddings, corporate events, and private parties across Ottawa. Book your next unforgettable event experience.",
+        theme_color: "#0a0a0d",
         background_color: "#0a0a0f",
         display: "standalone",
         orientation: "portrait",
@@ -51,6 +51,9 @@ export default defineConfig(({ mode }) => ({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,woff,woff2}"],
+        // Full-res event photos (e.g. Desert Oasis) exceed workbox's 2 MiB
+        // default precache limit; raise it so the build doesn't fail.
+        maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,

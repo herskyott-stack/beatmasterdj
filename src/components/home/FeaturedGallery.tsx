@@ -31,16 +31,14 @@ const FeaturedGallery = () => {
     supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
 
   return (
-    <section className="py-24 md:py-32 relative">
+    <section className="py-20 md:py-28 relative">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-10 md:mb-14">
-          <p className="text-xs uppercase tracking-[0.3em] text-primary font-display mb-3">
-            Featured
-          </p>
-          <h2 className="font-display text-3xl md:text-5xl font-bold">
-            <span className="gradient-text">Moments & Highlights</span>
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Featured</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+            Moments &amp; Highlights
           </h2>
-          <p className="text-muted-foreground mt-3 max-w-xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             A look behind the decks — events, setups, and unforgettable nights.
           </p>
         </div>
@@ -50,7 +48,7 @@ const FeaturedGallery = () => {
             <button
               key={it.id}
               onClick={() => setOpen(it)}
-              className="group relative overflow-hidden rounded-xl border border-primary/20 bg-card/40 backdrop-blur-md shadow-[0_0_30px_hsl(var(--primary)_/_0.08)] hover:shadow-[0_0_40px_hsl(var(--primary)_/_0.25)] hover:border-primary/50 transition-all duration-500"
+              className="group relative overflow-hidden rounded-xl border border-white/10 bg-card hover:border-primary/40 transition-colors duration-300 text-left"
             >
               <div className="aspect-[4/3] w-full overflow-hidden bg-black/40">
                 {it.type === "image" ? (
@@ -58,7 +56,7 @@ const FeaturedGallery = () => {
                     src={publicUrl(it.file_path)}
                     alt={it.title || "Featured media"}
                     loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                    className="w-full h-full object-cover image-zoom"
                   />
                 ) : (
                   <div className="relative w-full h-full">
@@ -70,7 +68,7 @@ const FeaturedGallery = () => {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 flex items-center justify-center bg-black/30 group-hover:bg-black/10 transition-colors">
-                      <div className="w-16 h-16 rounded-full bg-primary/90 flex items-center justify-center shadow-2xl">
+                      <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center">
                         <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
                       </div>
                     </div>
@@ -78,8 +76,8 @@ const FeaturedGallery = () => {
                 )}
               </div>
               {(it.title || it.caption) && (
-                <div className="p-4 text-left bg-gradient-to-t from-background/95 to-background/60">
-                  {it.title && <p className="font-display font-semibold">{it.title}</p>}
+                <div className="p-4">
+                  {it.title && <p className="font-display font-semibold text-white">{it.title}</p>}
                   {it.caption && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{it.caption}</p>}
                 </div>
               )}
@@ -89,12 +87,12 @@ const FeaturedGallery = () => {
       </div>
 
       <Dialog open={!!open} onOpenChange={(o) => !o && setOpen(null)}>
-        <DialogContent className="max-w-4xl bg-background/95 border-primary/30 p-0 overflow-hidden">
+        <DialogContent className="max-w-4xl bg-card border-white/10 p-0 overflow-hidden">
           {open && (
             <div className="relative">
               <button
                 onClick={() => setOpen(null)}
-                className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-background/80 border border-white/10 flex items-center justify-center hover:bg-primary/20 transition-colors"
+                className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-background/80 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -106,7 +104,7 @@ const FeaturedGallery = () => {
               )}
               {(open.title || open.caption) && (
                 <div className="p-5">
-                  {open.title && <p className="font-display text-lg font-semibold">{open.title}</p>}
+                  {open.title && <p className="font-display text-lg font-semibold text-white">{open.title}</p>}
                   {open.caption && <p className="text-sm text-muted-foreground mt-1">{open.caption}</p>}
                 </div>
               )}

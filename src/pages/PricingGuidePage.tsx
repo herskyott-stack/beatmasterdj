@@ -107,17 +107,17 @@ const PricingGuidePage = () => {
       <main className="pt-24 md:pt-32 pb-20">
         <section className="container mx-auto px-4 pb-20 md:pb-28">
           <div className="mx-auto max-w-4xl text-center">
-            <p className="mb-4 font-display text-xs uppercase tracking-[0.2em] text-primary">Free 2026 pricing breakdown</p>
-            <h1 className="font-display text-4xl font-extrabold md:text-6xl">Ottawa Wedding DJ Pricing Guide 2026</h1>
-            <p className="mx-auto mt-5 max-w-2xl text-lg text-muted-foreground">What you’ll actually pay — and what to ask before you book.</p>
+            <p className="eyebrow mb-4">Free 2026 pricing breakdown</p>
+            <h1 className="text-4xl font-bold md:text-5xl text-white tracking-tight">Ottawa Wedding DJ Pricing Guide 2026</h1>
+            <p className="mx-auto mt-4 max-w-2xl text-base md:text-lg text-muted-foreground">What you’ll actually pay — and what to ask before you book.</p>
           </div>
 
-          <Card variant="neon" className="mx-auto mt-10 max-w-2xl">
+          <Card className="mx-auto mt-10 max-w-2xl bg-card border-primary/30">
             <CardContent className="p-6 md:p-8">
               {success ? (
                 <div className="flex flex-col items-center py-5 text-center" role="status">
                   <CheckCircle2 className="mb-4 h-12 w-12 text-primary" />
-                  <h2 className="font-display text-2xl font-bold">Check your inbox — the pricing summary is on its way.</h2>
+                  <h2 className="font-display text-2xl font-bold text-white tracking-tight">Check your inbox — the pricing summary is on its way.</h2>
                   <p className="mt-3 text-muted-foreground">Ready for the next step?</p>
                   <Button variant="hero" size="lg" asChild className="mt-4">
                     <Link to="/book">Check Your Date</Link>
@@ -146,14 +146,14 @@ const PricingGuidePage = () => {
         <section className="border-y border-border bg-card/30 py-20 md:py-28">
           <div className="container mx-auto grid gap-12 px-4 lg:grid-cols-2 lg:gap-20">
             <div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">What a real DJ package includes</h2>
+              <h2 className="text-3xl font-bold md:text-4xl text-white tracking-tight">What a real DJ package includes</h2>
               <div className="mt-8 space-y-4">
                 {included.map((item) => <div key={item} className="flex gap-3"><Check className="mt-0.5 h-5 w-5 shrink-0 text-primary" /><span>{item}</span></div>)}
               </div>
               <p className="mt-8 border-l-2 border-primary pl-4 text-muted-foreground">If any of those are missing, you’re not comparing the same product.</p>
             </div>
             <div>
-              <h2 className="font-display text-3xl font-bold md:text-4xl">10 questions to ask before booking</h2>
+              <h2 className="text-3xl font-bold md:text-4xl text-white tracking-tight">10 questions to ask before booking</h2>
               <ol className="mt-8 space-y-4">
                 {questions.map((question, index) => <li key={question} className="flex gap-4"><span className="font-display text-primary">{String(index + 1).padStart(2, "0")}</span><span>{question}</span></li>)}
               </ol>
@@ -162,17 +162,17 @@ const PricingGuidePage = () => {
         </section>
 
         <section className="container mx-auto px-4 py-20 md:py-28">
-          <h2 className="text-center font-display text-3xl font-bold md:text-4xl">Realistic Ottawa price ranges</h2>
+          <h2 className="text-center text-3xl font-bold md:text-4xl text-white tracking-tight">Realistic Ottawa price ranges</h2>
           <div className="mx-auto mt-10 grid max-w-6xl gap-5 md:grid-cols-3">
             {ranges.map((range) => (
-              <Card key={range.title} variant={range.featured ? "neon" : "glass"} className="relative">
+              <Card key={range.title} variant={range.featured ? "featured" : "glass"} className="relative">
                 {range.featured && <span className="absolute right-3 top-3 rounded-sm border border-primary/40 bg-primary/10 px-2 py-1 text-xs text-primary">Where most great weddings land</span>}
                 <CardHeader className={range.featured ? "pt-14" : undefined}><CardTitle>{range.title}</CardTitle></CardHeader>
                 <CardContent><p className="font-display text-3xl font-bold text-primary">{range.price}</p><p className="mt-4 text-muted-foreground">{range.copy}</p></CardContent>
               </Card>
             ))}
           </div>
-          <div className="mx-auto mt-8 flex max-w-4xl gap-4 rounded-md border border-destructive/40 bg-destructive/10 p-5">
+          <div className="mx-auto mt-8 flex max-w-4xl gap-4 rounded-xl border border-destructive/30 bg-destructive/10 p-5">
             <AlertTriangle className="h-6 w-6 shrink-0 text-destructive" />
             <p>Anyone far below these ranges is cutting corners on gear, insurance, or experience — the three things that matter when 120 guests are on the dance floor.</p>
           </div>
@@ -180,7 +180,7 @@ const PricingGuidePage = () => {
 
         <section className="border-t border-border py-20 text-center md:py-28">
           <div className="container mx-auto px-4">
-            <h2 className="font-display text-3xl font-bold md:text-5xl">Want straight answers to all ten?</h2>
+            <h2 className="text-3xl font-bold md:text-4xl text-white tracking-tight">Want straight answers to all ten?</h2>
             <p className="mt-4 text-lg text-muted-foreground">Check your date and grab a free 15-minute consult.</p>
             <Button variant="hero" size="lg" asChild className="mt-8"><Link to="/book">Check your date</Link></Button>
             <p className="mt-6 text-sm text-muted-foreground">500+ events · 15+ years · 97% satisfaction</p>

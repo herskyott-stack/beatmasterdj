@@ -652,7 +652,7 @@ const PackagesPage = () => {
         <Navbar />
         <main className="pt-32 pb-16">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="font-display text-4xl font-bold mb-4">Category Not Found</h1>
+            <h1 className="font-display text-4xl font-bold text-white tracking-tight mb-4">Category Not Found</h1>
             <Button variant="outline" asChild>
               <Link to="/">Go Back Home</Link>
             </Button>
@@ -693,7 +693,7 @@ const PackagesPage = () => {
 
         {/* Hero Image Header */}
         <div className="container mx-auto px-4 mb-16">
-          <div className="relative h-64 md:h-80 rounded-md overflow-hidden mb-8">
+          <div className="relative h-72 md:h-96 rounded-xl overflow-hidden mb-8">
             <img
               src={category ? categoryHeroImages[category] : weddingHero}
               alt={categoryData.title}
@@ -701,8 +701,8 @@ const PackagesPage = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-8 text-center">
-              <h1 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-                <span className="gradient-text">{categoryData.title.toUpperCase()}</span>
+              <h1 className="font-display text-4xl md:text-5xl font-bold text-white tracking-tight mb-4">
+                {categoryData.title}
               </h1>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{categoryData.description}</p>
             </div>
@@ -715,17 +715,16 @@ const PackagesPage = () => {
           [realPhotoStrips[category], ...(category === "weddings" ? [realPhotoStrips.weddingsVibes] : [])].map(
             (strip, si) => (
               <div key={si} className="container mx-auto px-4 mb-16">
-                <h2 className="font-display text-2xl md:text-3xl font-bold mb-2 text-center">
-                  <span className="text-foreground">{strip.titleA}</span>
-                  <span className="gradient-text">{strip.titleB}</span>
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-white tracking-tight mb-2 text-center">
+                  {strip.titleA}{strip.titleB}
                 </h2>
                 <p className="text-muted-foreground text-center mb-8 max-w-2xl mx-auto">{strip.blurb}</p>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
                   {strip.photos.map((photo, i) => (
-                    <div key={i} className="relative rounded-md overflow-hidden aspect-[4/3]">
-                      <img src={photo.src} alt={strip.alt} className="w-full h-full object-cover" />
+                    <div key={i} className="relative rounded-xl overflow-hidden aspect-[4/3]">
+                      <img src={photo.src} alt={strip.alt} className="w-full h-full object-cover image-zoom" />
                       {photo.credit && (
-                        <span className="absolute bottom-2 right-2 text-[10px] text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                        <span className="absolute bottom-2 right-2 text-[10px] text-white/80 bg-black/60 px-2 py-1 rounded backdrop-blur-sm">
                           {photo.credit}
                         </span>
                       )}
@@ -747,33 +746,33 @@ const PackagesPage = () => {
                   key={pkg.name}
                   variant={isLit ? "featured" : "glass"}
                   onClick={() => setSelectedName(pkg.name)}
-                  className={`relative transition-all duration-500 cursor-pointer ${
+                  className={`relative transition-all duration-300 cursor-pointer hover:border-primary/40 hover:-translate-y-1 ${
                     isSelected
-                      ? "scale-[1.04] ring-2 ring-primary shadow-[0_0_50px_hsl(var(--primary)/0.45)]"
-                      : "hover:scale-[1.02] hover:ring-1 hover:ring-primary/50 hover:shadow-[0_0_35px_hsl(var(--primary)/0.35)]"
+                      ? "ring-2 ring-primary"
+                      : ""
                   } ${pkg.featured && !isSelected ? "lg:-mt-4 lg:mb-4" : ""}`}
                 >
                   {pkg.featured && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full">
                       <div className="flex items-center gap-1">
-                        <Star className="w-3 h-3 fill-current" />
-                        <span className="text-xs font-display uppercase tracking-wider">Most Popular</span>
+                        <Star className="w-3 h-3 fill-current text-primary-foreground" />
+                        <span className="text-xs font-semibold uppercase tracking-wider text-primary-foreground">Most Popular</span>
                       </div>
                     </div>
                   )}
                   {isSelected && !pkg.featured && (
-                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-primary to-accent rounded-full">
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full">
                       <div className="flex items-center gap-1">
-                        <Check className="w-3 h-3" />
-                        <span className="text-xs font-display uppercase tracking-wider">Selected</span>
+                        <Check className="w-3 h-3 text-primary-foreground" />
+                        <span className="text-xs font-semibold uppercase tracking-wider text-primary-foreground">Selected</span>
                       </div>
                     </div>
                   )}
                   <CardHeader className="text-center pb-4">
-                    <CardTitle className="font-display text-xl">{pkg.name}</CardTitle>
+                    <CardTitle className="text-xl">{pkg.name}</CardTitle>
                     <CardDescription>{pkg.description}</CardDescription>
                     <div className="mt-4">
-                      <span className="font-display text-4xl font-bold gradient-text">{pkg.price}</span>
+                      <span className="font-display text-4xl font-bold text-white">{pkg.price}</span>
                       <span className="ml-2 text-xs text-muted-foreground align-middle">+ 13% HST</span>
                     </div>
                   </CardHeader>
@@ -814,9 +813,9 @@ const PackagesPage = () => {
 
         {/* CTA Section */}
         <div className="container mx-auto px-4 mt-16">
-          <Card variant="neon" className="max-w-2xl mx-auto">
+          <Card className="max-w-2xl mx-auto bg-card border-white/10">
             <CardContent className="p-8 text-center">
-              <h2 className="font-display text-2xl font-bold mb-2">Need a Custom Package?</h2>
+              <h2 className="font-display text-2xl font-bold text-white tracking-tight mb-2">Need a Custom Package?</h2>
               <p className="text-muted-foreground mb-6">
                 Contact us to create a tailored package for your specific needs
               </p>

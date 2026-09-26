@@ -24,16 +24,15 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-xl border-b border-white/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-white/10">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2 md:gap-3 group shrink-0">
-            <div className="relative">
-              <Music className="w-8 h-8 md:w-10 md:h-10 text-primary transition-all duration-300 group-hover:text-secondary" />
-              <div className="absolute inset-0 bg-primary/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="w-10 h-10 md:w-11 md:h-11 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-primary/40 transition-colors duration-300">
+              <Music className="w-5 h-5 md:w-6 md:h-6 text-primary" />
             </div>
-            <span className="font-display text-lg xl:text-xl font-bold gradient-text whitespace-nowrap glitch-text">
+            <span className="font-display text-lg xl:text-xl font-bold text-white whitespace-nowrap">
               BEATMASTER DJ
             </span>
           </Link>
@@ -45,7 +44,7 @@ const Navbar = () => {
                 <Link
                   key={link.href}
                   to={link.href}
-                  className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out"
+                  className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   {link.label}
                 </Link>
@@ -53,7 +52,7 @@ const Navbar = () => {
                 <a
                   key={link.href}
                   href={link.href}
-                  className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out"
+                  className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200"
                 >
                   {link.label}
                 </a>
@@ -62,7 +61,7 @@ const Navbar = () => {
             {isAdmin && (
               <Link
                 to="/admin"
-                className="flex items-center gap-1.5 font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-primary hover:text-secondary transition-all duration-500 ease-out"
+                className="flex items-center gap-1.5 font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-primary hover:text-primary/80 transition-colors duration-200"
               >
                 <ShieldCheck className="h-4 w-4" /> Admin
               </Link>
@@ -76,7 +75,8 @@ const Navbar = () => {
           <div className="xl:hidden flex items-center gap-3">
             <Link
               to="/"
-              className="flex items-center justify-center w-11 h-11 rounded-full bg-gradient-to-br from-primary/15 to-secondary/15 border border-primary/40 hover:from-primary/25 hover:to-secondary/25 hover:border-primary/60 hover:shadow-[0_0_12px_hsl(var(--primary)_/_0.25)] transition-all duration-300"
+              className="flex items-center justify-center w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:border-primary/40 transition-colors duration-200"
+              aria-label="Home"
             >
               <Home className="w-4 h-4 text-primary" />
             </Link>
@@ -85,7 +85,7 @@ const Navbar = () => {
               variant="ghost"
               size="icon"
               aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-              className="flex items-center justify-center w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all duration-300"
+              className="flex items-center justify-center w-11 h-11 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors duration-200"
               onClick={() => setIsOpen(!isOpen)}
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -102,7 +102,7 @@ const Navbar = () => {
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-1.5"
+                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200 py-1.5"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -111,7 +111,7 @@ const Navbar = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-zinc-400 hover:text-primary transition-all duration-500 ease-out py-1.5"
+                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200 py-1.5"
                     onClick={() => setIsOpen(false)}
                   >
                     {link.label}
@@ -121,7 +121,7 @@ const Navbar = () => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className="flex items-center gap-2 border-t border-white/10 pt-4 font-display text-xs uppercase tracking-[0.15em] text-primary transition-colors hover:text-secondary"
+                  className="flex items-center gap-2 border-t border-white/10 pt-4 font-display text-xs uppercase tracking-[0.15em] text-primary transition-colors hover:text-primary/80"
                   onClick={() => setIsOpen(false)}
                 >
                   <ShieldCheck className="h-4 w-4" /> Admin Portal

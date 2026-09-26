@@ -24,8 +24,6 @@ const services: Array<{
   icon: typeof Building2;
   title: string;
   description: string;
-  color: string;
-  gradient: string;
   route: string;
   image: string;
   credit?: string;
@@ -34,8 +32,6 @@ const services: Array<{
     icon: Heart,
     title: "Weddings",
     description: "Ceremony to last dance — seamless MC, pro sound, and a dance floor that stays full all night.",
-    color: "text-secondary",
-    gradient: "from-secondary/20 to-accent/20",
     route: "/packages/weddings",
     image: weddingImg,
   },
@@ -43,8 +39,6 @@ const services: Array<{
     icon: Building2,
     title: "Corporate Events",
     description: "Polished, on-brand entertainment for galas, conferences and holiday parties. Always on time, always professional.",
-    color: "text-primary",
-    gradient: "from-primary/20 to-accent/20",
     route: "/packages/corporate",
     image: corporateLiveImg,
     credit: "Tim Skinner © Canadian Museum of Nature",
@@ -53,8 +47,6 @@ const services: Array<{
     icon: GraduationCap,
     title: "School Events",
     description: "Age-appropriate music for proms, homecoming, and school functions.",
-    color: "text-accent",
-    gradient: "from-accent/20 to-primary/20",
     route: "/packages/schools",
     image: schoolImg,
   },
@@ -62,8 +54,6 @@ const services: Array<{
     icon: Users,
     title: "Private Events",
     description: "Birthdays, anniversaries and milestones — your playlist, your vibe, zero cheesy DJ clichés.",
-    color: "text-secondary",
-    gradient: "from-secondary/20 to-primary/20",
     route: "/packages/private",
     image: privateLiveImg,
     credit: "© LMF",
@@ -72,8 +62,6 @@ const services: Array<{
     icon: Zap,
     title: "EDM Events",
     description: "High-energy electronic dance music for clubs and festival-style parties.",
-    color: "text-primary",
-    gradient: "from-primary/20 to-secondary/20",
     route: "/packages/edm",
     image: edmLiveImg,
   },
@@ -81,8 +69,6 @@ const services: Array<{
     icon: Mic2,
     title: "Karaoke",
     description: "Sing your heart out with 2 wireless microphones and projected lyrics on screen.",
-    color: "text-accent",
-    gradient: "from-accent/20 to-secondary/20",
     route: "/packages/karaoke",
     image: karaokeImg,
   },
@@ -90,8 +76,6 @@ const services: Array<{
     icon: Monitor,
     title: "AV Production",
     description: "Pro lighting production — DMX-controlled moving heads, pixel bars, laser, and concert-grade sound.",
-    color: "text-secondary",
-    gradient: "from-secondary/20 to-accent/20",
     route: "/packages/av",
     image: avLiveImg,
   },
@@ -99,8 +83,6 @@ const services: Array<{
     icon: Sparkles,
     title: "DJ Mentorship",
     description: "1-on-1 weekly lessons with a working pro DJ. Hobbyist to Pro Entrepreneur tracks.",
-    color: "text-primary",
-    gradient: "from-primary/20 to-secondary/20",
     route: "/mentorship",
     image: mentorshipLiveImg,
   },
@@ -109,25 +91,19 @@ const services: Array<{
 const ServicesSection = () => {
   const ref = useRevealOnScroll<HTMLElement>();
   return (
-    <section ref={ref} id="services" className="py-24 md:py-32 relative overflow-hidden bass-drop">
-      {/* Background Effects */}
-      <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/30 to-background" />
-
+    <section ref={ref} id="services" className="py-20 md:py-28 relative overflow-hidden bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="font-display text-4xl md:text-5xl font-bold mb-4 dj-heading glitch-text">
-            <span className="text-foreground">OUR </span>
-            <span className="gradient-text">SERVICES</span>
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+        <div className="text-center mb-14 md:mb-20">
+          <p className="eyebrow mb-4">Our Services</p>
+          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tight">Our services</h2>
+          <p className="text-muted-foreground max-w-2xl mx-auto mt-4 text-base md:text-lg">
             From intimate gatherings to large-scale productions, we bring the perfect soundtrack to every occasion.
           </p>
         </div>
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto stagger-fade-in">
           {services.map((service) => (
             <Link
               key={service.title}
@@ -136,21 +112,21 @@ const ServicesSection = () => {
             >
               <Card
                 variant="glass"
-                className="group cursor-pointer transition-all duration-500 hover:scale-105 hover:shadow-[0_0_40px_hsl(var(--primary)/0.2)] h-full overflow-hidden"
+                className="group cursor-pointer hover:border-primary/40 hover:-translate-y-1 h-full overflow-hidden"
               >
                 {/* Image Section */}
-                <div className="relative h-48 overflow-hidden turntable-hover">
+                <div className="relative h-44 overflow-hidden">
                   <img
                     src={service.image}
                     alt={`${service.title} DJ services`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover image-zoom"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/50 to-transparent" />
-                  
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+
                   {/* Icon Badge */}
                   <div className="absolute bottom-4 left-4">
-                    <div className={`relative w-12 h-12 rounded-full bg-gradient-to-br ${service.gradient} backdrop-blur-sm border border-white/20 flex items-center justify-center shadow-none`}>
-                      <service.icon className={`w-6 h-6 ${service.color}`} />
+                    <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 backdrop-blur-sm flex items-center justify-center">
+                      <service.icon className="w-6 h-6 text-primary" />
                     </div>
                   </div>
 
@@ -165,10 +141,10 @@ const ServicesSection = () => {
                 </div>
 
                 <CardContent className="p-6">
-                  <h3 className="font-display text-xl font-bold mb-3 group-hover:gradient-text transition-all duration-300">
+                  <h3 className="font-display text-lg font-bold text-white mb-2">
                     {service.title}
                   </h3>
-                  <p className="text-muted-foreground">
+                  <p className="text-muted-foreground text-sm leading-relaxed">
                     {service.description}
                   </p>
                 </CardContent>
