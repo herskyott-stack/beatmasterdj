@@ -3,17 +3,27 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 import { brokeredPreviewStorage } from './previewAuthStorage';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string | undefined;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined;
+// Public fallback credentials for the Lovable Cloud project behind
+// beatmasterdj.ca. Used only when the build-time env vars are missing
+// (Lovable does not reliably inject VITE_ vars into production builds).
+// The publishable key is public by design (it ships in client-side code);
+// private data is protected by row-level security on the database.
+const FALLBACK_SUPABASE_URL = "https://atxceyzigqadmsasxags.supabase.co";
+const FALLBACK_SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0eGNleXppZ3FhZG1zYXN4YWdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk3MjI0MjIsImV4cCI6MjA4NTI5ODQyMn0.OGrdcO6Z6foXKsvDCo8dD68NsYdNsLt_Fu5kFYJsF7M";
+
+const SUPABASE_URL =
+  (import.meta.env.VITE_SUPABASE_URL as string | undefined) || FALLBACK_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY =
+  (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string | undefined) ||
+  FALLBACK_SUPABASE_PUBLISHABLE_KEY;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-// Never throws at module load and never throws when used: if the env config
-// is missing, `supabase` is a safe no-op stub that behaves like a logged-out
-// client against an empty database, so a missing key can never blank the
-// whole site again. Backend-dependent features simply see "logged out" and
-// empty data instead of crashing the app.
+// Never throws at module load and never throws when used. If both the env
+// config and the public fallback above are missing, `supabase` is a safe
+// no-op stub that behaves like a logged-out client against an empty
+// database, so a missing key can never blank the whole site again.
 
 type AnyRecord = Record<string, any>;
 
