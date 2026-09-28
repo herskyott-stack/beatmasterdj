@@ -1,3 +1,5 @@
+import { useRef, useState } from "react";
+import { Play, Volume2 } from "lucide-react";
 import SectionHeader from "@/components/SectionHeader";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 
@@ -11,7 +13,8 @@ import reelHypeMan from "@/assets/videos/reel-party-hype-man.mp4";
 import reelHypeManPoster from "@/assets/videos/reel-party-hype-man-poster.jpg";
 
 /* Real wedding moments, hosted directly — just the video, no embeds,
-   no Instagram chrome. Native player: tap to play with sound. */
+   no Instagram chrome. One tap plays with full sound (browsers block
+   autoplay-with-sound, so the tap is required). */
 const REELS: Array<{
   src: string;
   poster: string;
@@ -44,6 +47,52 @@ const REELS: Array<{
   },
 ];
 
+const ReelCard = ({ reel }: { reel: (typeof REELS)[number] }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [playing, setPlaying] = useState(false);
+
+  return (
+    <article className="snap-center shrink-0 w-[80vw] max-w-[360px] sm:w-[340px] lg:w-auto lg:max-w-none">
+      <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
+        <video
+          ref={videoRef}
+          className="w-full aspect-[9/16] object-cover"
+          src={reel.src}
+          poster={reel.poster}
+          controls
+          playsInline
+          preload="metadata"
+          loop
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          aria-label={reel.title}
+        />
+        {!playing && (
+          <button
+            type="button"
+            onClick={() => videoRef.current?.play()}
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-black/40"
+            aria-label={`Play ${reel.title} with sound`}
+          >
+            <span className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+              <Play className="w-7 h-7 text-primary-foreground fill-current ml-1" />
+            </span>
+            <span className="inline-flex items-center gap-1.5 text-xs font-medium text-white bg-black/60 border border-white/20 rounded-full px-3 py-1.5">
+              <Volume2 className="w-3.5 h-3.5" /> Tap for sound
+            </span>
+          </button>
+        )}
+      </div>
+      <div className="mt-3 px-1">
+        <p className="font-display font-semibold text-white text-sm">
+          {reel.title}
+        </p>
+        <p className="text-xs text-muted-foreground mt-0.5">{reel.caption}</p>
+      </div>
+    </article>
+  );
+};
+
 const VideoReels = () => {
   const ref = useRevealOnScroll<HTMLElement>();
 
@@ -64,31 +113,7 @@ const VideoReels = () => {
 
         <div className="flex gap-5 overflow-x-auto pb-6 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 -mx-4 px-4 lg:mx-0 lg:px-0">
           {REELS.map((reel) => (
-            <article
-              key={reel.src}
-              className="snap-center shrink-0 w-[80vw] max-w-[360px] sm:w-[340px] lg:w-auto lg:max-w-none"
-            >
-              <div className="rounded-2xl overflow-hidden border border-white/10 bg-black shadow-[0_8px_30px_rgba(0,0,0,0.35)]">
-                <video
-                  className="w-full aspect-[9/16] object-cover"
-                  src={reel.src}
-                  poster={reel.poster}
-                  controls
-                  playsInline
-                  preload="metadata"
-                  loop
-                  aria-label={reel.title}
-                />
-              </div>
-              <div className="mt-3 px-1">
-                <p className="font-display font-semibold text-white text-sm">
-                  {reel.title}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {reel.caption}
-                </p>
-              </div>
-            </article>
+            <ReelCard key={reel.src} reel={reel} />
           ))}
         </div>
       </div>
