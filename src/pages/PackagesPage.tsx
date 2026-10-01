@@ -226,6 +226,8 @@ const packageData: Record<string, { title: string; description: string; packages
           "Full EV sub stack + Mackie tops",
           "4 wireless microphones",
           "Full intelligent rig: movers, bars, laser + fog",
+          "Cold sparkler fountains",
+          "Dry ice low-fog effect",
           "Unlimited consultations",
           "MC services",
           "Custom playlist creation",

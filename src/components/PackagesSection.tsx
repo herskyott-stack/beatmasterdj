@@ -76,6 +76,8 @@ const packageData: Record<string, Package[]> = {
         "Concert-grade sound system",
         "4 wireless microphones",
         "Intelligent lighting system",
+        "Cold sparkler fountains",
+        "Dry ice low-fog effect",
         "Unlimited consultations",
         "MC services",
         "Custom playlist creation",
