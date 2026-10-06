@@ -131,6 +131,12 @@ const Footer = () => {
             >
               Terms of Service
             </Link>
+            <Link
+              to="/cookies"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Cookie Policy
+            </Link>
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               aria-label="Back to top"
