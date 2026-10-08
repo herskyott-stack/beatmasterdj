@@ -49,7 +49,11 @@ const REELS: Array<{
 
 const ReelCard = ({ reel }: { reel: (typeof REELS)[number] }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
+  /* The tap-to-start overlay only exists to satisfy autoplay policies
+     (browsers block play-with-sound without a gesture). Once the user
+     has started playback, hide it for good so pausing keeps the native
+     controls (scrub, volume, fullscreen) reachable. */
+  const [started, setStarted] = useState(false);
 
   return (
     <article className="snap-center shrink-0 w-[80vw] max-w-[360px] sm:w-[340px] lg:w-auto lg:max-w-none">
@@ -63,11 +67,10 @@ const ReelCard = ({ reel }: { reel: (typeof REELS)[number] }) => {
           playsInline
           preload="metadata"
           loop
-          onPlay={() => setPlaying(true)}
-          onPause={() => setPlaying(false)}
+          onPlay={() => setStarted(true)}
           aria-label={reel.title}
         />
-        {!playing && (
+        {!started && (
           <button
             type="button"
             onClick={() => videoRef.current?.play()}
