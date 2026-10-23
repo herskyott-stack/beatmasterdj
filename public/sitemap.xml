@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://beatmasterdj.ca/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://beatmasterdj.ca/book</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/weddings</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/corporate</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/schools</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/private</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/edm</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/karaoke</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://beatmasterdj.ca/packages/av</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://beatmasterdj.ca/about</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://beatmasterdj.ca/mentorship</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://beatmasterdj.ca/pricing-guide</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://beatmasterdj.ca/lessons</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://beatmasterdj.ca/contact</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://beatmasterdj.ca/web-design</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://beatmasterdj.ca/giveaway</loc><changefreq>weekly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://beatmasterdj.ca/giveaway/rules</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://beatmasterdj.ca/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://beatmasterdj.ca/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://beatmasterdj.ca/cookies</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+</urlset>
