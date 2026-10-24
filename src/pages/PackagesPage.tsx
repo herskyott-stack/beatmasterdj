@@ -172,7 +172,7 @@ const packageData: Record<string, { title: string; description: string; packages
         name: "Essential",
         price: "$1,800",
         priceNum: 1800,
-        description: "Perfect for intimate ceremonies",
+        description: "Perfect for intimate receptions",
         features: [
           "4 hours of DJ service",
           "Mackie + EV pro sound system",
