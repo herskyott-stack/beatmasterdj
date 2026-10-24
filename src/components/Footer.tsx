@@ -113,6 +113,16 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Ecosystem bar */}
+        <div className="mt-12 pt-8 border-t border-white/10 text-center">
+          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-3">Part of the HERSKY ecosystem</p>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+            <a href="https://hersky.info" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">hersky.info — Hub</a>
+            <a href="https://hersky.info/shop" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">HERSKY Shop — Merch</a>
+            <a href="https://hersky.info/web-design" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Web Design — Hersky Builds</a>
+          </div>
+        </div>
+
         {/* Bottom bar */}
         <div className="mt-12 pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
