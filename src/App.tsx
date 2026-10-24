@@ -25,6 +25,8 @@ import InstallPage from "./pages/InstallPage";
 import ContactPage from "./pages/ContactPage";
 import AddonDetailPage from "./pages/AddonDetailPage";
 import MentorshipPage from "./pages/MentorshipPage";
+import ProductionPage from "./pages/ProductionPage";
+import AcademyPage from "./pages/AcademyPage";
 import GiveawayPage from "./pages/GiveawayPage";
 import GiveawayRulesPage from "./pages/GiveawayRulesPage";
 import ContestSignups from "./pages/admin/ContestSignups";
@@ -78,6 +80,8 @@ function App() {
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/addons/:addonId" element={<AddonDetailPage />} />
               <Route path="/mentorship" element={<MentorshipPage />} />
+              <Route path="/production" element={<ProductionPage />} />
+              <Route path="/academy" element={<AcademyPage />} />
               <Route path="/giveaway" element={<GiveawayPage />} />
               <Route path="/giveaway/rules" element={<GiveawayRulesPage />} />
               <Route path="/contest" element={<GiveawayPage />} />
