@@ -44,7 +44,7 @@ export const packageData: Record<string, Package[]> = {
       name: "Essential",
       price: "$1,800",
       priceNum: 1800,
-      description: "Perfect for intimate ceremonies",
+      description: "Perfect for intimate receptions",
       features: [
         "4 hours of DJ service",
         "Professional sound system",
