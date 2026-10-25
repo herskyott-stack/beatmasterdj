@@ -8,8 +8,10 @@ import Footer from "@/components/Footer";
 import { useCart } from "@/contexts/CartContext";
 import { supabase } from "@/integrations/supabase/client";
 import { isContestActive } from "@/lib/contest";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const BookingConfirmed = () => {
+  usePageMeta({ title: "Booking Confirmed | Beatmaster DJ", noindex: true });
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const sessionId = searchParams.get("session_id");

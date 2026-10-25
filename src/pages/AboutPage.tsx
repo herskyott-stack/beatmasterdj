@@ -9,6 +9,7 @@ import SectionHeader from "@/components/SectionHeader";
 // Real photos of DJ Hersky performing
 import aboutJakeImg from "@/assets/real/about-jake.jpg";
 import aboutCrewImg from "@/assets/real/about-crew.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const stats = [
   { number: "15+", label: "Years Experience", icon: Calendar },
@@ -64,6 +65,7 @@ const values = [
 ];
 
 const AboutPage = () => {
+  usePageMeta({ title: "About DJ Hersky — Ottawa Wedding & Event DJ | Beatmaster DJ", description: "Meet DJ Hersky, the Ottawa DJ behind Beatmaster DJ — 15+ years and 500+ weddings, corporate events, clubs and private parties." });
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

@@ -7,12 +7,13 @@ import SectionHeader from "@/components/SectionHeader";
 const inputClasses =
   "w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all";
 
-const ContactSection = () => {
+const ContactSection = ({ headingAs = "h2" }: { headingAs?: "h1" | "h2" }) => {
   const ref = useRevealOnScroll<HTMLElement>();
   return (
     <section ref={ref} id="contact" className="py-20 md:py-28 relative overflow-hidden bg-card/40 border-y border-white/5 bass-drop">
       <div className="container mx-auto px-4 relative z-10">
         <SectionHeader
+          as={headingAs}
           index="09"
           eyebrow="Get in touch"
           title="Lock in your date"

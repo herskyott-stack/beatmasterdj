@@ -18,6 +18,7 @@ import {
   requestTypeLabel,
 } from "@/lib/plannerLabels";
 import type { User } from "@supabase/supabase-js";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type MusicRequest = {
   id: string;
@@ -39,6 +40,7 @@ type Profile = {
 };
 
 const ClientPortal = () => {
+  usePageMeta({ title: "Client Portal | Beatmaster DJ", noindex: true });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { isAdmin } = useAdminCheck();

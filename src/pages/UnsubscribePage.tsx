@@ -2,10 +2,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // Unsubscribes are handled by the one-click link included in every email
 // (managed delivery). This page covers older links and the Privacy page link.
 export default function UnsubscribePage() {
+  usePageMeta({ title: "Unsubscribe | Beatmaster DJ", noindex: true });
   const mailto =
     "mailto:hersky.ott@gmail.com?subject=Unsubscribe%20request&body=Please%20unsubscribe%20this%20email%20address%20from%20Beatmaster%20DJ%20emails.";
 

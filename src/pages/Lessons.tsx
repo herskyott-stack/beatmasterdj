@@ -9,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { GraduationCap, Lock, ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const Lessons = () => {
+  usePageMeta({ title: "Lessons | Beatmaster DJ", noindex: true });
   const navigate = useNavigate();
   const { hasAccess, loading, userId } = useLessonAccess();
   const [modules, setModules] = useState<any[]>([]);

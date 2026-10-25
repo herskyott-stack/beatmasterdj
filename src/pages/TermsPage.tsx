@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const TermsPage = () => {
+  usePageMeta({ title: "Terms of Service | Beatmaster DJ", description: "Terms of service for booking Beatmaster DJ, including deposits, payments and cancellations." });
   return (
     <div className="min-h-screen pt-28 pb-20">
       <div className="container mx-auto px-4 max-w-3xl">

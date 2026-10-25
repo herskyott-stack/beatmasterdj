@@ -6,8 +6,10 @@ import { usePWAInstall } from "@/hooks/usePWAInstall";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Link } from "react-router-dom";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const InstallPage = () => {
+  usePageMeta({ title: "Get the App | Beatmaster DJ", description: "Install the Beatmaster DJ app on your phone for quick access to bookings, your client portal and event planning." });
   const { isInstallable, isInstalled, isIOS, installApp } = usePWAInstall();
   const [installing, setInstalling] = useState(false);
 
@@ -170,24 +172,15 @@ const InstallPage = () => {
             </Card>
           </div>
 
-          {/* App Store Links (Coming Soon) */}
+          {/* No app store needed — the installed web app is the app. */}
           <div className="mt-16 text-center">
-            <h2 className="font-display text-2xl font-bold mb-6">
-              <span className="gradient-text">NATIVE APPS</span>
-              <span className="text-foreground"> COMING SOON</span>
+            <h2 className="font-display text-2xl font-bold mb-3">
+              <span className="gradient-text">NO APP STORE</span>
+              <span className="text-foreground"> NEEDED</span>
             </h2>
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button variant="glass" size="lg" disabled className="opacity-50">
-                <Apple className="w-5 h-5" />
-                App Store
-              </Button>
-              <Button variant="glass" size="lg" disabled className="opacity-50">
-                <Smartphone className="w-5 h-5" />
-                Google Play
-              </Button>
-            </div>
-            <p className="text-muted-foreground mt-4 text-sm">
-              Native iOS and Android apps are in development and will be available soon.
+            <p className="text-muted-foreground text-sm max-w-xl mx-auto">
+              Once installed, Beatmaster DJ opens from your home screen like any other app — no download
+              from the App Store or Google Play, and it updates itself automatically.
             </p>
           </div>
 

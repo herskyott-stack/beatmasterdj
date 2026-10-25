@@ -10,11 +10,13 @@ import { Music, Mail, Lock, User, Phone, Calendar, MapPin } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { z } from "zod";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const emailSchema = z.string().email("Invalid email address");
 const passwordSchema = z.string().min(6, "Password must be at least 6 characters");
 
 const AuthPage = () => {
+  usePageMeta({ title: "Client Portal Sign In | Beatmaster DJ", noindex: true });
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");

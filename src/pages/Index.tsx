@@ -18,6 +18,7 @@ import SectionHeader from "@/components/SectionHeader";
 import { Button } from "@/components/ui/button";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import mentorshipImg from "@/assets/real/mentorship.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const MentorshipTeaser = () => {
   const ref = useRevealOnScroll<HTMLElement>();
@@ -65,6 +66,7 @@ const MentorshipTeaser = () => {
 };
 
 const Index = () => {
+  usePageMeta({ title: "Beatmaster DJ | Ottawa Wedding & Event DJ", description: "Ottawa DJ for weddings, corporate events, school functions, private parties and EDM nights — 500+ events, 15+ years, pro sound, lighting and MC. Check your date.", path: "/" });
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

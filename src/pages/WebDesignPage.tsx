@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const packages = [
   { name: "Starter Site", price: "$1,800", timeline: "About 2 weeks", items: ["5-page custom website", "Mobile-ready design", "Contact form", "Google Maps", "Basic SEO setup"] },
@@ -144,6 +145,7 @@ const QuoteRequestForm = () => {
 };
 
 const WebDesignPage = () => {
+  usePageMeta({ title: "Ottawa Small Business Web Design | Beatmaster DJ", description: "Websites for Ottawa small businesses that bring in customers — packages, add-ons, process and a free consultation." });
   useEffect(() => {
     document.title = "Ottawa Small Business Web Design | Beatmaster DJ";
   }, []);

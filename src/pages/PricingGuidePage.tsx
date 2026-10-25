@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const leadSchema = z.object({
   name: z.string().trim().min(2, "Please enter your name.").max(100, "Name is too long."),
@@ -44,6 +45,7 @@ const ranges = [
 ];
 
 const PricingGuidePage = () => {
+  usePageMeta({ title: "Ottawa Wedding DJ Pricing Guide 2026 | Beatmaster DJ", description: "What an Ottawa wedding DJ costs in 2026 — package prices, what is included, add-ons and how to compare quotes." });
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");

@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Badge } from "@/components/ui/badge";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import { Check, Star, Sparkles, Zap, Building2, Mountain, ShieldCheck } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type Tier = {
   id: string;
@@ -118,6 +119,7 @@ const TierCard = ({ t }: { t: Tier }) => {
 };
 
 const ProductionPage = () => {
+  usePageMeta({ title: "Full Event Production — DJ, Stage, Sound, Lighting & Visuals | Beatmaster DJ", description: "One contract for the whole show: DJ, staging, sound, lighting and visuals for Ottawa events, from galas to festivals." });
   useEffect(() => {
     document.title = "Full Event Production — DJ, Stage, Sound, Lighting & Visuals | Beatmaster DJ";
   }, []);

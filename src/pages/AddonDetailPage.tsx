@@ -13,7 +13,7 @@ import Footer from "@/components/Footer";
 import { getAddonById } from "@/data/addons";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "@/hooks/use-toast";
-import { useEffect } from "react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const AddonDetailPage = () => {
   const { addonId } = useParams<{ addonId: string }>();
@@ -21,11 +21,14 @@ const AddonDetailPage = () => {
   const { addItem, removeItem, isInCart } = useCart();
   const addon = addonId ? getAddonById(addonId) : undefined;
 
-  useEffect(() => {
-    if (addon) {
-      document.title = `${addon.name} | Beatmaster DJ`;
-    }
-  }, [addon]);
+  usePageMeta(
+    addon
+      ? {
+          title: `${addon.name} — ${addon.priceDisplay} Add-On | Beatmaster DJ`,
+          description: addon.shortDescription,
+        }
+      : { title: "Add-On Not Found | Beatmaster DJ", noindex: true },
+  );
 
   if (!addon) {
     return <Navigate to="/" replace />;

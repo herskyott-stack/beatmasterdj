@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 // TEMPLATE — not legal advice. Have a lawyer review before relying on it.
 
 const CookiePolicyPage = () => {
+  usePageMeta({ title: "Cookie Policy | Beatmaster DJ", description: "How Beatmaster DJ uses cookies and how to manage your preferences." });
   return (
     <div className="min-h-screen pt-28 pb-20">
       <div className="container mx-auto px-4 max-w-3xl">

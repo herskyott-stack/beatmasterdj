@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles, Layers, PlayCircle, ClipboardCheck, UserRound, CalendarClock } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const stats = [
   { icon: Layers, value: "12", label: "Modules" },
@@ -23,6 +24,7 @@ const included = [
 ];
 
 const AcademyPage = () => {
+  usePageMeta({ title: "Beatmaster DJ Academy — Online DJ Course (Early Access) | Beatmaster DJ", description: "The Beatmaster DJ Academy online DJ course — learn to mix, read a room and land paid gigs with DJ Hersky. Early access now open." });
   useEffect(() => {
     document.title = "Beatmaster DJ Academy — Online DJ Course (Early Access) | Beatmaster DJ";
   }, []);

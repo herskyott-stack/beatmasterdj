@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const PrivacyPage = () => {
+  usePageMeta({ title: "Privacy Policy | Beatmaster DJ", description: "How Beatmaster DJ collects, uses and protects your personal information." });
   return (
     <div className="min-h-screen pt-28 pb-20">
       <div className="container mx-auto px-4 max-w-3xl">

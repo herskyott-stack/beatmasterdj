@@ -16,6 +16,7 @@ import privatePackageImg from "@/assets/packages/private-package.jpg";
 import edmPackageImg from "@/assets/real/club-2.jpg";
 import karaokePackageImg from "@/assets/gear/denon-mcx8000.jpg";
 import avPackageImg from "@/assets/gear/dmx-console.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type Package = {
   name: string;
@@ -488,6 +489,7 @@ export const packageData: Record<string, Package[]> = {
 };
 
 const BookingPage = () => {
+  usePageMeta({ title: "Book Your DJ — Packages & Pricing | Beatmaster DJ", description: "Pick a DJ package for your wedding, corporate event, school dance or private party in Ottawa, add extras like cold sparklers or a photo booth, and reserve your date." });
   const { addItem } = useCart();
   const navigate = useNavigate();
 
@@ -513,6 +515,7 @@ const BookingPage = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-14 md:mb-20">
             <SectionHeader
+              as="h1"
               eyebrow="Booking"
               title="Book your event"
               sub="Select a package to begin your booking. Add-ons can be added during checkout."

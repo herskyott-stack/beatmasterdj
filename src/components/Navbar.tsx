@@ -1,9 +1,15 @@
-import { Home, Menu, X, Music, ShieldCheck, ArrowRight } from "lucide-react";
+import { Home, Menu, X, Music, ShieldCheck, ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminCheck } from "@/hooks/useAdminCheck";
 import { cn } from "@/lib/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,22 +31,25 @@ const Navbar = () => {
     };
   }, [isOpen]);
 
+  // `primary` links sit in the desktop bar; the rest go under "More" so the
+  // bar (and the Book Now button) fits on a laptop screen. Mobile shows all.
   const navLinks = [
     { href: "/", label: "Home", isRoute: true },
-    { href: "#services", label: "Services" },
-    { href: "/book", label: "Packages", isRoute: true },
-    { href: "#addons", label: "Add-Ons" },
-    { href: "/production", label: "Production", isRoute: true },
-    { href: "/mentorship", label: "Mentorship", isRoute: true },
+    { href: "/#services", label: "Services", primary: true },
+    { href: "/book", label: "Packages", isRoute: true, primary: true },
+    { href: "/#addons", label: "Add-Ons", primary: true },
+    { href: "/production", label: "Production", isRoute: true, primary: true },
+    { href: "/mentorship", label: "Mentorship", isRoute: true, primary: true },
     { href: "/academy", label: "Academy", isRoute: true },
-    { href: "/pricing-guide", label: "Pricing Guide", isRoute: true },
+    { href: "/pricing-guide", label: "Pricing Guide", isRoute: true, primary: true },
     { href: "/web-design", label: "Web Design", isRoute: true },
     { href: "/giveaway", label: "Giveaway", isRoute: true },
-    { href: "/about", label: "About", isRoute: true },
+    { href: "/about", label: "About", isRoute: true, primary: true },
     { href: "/auth", label: "Client Portal", isRoute: true },
     { href: "/install", label: "Get App", isRoute: true },
-    { href: "/contact", label: "Contact", isRoute: true },
+    { href: "/contact", label: "Contact", isRoute: true, primary: true },
   ];
+  const moreLinks = navLinks.filter((l) => !l.primary && l.href !== "/");
 
   return (
     <>
@@ -66,7 +75,7 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
             <div className="hidden xl:flex items-center gap-4">
-              {navLinks.map((link) => (
+              {navLinks.filter((l) => l.primary).map((link) => (
                 link.isRoute ? (
                   <Link
                     key={link.href}
@@ -85,6 +94,20 @@ const Navbar = () => {
                   </a>
                 )
               ))}
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1 font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200 outline-none">
+                  More <ChevronDown className="h-3.5 w-3.5" />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="min-w-[180px]">
+                  {moreLinks.map((link) => (
+                    <DropdownMenuItem key={link.href} asChild>
+                      <Link to={link.href} className="cursor-pointer">
+                        {link.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
               {isAdmin && (
                 <Link
                   to="/admin"

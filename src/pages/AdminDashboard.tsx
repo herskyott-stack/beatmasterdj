@@ -166,7 +166,7 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
 
     const { error } = await supabase
       .from("profiles")
-      .update({ [field]: value })
+      .update(field === "payment_status" ? { payment_status: value } : { payment_method: value })
       .eq("id", profileId);
 
     if (error) {

@@ -13,8 +13,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ArrowLeft, CreditCard, Check, FileText, PenTool, Loader2 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import BookingAddons from "@/components/BookingAddons";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const CheckoutPage = () => {
+  usePageMeta({ title: "Checkout | Beatmaster DJ", noindex: true });
   const { items, eventDetails, updateEventDetails, removeItem, getSubtotal, getTax, getTotal, getDeposit, clearCart } = useCart();
   const navigate = useNavigate();
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);

@@ -16,8 +16,10 @@ import LessonFilesList from "@/components/lessons/LessonFilesList";
 import { toast } from "@/hooks/use-toast";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const LessonView = () => {
+  usePageMeta({ title: "Lesson | Beatmaster DJ", noindex: true });
   const { moduleId, lessonId } = useParams();
   const navigate = useNavigate();
   const { hasAccess, loading, userId } = useLessonAccess();

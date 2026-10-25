@@ -56,6 +56,7 @@ import sbEntrance from "@/assets/real/weddings/sydney-blake-grand-entrance.jpg";
 import mcx8000Gear from "@/assets/gear/denon-mcx8000.jpg";
 import movingHeadGear from "@/assets/gear/moving-head.jpg";
 import pixelBarGear from "@/assets/gear/pixel-bar.jpg";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type StripPhoto = { src: string; credit?: string };
 
@@ -641,8 +642,14 @@ const packageData: Record<string, { title: string; description: string; packages
 };
 
 const PackagesPage = () => {
-  const navigate = useNavigate();
   const { category } = useParams<{ category: string }>();
+  const meta = category ? packageData[category] : null;
+  usePageMeta(
+    meta
+      ? { title: `${meta.title} | Beatmaster DJ`, description: meta.description }
+      : { title: "Packages | Beatmaster DJ", noindex: true },
+  );
+  const navigate = useNavigate();
   const { addItem } = useCart();
   const [selectedName, setSelectedName] = useState<string | null>(null);
 

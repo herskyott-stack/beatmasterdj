@@ -4,8 +4,10 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useContestSettings, formatContestDate } from "@/hooks/useContestSettings";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const GiveawayRulesPage = () => {
+  usePageMeta({ title: "Giveaway Rules | Beatmaster DJ", description: "Official rules for the Beatmaster DJ giveaway." });
   const { settings } = useContestSettings();
   const endsLabel = settings ? formatContestDate(settings.end_date) : "the contest end date";
   const name = settings?.contest_name ?? "Beatmaster DJ Fall Wedding & Event Giveaway";

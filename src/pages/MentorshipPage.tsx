@@ -37,6 +37,7 @@ import {
   Trophy,
   Rocket,
 } from "lucide-react";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 type Pathway = {
   id: string;
@@ -232,6 +233,7 @@ const PathwayCard = ({
 };
 
 const MentorshipPage = () => {
+  usePageMeta({ title: "DJ Mentorship Programs | Beatmaster DJ", description: "One-on-one DJ mentorship with DJ Hersky — go from hobbyist to paid professional with real gigs, gear guidance and live coaching." });
   const [hasGear, setHasGear] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});

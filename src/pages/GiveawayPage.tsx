@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useContestSettings, formatContestDate } from "@/hooks/useContestSettings";
 import { CONTEST_PACKAGES, getPackageById } from "@/lib/contestPackages";
 import ContestCountdown from "@/components/contest/ContestCountdown";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 const LS_KEY = "beatmasterdj_giveaway_form_v1";
 const IG_HANDLE = "hersky.ott";
@@ -53,6 +54,7 @@ const empty: FormState = {
 };
 
 const GiveawayPage = () => {
+  usePageMeta({ title: "Giveaway | Beatmaster DJ", description: "Enter the Beatmaster DJ giveaway for a chance to win DJ services for your Ottawa event." });
   const navigate = useNavigate();
   const { settings, loading, isActive } = useContestSettings();
   const [step, setStep] = useState<1 | 2 | 3>(1);
