@@ -1,0 +1,7 @@
+# Keeps the workflow actions patched. npm dependencies are left to Lovable.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

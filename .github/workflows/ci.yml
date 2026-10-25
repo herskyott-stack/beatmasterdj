@@ -1,0 +1,28 @@
+# Catches a broken build before it reaches main (Lovable deploys from main).
+# Pull requests only — not every Lovable push — so it stays within the free
+# GitHub Actions minutes.
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - name: Typecheck
+        run: npx tsc --noEmit -p tsconfig.app.json
+      - name: Build
+        run: npm run build
