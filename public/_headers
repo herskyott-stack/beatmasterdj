@@ -1,0 +1,4 @@
+/*
+  Content-Security-Policy-Report-Only: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' https://js.stripe.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://atxceyzigqadmsasxags.supabase.co; media-src 'self' blob: https://atxceyzigqadmsasxags.supabase.co; frame-src 'self' https://www.youtube.com https://checkout.stripe.com https://js.stripe.com; connect-src 'self' https://atxceyzigqadmsasxags.supabase.co wss://atxceyzigqadmsasxags.supabase.co https://formsubmit.co https://fonts.googleapis.com; form-action 'self' https://formsubmit.co https://checkout.stripe.com; worker-src 'self'; manifest-src 'self'
+  X-Frame-Options: SAMEORIGIN
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
