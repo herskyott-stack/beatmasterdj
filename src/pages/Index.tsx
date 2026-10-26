@@ -9,7 +9,7 @@ import FeaturedGallery from "@/components/home/FeaturedGallery";
 import BookingPreview from "@/components/home/BookingPreview";
 import GallerySection from "@/components/GallerySection";
 import VideoReels from "@/components/home/VideoReels";
-import ContestBanner from "@/components/contest/ContestBanner";
+import PromoSection, { PromoBanner } from "@/components/PromoSection";
 import TrustBar from "@/components/home/TrustBar";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ContactSection from "@/components/ContactSection";
@@ -69,7 +69,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Navbar />
       <main>
-        <ContestBanner />
+        <PromoBanner />
         <HeroSection />
         <TrustBar />
         <ServicesSection />
@@ -82,6 +82,8 @@ const Index = () => {
         <TestimonialsSection />
 
         <MentorshipTeaser />
+
+        <PromoSection />
 
         <ContactSection />
       </main>

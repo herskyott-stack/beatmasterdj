@@ -68,8 +68,8 @@ const Lessons = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button onClick={() => navigate("/mentorship")}>View Mentorship Program</Button>
-              <Button variant="outline" onClick={() => navigate("/client-portal")}>
-                <ArrowLeft className="w-4 h-4 mr-2" /> Back
+              <Button variant="outline" onClick={() => navigate("/")}>
+                <ArrowLeft className="w-4 h-4 mr-2" /> Back to Home
               </Button>
             </div>
           </div>
@@ -91,9 +91,6 @@ const Lessons = () => {
               </h1>
               <p className="text-muted-foreground">24 modules. Watch, learn, take the quiz, master the craft.</p>
             </div>
-            <Button variant="outline" onClick={() => navigate("/client-portal")}>
-              <ArrowLeft className="w-4 h-4 mr-2" /> Client Portal
-            </Button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

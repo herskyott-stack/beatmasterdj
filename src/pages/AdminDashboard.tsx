@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Trophy, Mail, CircleDollarSign, KanbanSquare, CloudDownload } from "lucide-react";
+import { Music, Users, Calendar, MapPin, LogOut, Search, ArrowLeft, GraduationCap, ImagePlus, Mail, CircleDollarSign, KanbanSquare, CloudDownload } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -29,6 +29,7 @@ import ClientDetailModal from "@/components/admin/ClientDetailModal";
 import PipelineBoard from "@/components/admin/PipelineBoard";
 import PlannerImportPanel from "@/components/admin/PlannerImportPanel";
 import AddClientDialog from "@/components/admin/AddClientDialog";
+import LeadsEmailPipeline from "@/components/admin/LeadsEmailPipeline";
 import type { PipelineStage } from "@/lib/pipeline";
 
 import HomeMediaManager from "@/components/admin/HomeMediaManager";
@@ -261,20 +262,12 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
                     <GraduationCap className="w-4 h-4 mr-2" />
                     DJ Lessons LMS
                   </Button>
-                  <Button variant="hero" onClick={() => navigate("/admin/contest")}>
-                    <Trophy className="w-4 h-4 mr-2" />
-                    Contest Signups
-                  </Button>
                   <Button variant="hero" onClick={() => navigate("/admin/email-status")}>
                     <Mail className="w-4 h-4 mr-2" />
                     Email DNS Status
                   </Button>
                 </>
               )}
-              <Button variant="outline" onClick={() => navigate("/client-portal")}>
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Client Portal
-              </Button>
               <Button variant="outline" onClick={handleSignOut}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Sign Out
@@ -334,6 +327,9 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
             <TabsList className="mb-6 flex flex-wrap h-auto">
               <TabsTrigger value="clients">
                 <Users className="w-4 h-4 mr-2" /> Clients & Events
+              </TabsTrigger>
+              <TabsTrigger value="leads">
+                <Mail className="w-4 h-4 mr-2" /> Leads & Email
               </TabsTrigger>
               <TabsTrigger value="pipeline">
                 <KanbanSquare className="w-4 h-4 mr-2" /> Pipeline
@@ -448,6 +444,9 @@ const AdminDashboard = forwardRef<HTMLDivElement>((_, ref) => {
                   </CardContent>
                 </Card>
               )}
+            </TabsContent>
+            <TabsContent value="leads">
+              <LeadsEmailPipeline />
             </TabsContent>
 
             <TabsContent value="home-media">

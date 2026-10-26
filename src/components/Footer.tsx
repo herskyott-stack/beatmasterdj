@@ -66,8 +66,6 @@ const Footer = () => {
                 { label: "About", href: "/about" },
                 { label: "Pricing Guide", href: "/pricing-guide" },
                 { label: "Mentorship", href: "/mentorship" },
-                { label: "Web Design", href: "/web-design" },
-                { label: "Giveaway", href: "/giveaway" },
               ].map((link) => (
                 <li key={link.href}>
                   <Link
@@ -119,7 +117,7 @@ const Footer = () => {
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             <a href="https://hersky.info" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">hersky.info — Hub</a>
             <a href="https://hersky.info/shop" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">HERSKY Shop — Merch</a>
-            <a href="https://hersky.info/web-design" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Web Design — Hersky Builds</a>
+            <a href="https://hersky.info" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:text-primary transition-colors">Website by Jake Hersky</a>
           </div>
         </div>
 

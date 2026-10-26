@@ -34,10 +34,7 @@ const Navbar = () => {
     { href: "/mentorship", label: "Mentorship", isRoute: true },
     { href: "/academy", label: "Academy", isRoute: true },
     { href: "/pricing-guide", label: "Pricing Guide", isRoute: true },
-    { href: "/web-design", label: "Web Design", isRoute: true },
-    { href: "/giveaway", label: "Giveaway", isRoute: true },
     { href: "/about", label: "About", isRoute: true },
-    { href: "/auth", label: "Client Portal", isRoute: true },
     { href: "/install", label: "Get App", isRoute: true },
     { href: "/contact", label: "Contact", isRoute: true },
   ];

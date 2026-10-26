@@ -1,8 +1,52 @@
+import { FormEvent } from "react";
 import { Mail, Phone, MapPin, Send, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRevealOnScroll } from "@/hooks/useRevealOnScroll";
 import SectionHeader from "@/components/SectionHeader";
+import { supabase } from "@/integrations/supabase/client";
+
+// Save every inquiry as a lead in the admin (Leads & Email pipeline) in
+// addition to the FormSubmit email. Never block the form on this — the
+// submission continues to FormSubmit either way.
+const saveLeadToAdmin = (form: HTMLFormElement) => {
+  const data = new FormData(form);
+  const first = String(data.get("first_name") ?? "").trim();
+  const last = String(data.get("last_name") ?? "").trim();
+  const promo = String(data.get("promo_code") ?? "").trim().toUpperCase();
+  const insertPromise = supabase.from("leads").insert({
+    name: `${first} ${last}`.trim() || "Website inquiry",
+    email: String(data.get("email") ?? "").trim(),
+    phone: String(data.get("phone") ?? "").trim() || null,
+    service_interest: "booking-inquiry",
+    message: String(data.get("message") ?? "").trim() || null,
+    metadata: {
+      source: "Contact form — beatmasterdj.ca",
+      page: window.location.pathname,
+      event_type: String(data.get("event_type") ?? ""),
+      event_date: String(data.get("event_date") ?? ""),
+      promo_code: promo || null,
+      status: "New",
+    },
+  });
+  return Promise.race([
+    insertPromise.then(({ error }) => {
+      if (error) console.error("Failed to save lead to admin:", error.message);
+    }),
+    new Promise((resolve) => setTimeout(resolve, 1500)),
+  ]);
+};
+
+const handleInquirySubmit = async (event: FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  try {
+    await saveLeadToAdmin(form);
+  } catch {
+    // Lead capture must never block the inquiry email.
+  }
+  form.submit();
+};
 
 const inputClasses =
   "w-full px-4 py-3 rounded-lg bg-white/5 border border-white/10 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-all";
@@ -24,7 +68,7 @@ const ContactSection = () => {
           <Card className="p-2">
             <CardContent className="p-6 md:p-8">
               <h3 className="font-display text-2xl font-bold text-white mb-6">Send a Message</h3>
-              <form action="https://formsubmit.co/hersky.ott@gmail.com" method="POST" className="space-y-6">
+              <form action="https://formsubmit.co/hersky.ott@gmail.com" method="POST" className="space-y-6" onSubmit={handleInquirySubmit}>
                 <input type="hidden" name="_subject" value="New DJ Booking Inquiry!" />
                 <input type="hidden" name="_captcha" value="false" />
                 <input type="hidden" name="_template" value="table" />
@@ -60,6 +104,25 @@ const ContactSection = () => {
                     placeholder="john@example.com"
                     required
                   />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Phone</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      className={inputClasses}
+                      placeholder="(613) 555-0100"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-2">Event Date</label>
+                    <input
+                      type="date"
+                      name="event_date"
+                      className={inputClasses}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Event Type</label>
@@ -111,6 +174,16 @@ const ContactSection = () => {
                       <option value="AV Production - General Inquiry">AV Production — General Inquiry</option>
                     </optgroup>
                   </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">Promo Code (optional)</label>
+                  <input
+                    type="text"
+                    name="promo_code"
+                    className={inputClasses}
+                    placeholder="FIRST15 or RETURN20"
+                  />
+                  <p className="text-xs text-muted-foreground mt-1">FIRST15 = 15% off your first booking · RETURN20 = 20% off a return booking. Off the package price before HST, on deposits made by Dec 31, 2026.</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">Message</label>

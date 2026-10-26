@@ -6,6 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import PromoSection from "@/components/PromoSection";
 import SectionHeader from "@/components/SectionHeader";
 
 // Package images
@@ -587,6 +588,7 @@ const BookingPage = () => {
             ))}
           </Tabs>
         </div>
+        <PromoSection />
       </main>
       <Footer />
     </div>

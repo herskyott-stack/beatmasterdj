@@ -26,15 +26,27 @@ const AuthPage = () => {
   const [eventLocation, setEventLocation] = useState("");
 
   useEffect(() => {
+    // The client portal was removed (2026-10-26) — signed-in users go to the
+    // admin dashboard (admins) or DJ Lessons (students).
+    const redirectSignedInUser = async (userId: string) => {
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", userId)
+        .eq("role", "admin")
+        .maybeSingle();
+      navigate(roleData ? "/admin" : "/lessons");
+    };
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (session?.user) {
-        navigate("/client-portal");
+        redirectSignedInUser(session.user.id);
       }
     });
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        navigate("/client-portal");
+        redirectSignedInUser(session.user.id);
       }
     });
 
@@ -110,7 +122,7 @@ const AuthPage = () => {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/client-portal`,
+        emailRedirectTo: `${window.location.origin}/auth`,
       },
     });
 
@@ -150,7 +162,7 @@ const AuthPage = () => {
 
       toast({
         title: "Account Created!",
-        description: "Welcome to Beatmaster DJ. You can now manage your music requests.",
+        description: "Welcome to Beatmaster DJ. Sign in any time to reach DJ Lessons or the admin dashboard.",
       });
     }
     
@@ -168,10 +180,10 @@ const AuthPage = () => {
                 <Music className="w-8 h-8 text-white" />
               </div>
               <h1 className="font-display text-3xl font-bold mb-2">
-                <span className="gradient-text">Client Portal</span>
+                <span className="gradient-text">Sign In</span>
               </h1>
               <p className="text-muted-foreground">
-                Sign in to manage your music requests and event details
+                Sign in — admins go to the dashboard, students go to DJ Lessons
               </p>
             </div>
 
