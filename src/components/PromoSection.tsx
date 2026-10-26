@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BadgePercent, ArrowRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionHeader from "@/components/SectionHeader";
@@ -77,7 +77,14 @@ export const PromoBanner = () => {
 // Refined promo cards — same section, copy and anchor (#promos) as before,
 // tightened spacing and type so it reads as a pricing/booking detail,
 // not a second hero. Rendered on the homepage and at the end of /book.
-const PromoSection = () => (
+const PromoSection = () => {
+  const { pathname } = useLocation();
+  // This section also renders at the end of /book, where a /book link is a
+  // dead self-link. There, send visitors to /contact instead — the inquiry
+  // form is where the event date and promo code are actually entered.
+  const checkDateHref = pathname === "/book" ? "/contact" : "/book";
+
+  return (
   <section id="promos" className="py-14 md:py-20 relative overflow-hidden">
     <div className="container mx-auto px-4 relative z-10">
       <SectionHeader
@@ -121,13 +128,14 @@ const PromoSection = () => (
       </p>
       <div className="text-center mt-6">
         <Button variant="hero" size="lg" asChild>
-          <Link to="/book">
+          <Link to={checkDateHref}>
             Check your date <ArrowRight className="w-4 h-4 ml-1" />
           </Link>
         </Button>
       </div>
     </div>
   </section>
-);
+  );
+};
 
 export default PromoSection;

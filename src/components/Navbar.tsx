@@ -27,9 +27,9 @@ const Navbar = () => {
 
   const navLinks = [
     { href: "/", label: "Home", isRoute: true },
-    { href: "#services", label: "Services" },
+    { href: "/#services", label: "Services", isRoute: true },
     { href: "/book", label: "Packages", isRoute: true },
-    { href: "#addons", label: "Add-Ons" },
+    { href: "/#addons", label: "Add-Ons", isRoute: true },
     { href: "/production", label: "Production", isRoute: true },
     { href: "/mentorship", label: "Mentorship", isRoute: true },
     { href: "/academy", label: "Academy", isRoute: true },

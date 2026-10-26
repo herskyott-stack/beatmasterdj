@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import { GraduationCap, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
@@ -65,6 +66,20 @@ const MentorshipTeaser = () => {
 };
 
 const Index = () => {
+  const { hash } = useLocation();
+
+  // Navbar's Services / Add-Ons links target /#services and /#addons so
+  // they work from any route. Once home, scroll to the anchored section
+  // (deferred a frame so ScrollToTop's scroll-to-top on the route change
+  // does not override it).
+  useEffect(() => {
+    if (!hash) return;
+    const el = document.getElementById(hash.slice(1));
+    if (!el) return;
+    const frame = requestAnimationFrame(() => el.scrollIntoView());
+    return () => cancelAnimationFrame(frame);
+  }, [hash]);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
