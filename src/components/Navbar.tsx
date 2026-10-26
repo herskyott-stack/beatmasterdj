@@ -52,7 +52,7 @@ const Navbar = () => {
             : "bg-gradient-to-b from-black/60 to-transparent border-b border-transparent"
         )}
       >
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 xl:px-6 2xl:max-w-[1680px] 2xl:px-10">
           <div className="flex items-center justify-between h-16 md:h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2 md:gap-3 group shrink-0" onClick={() => setIsOpen(false)}>
@@ -65,13 +65,13 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden xl:flex items-center gap-4">
+            <div className="hidden xl:flex flex-1 items-center justify-between gap-2 ml-10 2xl:gap-3 2xl:ml-12">
               {navLinks.map((link) => (
                 link.isRoute ? (
                   <Link
                     key={link.href}
                     to={link.href}
-                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200"
+                    className="font-display text-[10px] uppercase tracking-[0.04em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200 2xl:text-[11.5px] 2xl:tracking-[0.08em]"
                   >
                     {link.label}
                   </Link>
@@ -79,7 +79,7 @@ const Navbar = () => {
                   <a
                     key={link.href}
                     href={link.href}
-                    className="font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200"
+                    className="font-display text-[10px] uppercase tracking-[0.04em] whitespace-nowrap text-muted-foreground hover:text-primary transition-colors duration-200 2xl:text-[11.5px] 2xl:tracking-[0.08em]"
                   >
                     {link.label}
                   </a>
@@ -88,7 +88,7 @@ const Navbar = () => {
               {isAdmin && (
                 <Link
                   to="/admin"
-                  className="flex items-center gap-1.5 font-display text-xs uppercase tracking-[0.15em] whitespace-nowrap text-primary hover:text-primary/80 transition-colors duration-200"
+                  className="flex items-center gap-1.5 font-display text-[10px] uppercase tracking-[0.04em] whitespace-nowrap text-primary hover:text-primary/80 transition-colors duration-200 2xl:text-[11.5px] 2xl:tracking-[0.08em]"
                 >
                   <ShieldCheck className="h-4 w-4" /> Admin
                 </Link>
