@@ -312,3 +312,8 @@
     box-shadow: var(--shadow-lift);
   }
 }
+
+/* Hide the Lovable badge on every site (Jake's standing rule, 2026-10-16) */
+#lovable-badge {
+  display: none !important;
+}
