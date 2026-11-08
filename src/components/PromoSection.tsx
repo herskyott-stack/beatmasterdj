@@ -94,7 +94,7 @@ const PromoSection = () => {
         className="mb-10 md:mb-12"
       />
       <div className="grid md:grid-cols-2 gap-5 max-w-4xl mx-auto">
-        <div className="rounded-2xl border border-amber-200/25 bg-card/60 backdrop-blur-xl p-6 md:p-7">
+        <div className="rounded-3xl border border-amber-200/25 bg-card/60 backdrop-blur-[14px] backdrop-saturate-150 shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-6 md:p-7">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-primary font-display mb-2">First event</p>
@@ -108,7 +108,7 @@ const PromoSection = () => {
             Booking Beatmaster DJ for the first time? Take 15% off your package price.
           </p>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-xl p-6 md:p-7">
+        <div className="rounded-3xl border border-white/[0.14] bg-card/60 backdrop-blur-[14px] backdrop-saturate-150 shadow-[0_8px_32px_rgba(0,0,0,0.45)] p-6 md:p-7">
           <div className="flex items-start justify-between gap-4 mb-4">
             <div>
               <p className="text-xs uppercase tracking-[0.2em] text-primary font-display mb-2">Second / returning event</p>

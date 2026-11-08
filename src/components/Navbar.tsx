@@ -45,7 +45,7 @@ const Navbar = () => {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-500",
           scrolled || isOpen
-            ? "bg-background/85 backdrop-blur-xl border-b border-white/10 shadow-[0_8px_32px_-16px_rgba(0,0,0,0.8)]"
+            ? "bg-[#07110d]/75 backdrop-blur-[14px] backdrop-saturate-150 border-b border-white/[0.14] shadow-[0_8px_32px_-16px_rgba(0,0,0,0.8)]"
             : "bg-gradient-to-b from-black/60 to-transparent border-b border-transparent"
         )}
       >

@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold ring-offset-background transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 font-display uppercase tracking-wider",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold ring-offset-background transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 font-display uppercase tracking-wider",
   {
     variants: {
       variant: {
@@ -17,13 +17,13 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         hero: "btn-shine bg-primary text-primary-foreground hover:bg-primary/85 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.5)]",
         heroPink: "bg-secondary text-secondary-foreground hover:bg-secondary/85",
-        glass: "bg-white/5 backdrop-blur-xl border border-white/10 text-foreground hover:bg-white/10 hover:border-white/20",
+        glass: "bg-white/[0.07] backdrop-blur-[14px] backdrop-saturate-150 border border-white/[0.16] shadow-[0_8px_32px_rgba(0,0,0,0.35)] text-foreground hover:bg-white/[0.12] hover:border-white/25",
       },
       size: {
         default: "h-11 px-6 py-2",
-        sm: "h-9 rounded-md px-4",
-        lg: "h-14 rounded-md px-10 text-base",
-        xl: "h-16 rounded-md px-12 text-lg",
+        sm: "h-9 rounded-full px-4",
+        lg: "h-14 rounded-full px-10 text-base",
+        xl: "h-16 rounded-full px-12 text-lg",
         icon: "h-10 w-10",
       },
     },

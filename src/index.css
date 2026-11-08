@@ -49,6 +49,17 @@
 
     --shadow-card: 0 12px 40px -16px hsl(0 0% 0% / 0.6);
     --shadow-lift: 0 20px 60px -20px hsl(0 0% 0% / 0.7);
+
+    /* Glass V22 · Depth C tokens (dark adaptation — GLASS-V22-SPEC §7):
+       the shared recipe (blur 14px saturate 1.4, 1px light border, 24px
+       radius, soft shadow, -5px hover lift) rendered for a dark,
+       photography-first site. Cyan stays the one accent; the emerald
+       anchor appears only as a deep tint inside .glass-v22-hero. */
+    --glass-v22-surface: linear-gradient(160deg, hsl(0 0% 100% / 0.09), hsl(0 0% 100% / 0.04)), hsl(var(--card) / 0.55);
+    --glass-v22-border: hsl(0 0% 100% / 0.14);
+    --glass-v22-hero-bg: linear-gradient(160deg, rgba(12, 59, 46, 0.72), rgba(7, 17, 13, 0.86));
+    --glass-v22-radius: 24px;
+    --glass-v22-shadow: 0 8px 32px hsl(0 0% 0% / 0.45), inset 0 1px 0 hsl(0 0% 100% / 0.08);
   }
 
   .dark {
@@ -113,6 +124,55 @@
   .glass-card {
     @apply bg-card border border-white/[0.08] rounded-xl;
     box-shadow: var(--shadow-card);
+  }
+
+  /* Glass V22 · Depth C — frosted glass surfaces (dark adaptation).
+     Text on .glass-v22 sits over the site's dark sections / card scrims;
+     text on .glass-v22-hero sits over a deep emerald-dark glass whose
+     opacity is set for WCAG contrast over photography (spec §6). */
+  .glass-v22 {
+    background: var(--glass-v22-surface);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border: 1px solid var(--glass-v22-border);
+    border-radius: var(--glass-v22-radius);
+    box-shadow: var(--glass-v22-shadow);
+  }
+
+  .glass-v22-hero {
+    background: var(--glass-v22-hero-bg);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    border: 1px solid hsl(0 0% 100% / 0.16);
+    border-radius: var(--glass-v22-radius);
+    box-shadow: 0 8px 32px hsl(0 0% 0% / 0.5), inset 0 1px 0 hsl(0 0% 100% / 0.1);
+  }
+
+  /* No-blur fallback: never leave text on a transparent box (spec §3). */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .glass-v22 {
+      background: hsl(var(--card));
+    }
+    .glass-v22-hero {
+      background: #0a1a14;
+    }
+  }
+
+  /* V22 hover lift for interactive glass cards (spec §3/§4.7). */
+  .glass-v22-lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .glass-v22-lift:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px hsl(0 0% 0% / 0.55), inset 0 1px 0 hsl(0 0% 100% / 0.08);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .glass-v22-lift {
+      transition: none;
+    }
+    .glass-v22-lift:hover {
+      transform: none;
+    }
   }
 
   /* Professional eyebrow label */

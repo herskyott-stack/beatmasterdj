@@ -49,15 +49,17 @@ const HeroSection = () => {
                 Book Your Event
               </Link>
             </Button>
-            <Button variant="outline" size="xl" asChild>
+            <Button variant="glass" size="xl" asChild>
               <Link to="/pricing-guide">
                 See Pricing
               </Link>
             </Button>
           </div>
 
-          {/* Stats */}
-          <dl className="grid grid-cols-3 mt-12 md:mt-16 max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          {/* Stats — Glass V22 hero card: frosted emerald-tinted glass
+              floating over the photo hero (Depth C accent). */}
+          <div className="glass-v22-hero mt-12 md:mt-16 max-w-2xl mx-auto px-4 sm:px-6 py-5 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <dl className="grid grid-cols-3">
             {[
               { value: "500+", label: "Events Performed" },
               { value: "15+", label: "Years Experience" },
@@ -67,7 +69,7 @@ const HeroSection = () => {
                 key={stat.label}
                 className={`flex flex-col text-center min-w-0 px-2 ${i > 0 ? "border-l border-white/10" : ""}`}
               >
-                <dt className="order-2 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-muted-foreground mt-2 leading-tight">
+                <dt className="order-2 text-[10px] sm:text-xs uppercase tracking-[0.2em] text-zinc-300 mt-2 leading-tight">
                   {stat.label}
                 </dt>
                 <dd className="order-1 font-display text-2xl sm:text-3xl md:text-4xl font-bold text-white tabular-nums">
@@ -76,6 +78,7 @@ const HeroSection = () => {
               </div>
             ))}
           </dl>
+          </div>
         </div>
       </div>
 
